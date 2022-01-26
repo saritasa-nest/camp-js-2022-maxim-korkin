@@ -2,6 +2,8 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../services/AuthService';
 
+import setStatus from '../utils/setFormMessage';
+
 const signUpForm: HTMLFormElement | null = document.querySelector('#signup-form');
 
 if (signUpForm) {
@@ -15,7 +17,8 @@ if (signUpForm) {
       await AuthService.signUpUser(email, password)();
       signUpForm.reset();
     })().catch((reason: FirebaseError) => {
-
+      const message = reason.code.replace('auth/', '').replaceAll('-', ' ');
+      setStatus(signUpForm, message);
     });
 
   });
