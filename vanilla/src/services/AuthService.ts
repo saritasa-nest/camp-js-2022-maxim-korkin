@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndP
 import { auth } from '../firebase/firebase';
 
 import changeNavBarOnSignIn from '../utils/changeNavBarOnSignIn';
+
 import changeNavBarOnSignOut from '../utils/changeNavBarOnSignOut';
 
 /**

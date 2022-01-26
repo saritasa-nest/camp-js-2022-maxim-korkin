@@ -15,9 +15,9 @@ if (signInForm) {
     const password: string = data.get('signin-password') as string;
 
     (async() => {
-      await AuthService.signInUser(email, password)();
-
       setMessage(signInForm, '');
+
+      await AuthService.signInUser(email, password)();
 
       signInForm.reset();
 
