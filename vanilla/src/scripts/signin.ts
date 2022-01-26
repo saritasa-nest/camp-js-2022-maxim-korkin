@@ -2,7 +2,7 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../services/AuthService';
 
-import setFormStatus from '../utils/setFormMessage';
+import setMessage from '../utils/setFormMessage';
 
 const signInForm: HTMLFormElement | null = document.querySelector('#signin-form');
 
@@ -16,10 +16,18 @@ if (signInForm) {
 
     (async() => {
       await AuthService.signInUser(email, password)();
+
+      setMessage(signInForm, '');
+
       signInForm.reset();
+
+      const signInModal: Element | null = document.querySelector('#signin');
+      if (signInModal) {
+        M.Modal.getInstance(signInModal).close();
+      }
     })().catch((reason: FirebaseError) => {
       const message = reason.code.replace('auth/', '').replaceAll('-', ' ');
-      setFormStatus(signInForm, message);
+      setMessage(signInForm, message);
     });
   });
 }
