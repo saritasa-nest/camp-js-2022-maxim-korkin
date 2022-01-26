@@ -4,7 +4,7 @@
  * @param message - String with the message.
  */
 export default function setFormMessage(form: HTMLFormElement, message: string): void {
-  const statusElement = form.querySelector('.message');
+  const statusElement = form.querySelector('.form-error-message');
   if (statusElement) {
     statusElement.innerHTML = `<p>${message}</p>`;
   }
