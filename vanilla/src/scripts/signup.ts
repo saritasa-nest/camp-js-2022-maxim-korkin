@@ -7,8 +7,8 @@ import setMessage from '../utils/setFormMessage';
 const signUpForm: HTMLFormElement | null = document.querySelector('#signup-form');
 
 if (signUpForm) {
-  signUpForm.addEventListener('submit', (e: Event) => {
-    e.preventDefault();
+  signUpForm.addEventListener('submit', (event: Event) => {
+    event.preventDefault();
     const data: FormData = new FormData(signUpForm);
     const email: string = data.get('signup-email') as string;
     const password: string = data.get('signup-password') as string;

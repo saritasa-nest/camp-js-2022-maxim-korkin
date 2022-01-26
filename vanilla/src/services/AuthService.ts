@@ -1,6 +1,9 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 import { auth } from '../firebase/firebase';
+
+import changeNavBarOnSignIn from '../utils/changeNavBarOnSignIn';
+import changeNavBarOnSignOut from '../utils/changeNavBarOnSignOut';
 
 /**
  * Firebase authentication service.
@@ -31,14 +34,21 @@ export class AuthService {
   }
 
   /**
+   * Method for signing out the user.
+   */
+  public static signOutUser(): void {
+    signOut(auth);
+  }
+
+  /**
    * Method for changing the page when the user signs in or out.
    */
   public static startObservingUserActions(): void {
     onAuthStateChanged(auth, user => {
       if (user) {
-        console.log(user);
+        changeNavBarOnSignIn(user.email as string);
       } else {
-        console.log('no user');
+        changeNavBarOnSignOut();
       }
     });
   }
