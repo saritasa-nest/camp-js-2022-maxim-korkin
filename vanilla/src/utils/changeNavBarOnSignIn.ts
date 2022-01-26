@@ -2,7 +2,7 @@ import { AuthService } from './../services/AuthService';
 
 /**
  * Function for changing navbar when the user signs in.
- * @param email - Email to show in the nav bar.
+ * @param email - Email to show at the nav bar.
  */
 export default function changeNavBarOnSignIn(email: string): void {
   const navBarButtons: Element | null = document.querySelector('#nav-mobile');
