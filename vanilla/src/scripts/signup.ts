@@ -17,16 +17,19 @@ if (signUpForm !== null) {
     const formInput: FormFields | null = getFormInput(signUpForm);
 
     if (formInput !== null) {
-      await AuthService.signUpUser(formInput.email, formInput.password).then(() => {
+      try {
+        await AuthService.signUpUser(formInput.email, formInput.password);
+
         signUpForm.reset();
 
         const signUpModal = document.querySelector('#signup');
         closeModal(signUpModal);
-      })
-        .catch((reason: FirebaseError) => {
-        const message = reason.code.replace('auth/', '').replaceAll('-', ' ');
-        setFormErrorMessage(signUpForm, message);
-      });
+      } catch (error: unknown) {
+        if (error instanceof FirebaseError) {
+          const message = error.code.replace('auth/', '').replaceAll('-', ' ');
+          setFormErrorMessage(signUpForm, message);
+        }
+      }
     }
   });
 }
