@@ -12,22 +12,20 @@
   </head>
   <body>
     <nav>
-      <div class="nav-wrapper">
-        <a href="/" class="brand-logo">Star Wars</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li>
-            <a class="modal-trigger" href="#signin">Sign In</a>
-          </li>
-          <li>
-            <a class="modal-trigger" href="#signup">Sign Up</a>
-          </li>
-        </ul>
-      </div>
+      <a href="/" class="brand-logo">Star Wars</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li>
+          <a class="modal-trigger" href="#signin">Sign In</a>
+        </li>
+        <li>
+          <a class="modal-trigger" href="#signup">Sign Up</a>
+        </li>
+      </ul>
     </nav>
 
     <div id="signin" class="modal">
       <div class="modal-content">
-        <h4>Sign In</h4>
+        <h2>Sign In</h2>
         <form id="signin-form">
           <div class="input-field">
             <input type="email" name="signin-email" required />
@@ -37,17 +35,14 @@
             <input type="password" name="signin-password" required />
             <label for="signin-password"> Password</label>
           </div>
-          <div class="form-error-message">
-            <p></p>
-          </div>
-          <button class="btn yellow darken-2 zdepth-1">Sign In</button>
+          <button type="submit" class="btn yellow darken-2 zdepth-1">Sign In</button>
         </form>
       </div>
     </div>
 
     <div id="signup" class="modal">
       <div class="modal-content">
-        <h4>Sign Up</h4>
+        <h2>Sign Up</h2>
         <form id="signup-form">
           <div class="input-field">
             <input type="email" name="signup-email" required />
@@ -57,10 +52,7 @@
             <input type="password" name="signup-password" required />
             <label for="signup-password"> Password</label>
           </div>
-          <div class="form-error-message">
-            <p></p>
-          </div>
-          <button class="btn yellow darken-2 zdepth-1">Sign up</button>
+          <button type="submit" class="btn yellow darken-2 zdepth-1">Sign up</button>
         </form>
       </div>
     </div>

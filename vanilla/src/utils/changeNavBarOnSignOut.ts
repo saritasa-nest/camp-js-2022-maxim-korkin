@@ -1,9 +1,9 @@
 /**
  * Function for changing navbar when the user signs out.
  */
-export default function changeNavBarOnSignIn(): void {
+export function changeNavBarOnSignOut(): void {
   const navBarButtons: Element | null = document.querySelector('#nav-mobile');
-  if (navBarButtons) {
+  if (navBarButtons != null) {
     navBarButtons.innerHTML = `
   <li>
     <a class="modal-trigger" href="#signin">Sign In</a>

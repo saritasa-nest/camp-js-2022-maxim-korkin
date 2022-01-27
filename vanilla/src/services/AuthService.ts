@@ -2,9 +2,9 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndP
 
 import { auth } from '../firebase/firebase';
 
-import changeNavBarOnSignIn from '../utils/changeNavBarOnSignIn';
+import { changeNavBarOnSignIn } from '../utils/changeNavBarOnSignIn';
 
-import changeNavBarOnSignOut from '../utils/changeNavBarOnSignOut';
+import { changeNavBarOnSignOut } from '../utils/changeNavBarOnSignOut';
 
 /**
  * Firebase authentication service.
@@ -46,8 +46,10 @@ export class AuthService {
    */
   public static startObservingUserActions(): void {
     onAuthStateChanged(auth, user => {
-      if (user) {
-        changeNavBarOnSignIn(user.email as string);
+      if (user != null) {
+        if (user.email != null) {
+          changeNavBarOnSignIn(user.email);
+        }
       } else {
         changeNavBarOnSignOut();
       }

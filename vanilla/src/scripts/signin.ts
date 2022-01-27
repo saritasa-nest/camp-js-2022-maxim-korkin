@@ -2,32 +2,45 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../services/AuthService';
 
-import setMessage from '../utils/setFormMessage';
+import { setFormMessage } from '../utils/setFormMessage';
 
 const signInForm: HTMLFormElement | null = document.querySelector('#signin-form');
 
-if (signInForm) {
+if (signInForm != null) {
   signInForm.addEventListener('submit', (event: Event) => {
     event.preventDefault();
 
     const data: FormData = new FormData(signInForm);
-    const email: string = data.get('signin-email') as string;
-    const password: string = data.get('signin-password') as string;
+
+    const email: string | undefined = data.get('signin-email')?.toString();
+
+    const password: string | undefined = data.get('signin-password')?.toString();
 
     (async() => {
-      setMessage(signInForm, '');
+      setFormMessage(signInForm, '');
 
-      await AuthService.signInUser(email, password)();
+      if (typeof email === 'string' && typeof password === 'string') {
+        if (email.trim() === '') {
+          const message = 'you have to proide an email';
+          setFormMessage(signInForm, message);
+        } else if (password.trim() === '') {
+          const message = 'wrong password';
+          setFormMessage(signInForm, message);
+        } else {
+          await AuthService.signInUser(email, password)();
 
-      signInForm.reset();
+          signInForm.reset();
 
-      const signInModal: Element | null = document.querySelector('#signin');
-      if (signInModal) {
-        M.Modal.getInstance(signInModal).close();
+          const signInModal: Element | null = document.querySelector('#signin');
+          if (signInModal != null) {
+            M.Modal.getInstance(signInModal).close();
+          }
+        }
       }
+
     })().catch((reason: FirebaseError) => {
       const message = reason.code.replace('auth/', '').replaceAll('-', ' ');
-      setMessage(signInForm, message);
+      setFormMessage(signInForm, message);
     });
   });
 }

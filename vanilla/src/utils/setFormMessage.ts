@@ -3,9 +3,16 @@
  * @param form - The form where the message should be displayed.
  * @param message - String with the message.
  */
-export default function setFormMessage(form: HTMLFormElement, message: string): void {
-  const messageElement = form.querySelector('.form-error-message');
-  if (messageElement) {
+export function setFormMessage(form: HTMLFormElement, message: string): void {
+  if (message.trim() !== '') {
+    const messageElement: Element = document.createElement('div');
+    messageElement.classList.add('form-error-message');
     messageElement.innerHTML = `<p>${message}</p>`;
+    form.insertBefore(messageElement, form.children[2]);
+  } else {
+    const messageElement: Element | null = form.querySelector('.form-error-message');
+    if (messageElement != null) {
+      messageElement.remove();
+    }
   }
 }
