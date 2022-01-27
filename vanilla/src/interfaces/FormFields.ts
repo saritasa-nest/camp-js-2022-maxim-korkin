@@ -4,8 +4,8 @@
 export interface FormFields {
 
   /** User's email. */
-  email: string;
+  readonly email: string;
 
   /** User's password. */
-  password: string;
+  readonly password: string;
 }
