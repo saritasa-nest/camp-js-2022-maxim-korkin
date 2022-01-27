@@ -11,10 +11,8 @@ import { changeNavBarOnSignOut } from './changeNavBarOnSignOut';
  */
 export function startObservingUserActions(): void {
   onAuthStateChanged(auth, user => {
-    if (user != null) {
-      if (user.email != null) {
+    if (user?.email != null) {
         changeNavBarOnSignIn(user.email);
-      }
     } else {
       changeNavBarOnSignOut();
     }
