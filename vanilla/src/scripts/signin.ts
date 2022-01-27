@@ -10,11 +10,11 @@ if (signInForm != null) {
   signInForm.addEventListener('submit', (event: Event) => {
     event.preventDefault();
 
-    const data: FormData = new FormData(signInForm);
+    const data = new FormData(signInForm);
 
-    const email: string | undefined = data.get('signin-email')?.toString();
+    const email = data.get('signin-email')?.toString();
 
-    const password: string | undefined = data.get('signin-password')?.toString();
+    const password = data.get('signin-password')?.toString();
 
     (async() => {
       setFormMessage(signInForm, '');
@@ -27,11 +27,11 @@ if (signInForm != null) {
           const message = 'wrong password';
           setFormMessage(signInForm, message);
         } else {
-          await AuthService.signInUser(email, password)();
+          await AuthService.signInUser(email, password);
 
           signInForm.reset();
 
-          const signInModal: Element | null = document.querySelector('#signin');
+          const signInModal = document.querySelector('#signin');
           if (signInModal != null) {
             M.Modal.getInstance(signInModal).close();
           }

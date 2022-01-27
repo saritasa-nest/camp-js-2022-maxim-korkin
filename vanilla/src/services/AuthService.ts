@@ -1,10 +1,6 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
 
 import { auth } from '../firebase/firebase';
-
-import { changeNavBarOnSignIn } from '../utils/changeNavBarOnSignIn';
-
-import { changeNavBarOnSignOut } from '../utils/changeNavBarOnSignOut';
 
 /**
  * Firebase authentication service.
@@ -16,10 +12,8 @@ export class AuthService {
  * @param password - User`s password.
  * @returns Function for signing up.
  */
-  public static signUpUser(email: string, password: string): Function {
-    return async() => {
-      await createUserWithEmailAndPassword(auth, email, password);
-    };
+  public static signUpUser(email: string, password: string): Promise<UserCredential> {
+    return createUserWithEmailAndPassword(auth, email, password);
   }
 
   /**
@@ -28,10 +22,8 @@ export class AuthService {
    * @param password - User`s password.
    * @returns Function for signing in.
    */
-  public static signInUser(email: string, password: string): Function {
-    return async() => {
-      await signInWithEmailAndPassword(auth, email, password);
-    };
+  public static signInUser(email: string, password: string): Promise<UserCredential> {
+    return signInWithEmailAndPassword(auth, email, password);
   }
 
   /**
@@ -39,20 +31,5 @@ export class AuthService {
    */
   public static signOutUser(): void {
     signOut(auth);
-  }
-
-  /**
-   * Method for changing the page when the user signs in or out.
-   */
-  public static startObservingUserActions(): void {
-    onAuthStateChanged(auth, user => {
-      if (user != null) {
-        if (user.email != null) {
-          changeNavBarOnSignIn(user.email);
-        }
-      } else {
-        changeNavBarOnSignOut();
-      }
-    });
   }
 }

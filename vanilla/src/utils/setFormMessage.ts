@@ -5,12 +5,12 @@
  */
 export function setFormMessage(form: HTMLFormElement, message: string): void {
   if (message.trim() !== '') {
-    const messageElement: Element = document.createElement('div');
+    const messageElement = document.createElement('div');
     messageElement.classList.add('form-error-message');
     messageElement.innerHTML = `<p>${message}</p>`;
     form.insertBefore(messageElement, form.children[2]);
   } else {
-    const messageElement: Element | null = form.querySelector('.form-error-message');
+    const messageElement = form.querySelector('.form-error-message');
     if (messageElement != null) {
       messageElement.remove();
     }

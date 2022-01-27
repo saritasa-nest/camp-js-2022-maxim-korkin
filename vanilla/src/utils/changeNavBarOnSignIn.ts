@@ -5,7 +5,7 @@ import { AuthService } from './../services/AuthService';
  * @param email - Email to show at the nav bar.
  */
 export function changeNavBarOnSignIn(email: string): void {
-  const navBarButtons: Element | null = document.querySelector('#nav-mobile');
+  const navBarButtons = document.querySelector('#nav-mobile');
   if (navBarButtons != null) {
     navBarButtons.innerHTML = `
     <li>
@@ -15,7 +15,7 @@ export function changeNavBarOnSignIn(email: string): void {
       <a class="signout-btn">Sign Out</a>
     </li>`;
 
-    const signOutButton: Element | null = document.querySelector('.signout-btn');
+    const signOutButton = document.querySelector('.signout-btn');
     if (signOutButton != null) {
       signOutButton.addEventListener('click', () => {
         AuthService.signOutUser();

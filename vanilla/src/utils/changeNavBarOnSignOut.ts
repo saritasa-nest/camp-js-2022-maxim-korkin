@@ -2,7 +2,7 @@
  * Function for changing navbar when the user signs out.
  */
 export function changeNavBarOnSignOut(): void {
-  const navBarButtons: Element | null = document.querySelector('#nav-mobile');
+  const navBarButtons = document.querySelector('#nav-mobile');
   if (navBarButtons != null) {
     navBarButtons.innerHTML = `
   <li>

@@ -10,11 +10,11 @@ if (signUpForm != null) {
   signUpForm.addEventListener('submit', (event: Event) => {
     event.preventDefault();
 
-    const data: FormData = new FormData(signUpForm);
+    const data = new FormData(signUpForm);
 
-    const email: string | undefined = data.get('signup-email')?.toString();
+    const email = data.get('signup-email')?.toString();
 
-    const password: string | undefined = data.get('signup-password')?.toString();
+    const password = data.get('signup-password')?.toString();
 
     (async() => {
       setFormMessage(signUpForm, '');
@@ -27,11 +27,11 @@ if (signUpForm != null) {
           const message = 'password cannot be empty or contain spaces only';
           setFormMessage(signUpForm, message);
         } else {
-          await AuthService.signUpUser(email, password)();
+          await AuthService.signUpUser(email, password);
 
           signUpForm.reset();
 
-          const signUpModal: Element | null = document.querySelector('#signup');
+          const signUpModal = document.querySelector('#signup');
           if (signUpModal != null) {
             M.Modal.getInstance(signUpModal).close();
           }

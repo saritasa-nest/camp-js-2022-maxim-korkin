@@ -10,11 +10,6 @@
   },
   "devDependencies": {
     "@chernodub/eslint-config": "^2.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.10.1",
-    "@typescript-eslint/parser": "^5.10.1",
-    "eslint": "^8.7.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jsdoc": "^37.6.3",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "stylelint": "^14.3.0",
     "stylelint-config-recommended": "^6.0.0",
