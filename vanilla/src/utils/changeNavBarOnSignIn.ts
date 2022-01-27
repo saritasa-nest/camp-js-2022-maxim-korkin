@@ -6,7 +6,7 @@ import { AuthService } from './../services/AuthService';
  */
 export function changeNavBarOnSignIn(email: string): void {
   const navBarButtons = document.querySelector('#nav-mobile');
-  if (navBarButtons != null) {
+  if (navBarButtons !== null) {
     navBarButtons.innerHTML = `
     <li>
       <div>${email}</div>
@@ -16,7 +16,7 @@ export function changeNavBarOnSignIn(email: string): void {
     </li>`;
 
     const signOutButton = document.querySelector('.signout-btn');
-    if (signOutButton != null) {
+    if (signOutButton !== null) {
       signOutButton.addEventListener('click', () => {
         AuthService.signOutUser();
       });

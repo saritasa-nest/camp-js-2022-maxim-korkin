@@ -3,7 +3,7 @@
  */
 export function changeNavBarOnSignOut(): void {
   const navBarButtons = document.querySelector('#nav-mobile');
-  if (navBarButtons != null) {
+  if (navBarButtons !== null) {
     navBarButtons.innerHTML = `
   <li>
     <a class="modal-trigger" href="#signin">Sign In</a>

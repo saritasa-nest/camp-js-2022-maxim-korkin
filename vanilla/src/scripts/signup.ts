@@ -8,7 +8,7 @@ import { setFormErrorMessage } from '../utils/setFormErrorMessage';
 
 const signUpForm: HTMLFormElement | null = document.querySelector('#signup-form');
 
-if (signUpForm != null) {
+if (signUpForm !== null) {
   signUpForm.addEventListener('submit', async(event: Event) => {
     event.preventDefault();
 
