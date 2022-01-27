@@ -2,12 +2,14 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../services/AuthService';
 
-import { setFormMessage } from '../utils/setFormMessage';
+import { closeModal } from '../utils/closeModal';
+
+import { setFormErrorMessage } from '../utils/setFormErrorMessage';
 
 const signUpForm: HTMLFormElement | null = document.querySelector('#signup-form');
 
 if (signUpForm != null) {
-  signUpForm.addEventListener('submit', (event: Event) => {
+  signUpForm.addEventListener('submit', async(event: Event) => {
     event.preventDefault();
 
     const data = new FormData(signUpForm);
@@ -16,30 +18,27 @@ if (signUpForm != null) {
 
     const password = data.get('signup-password')?.toString();
 
-    (async() => {
-      setFormMessage(signUpForm, '');
+    setFormErrorMessage(signUpForm, '');
 
-      if (typeof email === 'string' && typeof password === 'string') {
-        if (email.trim() === '') {
-          const message = 'you have to proide an email';
-          setFormMessage(signUpForm, message);
-        } else if (password.trim() === '') {
-          const message = 'password cannot be empty or contain spaces only';
-          setFormMessage(signUpForm, message);
-        } else {
-          await AuthService.signUpUser(email, password);
-
+    if (typeof email === 'string' && typeof password === 'string') {
+      if (email.trim() === '') {
+        const message = 'you have to provide an email';
+        setFormErrorMessage(signUpForm, message);
+      } else if (password.trim() === '') {
+        const message = 'wrong password';
+        setFormErrorMessage(signUpForm, message);
+      } else {
+        await AuthService.signUpUser(email, password).then(() => {
           signUpForm.reset();
 
           const signUpModal = document.querySelector('#signup');
-          if (signUpModal != null) {
-            M.Modal.getInstance(signUpModal).close();
-          }
-        }
+          closeModal(signUpModal);
+        })
+          .catch((reason: FirebaseError) => {
+          const message = reason.code.replace('auth/', '').replaceAll('-', ' ');
+          setFormErrorMessage(signUpForm, message);
+        });
       }
-    })().catch((reason: FirebaseError) => {
-      const message = reason.code.replace('auth/', '').replaceAll('-', ' ');
-      setFormMessage(signUpForm, message);
-    });
+    }
   });
 }

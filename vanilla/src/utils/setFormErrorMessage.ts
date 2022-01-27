@@ -3,7 +3,7 @@
  * @param form - The form where the message should be displayed.
  * @param message - String with the message.
  */
-export function setFormMessage(form: HTMLFormElement, message: string): void {
+export function setFormErrorMessage(form: HTMLFormElement, message: string): void {
   if (message.trim() !== '') {
     const messageElement = document.createElement('div');
     messageElement.classList.add('form-error-message');
