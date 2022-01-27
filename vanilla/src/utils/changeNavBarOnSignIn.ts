@@ -12,10 +12,10 @@ export function changeNavBarOnSignIn(email: string): void {
       <div>${email}</div>
     </li>
     <li>
-      <a class="signout-btn">Sign Out</a>
+      <a class="signout">Sign Out</a>
     </li>`;
 
-    const signOutButton = document.querySelector('.signout-btn');
+    const signOutButton = document.querySelector('.signout');
     if (signOutButton !== null) {
       signOutButton.addEventListener('click', () => {
         AuthService.signOutUser();
