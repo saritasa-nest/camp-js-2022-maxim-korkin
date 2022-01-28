@@ -5,3 +5,7 @@
 .form-error-message {
   color: var(--error-color);
 }
+
+.films-table-container {
+  padding: 20px;
+}
