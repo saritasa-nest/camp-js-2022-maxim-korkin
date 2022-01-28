@@ -1,12 +1,12 @@
 import { FirebaseError } from 'firebase/app';
 
-import { AuthService } from '../services/AuthService';
+import { AuthService } from '../../services/auth/AuthService';
 
-import { getFormInput } from '../utils/getFormInput';
-import { closeModal } from '../utils/closeModal';
-import { setFormErrorMessage } from '../utils/setFormErrorMessage';
+import { getFormInput } from '../../utils/auth/getFormInput';
+import { closeModal } from '../../utils/auth/closeModal';
+import { setFormErrorMessage } from '../../utils/auth/setFormErrorMessage';
 
-import { FormFields } from './../interfaces/FormFields';
+import { FormFields } from '../../interfaces/auth/FormFields';
 
 const signUpForm: HTMLFormElement | null = document.querySelector('#signup-form');
 
