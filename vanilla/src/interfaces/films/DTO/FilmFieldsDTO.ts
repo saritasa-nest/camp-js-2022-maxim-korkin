@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
- * Interface describing the fields of film.
+ * DTO interface describing the fields of film.
  */
-export interface FilmFields {
+export interface FilmFieldsDTO {
 
   /** An array containing IDs of characters in the film. */
   readonly characters: number[];

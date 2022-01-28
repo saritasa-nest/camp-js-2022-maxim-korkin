@@ -6,7 +6,7 @@ import { FilmFields } from './FilmFields';
 export interface Film {
 
   /** Fileds which describe the film. */
-  readonly filmFields: FilmFields;
+  readonly fields: FilmFields;
 
   /** Model in DB. */
   readonly model: string;
