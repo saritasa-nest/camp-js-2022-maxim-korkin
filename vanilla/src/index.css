@@ -1,0 +1,7 @@
+:root {
+  --error-color: #FF0000
+}
+
+.form-error-message {
+  color: var(--error-color);
+}
