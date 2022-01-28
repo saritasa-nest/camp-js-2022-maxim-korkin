@@ -11,7 +11,7 @@ export function setFormErrorMessage(form: HTMLFormElement, message: string): voi
     form.insertBefore(messageElement, form.querySelector('btn'));
   } else {
     const messageElement = form.querySelector('.form-error-message');
-    if (messageElement != null) {
+    if (messageElement !== null) {
       messageElement.remove();
     }
   }
