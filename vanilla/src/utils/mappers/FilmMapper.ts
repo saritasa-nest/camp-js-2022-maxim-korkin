@@ -1,8 +1,8 @@
-import { FilmFields } from '../interfaces/films/film/FilmFields';
+import { FilmFields } from '../../interfaces/films/film/FilmFields';
 
-import { Film } from './../interfaces/films/film/Film';
+import { Film } from '../../interfaces/films/film/Film';
 
-import { FilmDTO } from './../interfaces/films/DTO/FilmDTO';
+import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
 /**
  * Class for mapping Film and FilmDTO objects to each other.

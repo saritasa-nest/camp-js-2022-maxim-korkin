@@ -1,3 +1,9 @@
-import { displayFirstPageOfFilms } from './../../utils/films/displayFirstPageOfFilms';
+import { Modes } from '../../utils/enums/filmsPaginationModes';
 
-displayFirstPageOfFilms();
+import { displayPageOfFilms } from '../../utils/films/displayPageOfFilms';
+
+import { FirstAndLastFilms } from './../../interfaces/films/FirstAndLastFilms';
+
+const firstAndLastFilms: FirstAndLastFilms = { firstFilm: null, lastFilm: null };
+
+displayPageOfFilms(firstAndLastFilms, Modes.Init);

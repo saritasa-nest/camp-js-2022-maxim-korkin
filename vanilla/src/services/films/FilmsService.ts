@@ -1,4 +1,4 @@
-import { DocumentSnapshot, getDocs, limit, orderBy, query, QuerySnapshot, startAfter } from 'firebase/firestore';
+import { endBefore, getDocs, limit, orderBy, query, QueryDocumentSnapshot, QuerySnapshot, startAfter } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
@@ -29,11 +29,28 @@ export class FilmsService {
    * @returns
    */
   public static fetchNextPageOfFilms(
-    lastVisibleFilm: DocumentSnapshot,
+    lastVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
     limitOfFilmsOnPage = 2,
     orderingField = 'pk',
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(limitOfFilmsOnPage), startAfter(lastVisibleFilm));
+
+    return getDocs(filmsQuery);
+  }
+
+  /**
+   * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previos page.
+   * @param firstVisibleFilm - First film on the current page.
+   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
+   * @param orderingField - Field to order the results. Default value if 'pk'.
+   * @returns
+   */
+  public static fetchPrevPageOfFilms(
+    firstVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
+    limitOfFilmsOnPage = 2,
+    orderingField = 'pk',
+  ): Promise<QuerySnapshot<FilmDTO>> {
+    const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(limitOfFilmsOnPage), endBefore(firstVisibleFilm));
 
     return getDocs(filmsQuery);
   }
