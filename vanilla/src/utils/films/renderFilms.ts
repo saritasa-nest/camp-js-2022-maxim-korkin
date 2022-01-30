@@ -1,20 +1,10 @@
-import { QuerySnapshot } from 'firebase/firestore';
+import { Film } from './../../interfaces/films/film/Film';
 
-import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
-import { FirstAndLastFilms } from '../../interfaces/films/FirstAndLastFilms';
-import { FilmMapper } from '../mappers/FilmMapper';
-
-export const renderFilms = (filmDocs: QuerySnapshot<FilmDTO>): FirstAndLastFilms => {
+export const renderFilms = (films: Film[]): void => {
   const filmsTableBody = document.querySelector('.films-table-body');
 
-  let newFirstAndLastFilms: FirstAndLastFilms = {
-    firstFilm: null,
-    lastFilm: null,
-  };
-
   if (filmsTableBody !== null) {
-    filmDocs.forEach(filmDoc => {
-      const film = FilmMapper.mapFilmDTOToFilm(filmDoc.data());
+    films.forEach(film => {
       filmsTableBody.innerHTML += `
       <tr>
         <td>${film.fields.episodeID}</td>
@@ -24,15 +14,5 @@ export const renderFilms = (filmDocs: QuerySnapshot<FilmDTO>): FirstAndLastFilms
         <td>${film.fields.director}</td>
       </tr>`;
     });
-
-    const firstFilmDoc = filmDocs.docs[0];
-    const lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-
-    newFirstAndLastFilms = {
-      firstFilm: firstFilmDoc,
-      lastFilm: lastFilmDoc,
-    };
   }
-
-  return newFirstAndLastFilms;
 };
