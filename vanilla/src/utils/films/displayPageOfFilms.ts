@@ -13,9 +13,9 @@ import { renderFilms } from './renderFilms';
 import { Film } from './../../interfaces/films/film/Film';
 
 /**
- * Closure for displaying pages with films.
+ * Closure for fetching and displaying pages with films.
  * @param mode - Describes which page to show. Init - first load, Next - next page, Prev - previous page.
- * @returns Function which fetches needed list of films and displays it in the page.
+ * @returns Function which fetches required list of films and displays it on the page.
  */
 export const displayFilmsTable = (): Function => {
   let filmDocs: QuerySnapshot<FilmDTO>;
@@ -31,29 +31,34 @@ export const displayFilmsTable = (): Function => {
 
       if (filmsTableBody !== null) {
         if (mode === Modes.Init) {
-          const newfilmDocs = await FilmsService.fetchFirstPageOfFilms();
-          filmDocs = newfilmDocs;
+          filmDocs = await FilmsService.fetchFirstPageOfFilms();
+
           lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
           firstFilmDoc = filmDocs.docs[0];
+
           films = mapQuerySnapshotToArray(filmDocs);
         } else if (mode === Modes.Next) {
           const lastFilmDocCopy = lastFilmDoc;
-          const newFilmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc);
+          const newFilmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDocCopy);
 
-          if (lastFilmDocCopy === lastFilmDoc) {
+          if (lastFilmDocCopy === lastFilmDoc && newFilmDocs.docs.length !== 0) {
             filmDocs = newFilmDocs;
+
             lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
             firstFilmDoc = filmDocs.docs[0];
+
             films = mapQuerySnapshotToArray(filmDocs);
           }
         } else if (mode === Modes.Prev) {
           const firstFilmDocCopy = firstFilmDoc;
           const newFilmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDocCopy);
 
-          if (firstFilmDocCopy === firstFilmDoc) {
+          if (firstFilmDocCopy === firstFilmDoc && newFilmDocs.docs.length !== 0) {
             filmDocs = newFilmDocs;
+
             lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
             firstFilmDoc = filmDocs.docs[0];
+
             films = mapQuerySnapshotToArray(filmDocs);
           }
         }
