@@ -1,9 +1,30 @@
+import { Mutex } from 'async-mutex';
+
 import { Modes } from '../../utils/enums/filmsPaginationModes';
 
-import { displayPageOfFilms } from '../../utils/films/displayPageOfFilms';
+import { displayFilmsTable } from '../../utils/films/displayPageOfFilms';
 
-import { FirstAndLastFilms } from './../../interfaces/films/FirstAndLastFilms';
+const displayFilms = displayFilmsTable();
 
-const firstAndLastFilms: FirstAndLastFilms = { firstFilm: null, lastFilm: null };
+const mutex = new Mutex();
 
-displayPageOfFilms(firstAndLastFilms, Modes.Init);
+displayFilms(Modes.Init);
+
+const nextButton = document.querySelector('.next-btn');
+const prevButton = document.querySelector('.prev-btn');
+
+if (nextButton !== null) {
+  nextButton.addEventListener('click', () => {
+    mutex.runExclusive(() => {
+      displayFilms(Modes.Next);
+    });
+  });
+}
+
+if (prevButton !== null) {
+  prevButton.addEventListener('click', () => {
+    mutex.runExclusive(() => {
+      displayFilms(Modes.Prev);
+    });
+  });
+}

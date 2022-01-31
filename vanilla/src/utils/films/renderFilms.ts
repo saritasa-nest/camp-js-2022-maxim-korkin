@@ -4,6 +4,7 @@ export const renderFilms = (films: Film[]): void => {
   const filmsTableBody = document.querySelector('.films-table-body');
 
   if (filmsTableBody !== null) {
+    filmsTableBody.innerHTML = '';
     films.forEach(film => {
       filmsTableBody.innerHTML += `
       <tr>

@@ -1,41 +1,66 @@
-import { Film } from './../../interfaces/films/film/Film';
-import { FilmsService } from '../../services/films/FilmsService';
+import { QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
 
-import { FirstAndLastFilms } from '../../interfaces/films/FirstAndLastFilms';
+import { FilmsService } from '../../services/films/FilmsService';
 
 import { Modes } from '../enums/filmsPaginationModes';
 
-import { renderFilms } from './renderFilms';
-import { QuerySnapshot } from 'firebase/firestore';
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
+import { mapQuerySnapshotToArray } from './mapQuerySnapshotToArray';
+
+import { renderFilms } from './renderFilms';
+
+import { Film } from './../../interfaces/films/film/Film';
+
 /**
- * Function dor displaying pages with films.
- * @param firstAndLastFilms - Object containing first and last films on the page.
- * @param mode - Describes what page to show. Init - first load, Next - next page, Prev - previous page.
- * @returns New object containing first and last films on the page.
+ * Closure for displaying pages with films.
+ * @param mode - Describes which page to show. Init - first load, Next - next page, Prev - previous page.
+ * @returns Function which fetches needed list of films and displays it in the page.
  */
-export const displayFilmsTable = (mode = Modes.Init): Function => {
+export const displayFilmsTable = (): Function => {
   let filmDocs: QuerySnapshot<FilmDTO>;
-  let isLoaded = true;
 
-  return async(): Promise<void> => {
-    isLoaded = false;
-    const filmsTableBody = document.querySelector('.films-table-body');
+  let films: Film[];
 
-    if (isLoaded && filmsTableBody !== null) {
-      filmsTableBody.innerHTML = '';
+  let lastFilmDoc: QueryDocumentSnapshot<FilmDTO>;
 
-      if (mode === Modes.Init) {
-        filmDocs = await FilmsService.fetchFirstPageOfFilms();
-      } else if (mode === Modes.Next) {
-        
-      } else if (mode === Modes.Prev && firstAndLastFilms.firstFilm !== null) {
-        filmDocs = await FilmsService.fetchPrevPageOfFilms(firstAndLastFilms.firstFilm);
+  let firstFilmDoc: QueryDocumentSnapshot<FilmDTO>;
+
+  return async(mode = Modes.Init): Promise<void> => {
+      const filmsTableBody = document.querySelector('.films-table-body');
+
+      if (filmsTableBody !== null) {
+        if (mode === Modes.Init) {
+          const newfilmDocs = await FilmsService.fetchFirstPageOfFilms();
+          filmDocs = newfilmDocs;
+          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+          firstFilmDoc = filmDocs.docs[0];
+          films = mapQuerySnapshotToArray(filmDocs);
+        } else if (mode === Modes.Next) {
+          const lastFilmDocCopy = lastFilmDoc;
+          const newFilmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc);
+
+          if (lastFilmDocCopy === lastFilmDoc) {
+            filmDocs = newFilmDocs;
+            lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+            firstFilmDoc = filmDocs.docs[0];
+            films = mapQuerySnapshotToArray(filmDocs);
+          }
+        } else if (mode === Modes.Prev) {
+          const firstFilmDocCopy = firstFilmDoc;
+          const newFilmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDocCopy);
+
+          if (firstFilmDocCopy === firstFilmDoc) {
+            filmDocs = newFilmDocs;
+            lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+            firstFilmDoc = filmDocs.docs[0];
+            films = mapQuerySnapshotToArray(filmDocs);
+          }
+        }
+
+        if (films.length !== 0) {
+          renderFilms(films);
+        }
       }
-
-      renderFilms(filmDocs);
-    }
-    isLoaded = true;
-  }
+    };
 };

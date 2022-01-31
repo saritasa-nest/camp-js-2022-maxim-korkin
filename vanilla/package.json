@@ -10,14 +10,15 @@
   },
   "devDependencies": {
     "@chernodub/eslint-config": "^2.0.4",
+    "@types/materialize-css": "^1.0.11",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "stylelint": "^14.3.0",
     "stylelint-config-recommended": "^6.0.0",
     "typescript": "^4.5.5",
-    "vite": "^2.7.2",
-    "@types/materialize-css": "^1.0.11"
+    "vite": "^2.7.2"
   },
   "dependencies": {
+    "async-mutex": "^0.3.2",
     "dotenv": "^14.3.2",
     "firebase": "^9.6.4",
     "materialize-css": "^1.0.0-rc.2"
