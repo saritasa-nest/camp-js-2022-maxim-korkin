@@ -6,7 +6,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint -c .eslintrc src --ext .js,.ts",
-    "stylelint": "npx stylelint 'src/**/*.css'"
+    "stylelint": "npx stylelint ./src/*.css"
   },
   "devDependencies": {
     "@chernodub/eslint-config": "^2.0.4",
