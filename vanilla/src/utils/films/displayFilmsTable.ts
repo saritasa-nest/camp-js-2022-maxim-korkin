@@ -1,5 +1,5 @@
 /* eslint-disable require-atomic-updates */
-// Disabled it since im using a mutex to make sure that only one instance of promise has access to outer variables.
+// Disabled it since im using a mutex to make sure that only one instance of async function has access to outer variables.
 
 import { QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
 
