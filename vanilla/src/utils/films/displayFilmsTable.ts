@@ -1,8 +1,13 @@
+/* eslint-disable require-atomic-updates */
+// Disabled it since im using a mutex to make sure that only one instance of promise has access to outer variables.
+
 import { QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
+
+import { getMutex } from 'simple-mutex-promise';
 
 import { FilmsService } from '../../services/films/FilmsService';
 
-import { Modes } from '../enums/filmsPaginationModes';
+import { PaginationModes } from '../enums/filmsPaginationModes';
 
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
@@ -38,24 +43,30 @@ export const displayFilmsTable = (): Function => {
 
   let inProgress = false;
 
-  return async(mode = Modes.Init): Promise<void> => {
+  const mutex = getMutex();
+
+  return async(mode = PaginationModes.Init): Promise<void> => {
     if (inProgress === true) {
       return;
     }
+
+    const [lock, release] = mutex.getLock();
+
     inProgress = true;
 
-    console.log(1);
+    await lock;
+
     const filmsTableBody = document.querySelector('.films-table-body');
 
     if (filmsTableBody !== null) {
-      if (mode === Modes.Init) {
+      if (mode === PaginationModes.Init) {
         filmDocs = await FilmsService.fetchFirstPageOfFilms();
 
         lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
         firstFilmDoc = filmDocs.docs[0];
 
         films = mapQuerySnapshotToArray(filmDocs);
-      } else if (mode === Modes.Next && !onLastPage) {
+      } else if (mode === PaginationModes.Next && !onLastPage) {
         const lastFilmDocCopy = lastFilmDoc;
         const newFilmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDocCopy);
 
@@ -67,7 +78,7 @@ export const displayFilmsTable = (): Function => {
 
           films = mapQuerySnapshotToArray(filmDocs);
         }
-      } else if (mode === Modes.Prev && !onFirstPage) {
+      } else if (mode === PaginationModes.Prev && !onFirstPage) {
         const firstFilmDocCopy = firstFilmDoc;
         const newFilmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDocCopy);
 
@@ -86,9 +97,9 @@ export const displayFilmsTable = (): Function => {
         onLastPage = await isLastPage(lastFilmDoc, orderingField);
         renderFilms(films);
       }
-      console.log(2);
 
       inProgress = false;
+      release();
     }
   };
 };
