@@ -12,8 +12,9 @@ export class FilmsService {
 
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
-   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @param orderingField - Field to order the results. Default value if 'pk'.
+   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
+   * @returns
    */
   public static fetchFirstPageOfFilms(orderingField = 'pk', limitOfFilmsOnPage = 2): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(limitOfFilmsOnPage));
@@ -56,5 +57,31 @@ export class FilmsService {
       endBefore(firstVisibleFilm));
 
     return getDocs(filmsQuery);
+  }
+
+  /**
+   * Method for getting the last document from the collection ordered by the orderingField.
+   * @param orderingField - Field to order the results.
+   * @returns
+   */
+  public static async fetchLastFilm(orderingField: string): Promise<FilmDTO> {
+    const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limitToLast(1));
+
+    const lastFilmSnapshot = await getDocs(lastFilmQuery);
+
+    return lastFilmSnapshot.docs[0].data();
+  }
+
+  /**
+   * Method for getting the first document from the collection ordered by the orderingField.
+   * @param orderingField - Field to order the results.
+   * @returns
+   */
+  public static async fetchFirstFilm(orderingField: string): Promise<FilmDTO> {
+    const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(1));
+
+    const firstFilmSnapshot = await getDocs(firstFilmQuery);
+
+    return firstFilmSnapshot.docs[0].data();
   }
 }
