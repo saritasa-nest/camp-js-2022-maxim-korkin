@@ -6,8 +6,8 @@ const displayFilms = displayFilmsTable();
 
 displayFilms(PaginationModes.Init);
 
-const nextButton = document.querySelector('.next-btn');
-const prevButton = document.querySelector('.prev-btn');
+const nextButton = document.querySelector('.pagination-next-btn');
+const prevButton = document.querySelector('.pagination-prev-btn');
 
 if (nextButton !== null) {
   nextButton.addEventListener('click', () => {

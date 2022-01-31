@@ -1,3 +1,4 @@
+import { updatePaginationButtons } from './updatePaginationButtons';
 /* eslint-disable require-atomic-updates */
 // Disabled it since im using a mutex to make sure that only one instance of async function has access to outer variables.
 
@@ -67,34 +68,25 @@ export const displayFilmsTable = (): Function => {
 
         films = mapQuerySnapshotToArray(filmDocs);
       } else if (mode === PaginationModes.Next && !onLastPage) {
-        const lastFilmDocCopy = lastFilmDoc;
-        const newFilmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDocCopy);
+        filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc);
 
-        if (lastFilmDocCopy.data().pk === lastFilmDoc.data().pk) {
-          filmDocs = newFilmDocs;
+        lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+        firstFilmDoc = filmDocs.docs[0];
 
-          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-          firstFilmDoc = filmDocs.docs[0];
-
-          films = mapQuerySnapshotToArray(filmDocs);
-        }
+        films = mapQuerySnapshotToArray(filmDocs);
       } else if (mode === PaginationModes.Prev && !onFirstPage) {
-        const firstFilmDocCopy = firstFilmDoc;
-        const newFilmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDocCopy);
+        filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc);
 
-        if (firstFilmDocCopy.data().pk === firstFilmDoc.data().pk) {
-          filmDocs = newFilmDocs;
+        lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+        firstFilmDoc = filmDocs.docs[0];
 
-          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-          firstFilmDoc = filmDocs.docs[0];
-
-          films = mapQuerySnapshotToArray(filmDocs);
-        }
+        films = mapQuerySnapshotToArray(filmDocs);
       }
 
       if (films.length !== 0) {
         onFirstPage = await isFirstPage(firstFilmDoc, orderingField);
         onLastPage = await isLastPage(lastFilmDoc, orderingField);
+        updatePaginationButtons(onFirstPage, onLastPage);
         renderFilms(films);
       }
 
