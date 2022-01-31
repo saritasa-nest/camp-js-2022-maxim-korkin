@@ -13,6 +13,8 @@ import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
 import { Film } from '../../interfaces/films/film/Film';
 
+import { SortingFields } from './../enums/sortingFields';
+
 import { updatePaginationButtons } from './updatePaginationButtons';
 
 import { isFirstPage } from './isFirstPage';
@@ -37,7 +39,7 @@ export const displayFilmsTable = (): Function => {
 
   let firstFilmDoc: QueryDocumentSnapshot<FilmDTO>;
 
-  const orderingField = 'pk';
+  let orderingField = SortingFields.EpisodeId;
 
   let onFirstPage: boolean;
 
@@ -47,36 +49,40 @@ export const displayFilmsTable = (): Function => {
 
   const mutex = getMutex();
 
-  return async(mode = PaginationModes.Init): Promise<void> => {
+  return async(mode = PaginationModes.Init, newOrderingField: SortingFields | null = null): Promise<void> => {
     if (inProgress === true) {
       return;
     }
 
-    const [lock, release] = mutex.getLock();
-
     inProgress = true;
 
+    const [lock, release] = mutex.getLock();
+
     await lock;
+
+    if (newOrderingField !== null) {
+      orderingField = newOrderingField;
+    }
 
     const filmsTableBody = document.querySelector('.films-table-body');
 
     if (filmsTableBody !== null) {
       if (mode === PaginationModes.Init) {
-        filmDocs = await FilmsService.fetchFirstPageOfFilms();
+        filmDocs = await FilmsService.fetchFirstPageOfFilms(orderingField);
 
         lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
         firstFilmDoc = filmDocs.docs[0];
 
         films = mapQuerySnapshotToArray(filmDocs);
       } else if (mode === PaginationModes.Next && !onLastPage) {
-        filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc);
+        filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc, orderingField);
 
         lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
         firstFilmDoc = filmDocs.docs[0];
 
         films = mapQuerySnapshotToArray(filmDocs);
       } else if (mode === PaginationModes.Prev && !onFirstPage) {
-        filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc);
+        filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc, orderingField);
 
         lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
         firstFilmDoc = filmDocs.docs[0];
