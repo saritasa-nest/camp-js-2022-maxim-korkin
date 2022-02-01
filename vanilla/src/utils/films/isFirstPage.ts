@@ -21,9 +21,5 @@ export const isFirstPage = async(
 ): Promise<boolean> => {
   const firstFilm = await FilmsService.fetchFirstFilm(orderingField, orderingMode);
 
-  if (firstFilm.pk === firstFilmOnPage.data().pk) {
-    return true;
-  }
-  return false;
-
+  return firstFilm.pk === firstFilmOnPage.data().pk;
 };

@@ -16,13 +16,10 @@ import { OrderingModes } from '../enums/films/OrderingModes';
  */
 export const isLastPage = async(
   lastFilmOnPage: QueryDocumentSnapshot<FilmDTO>,
-  orderingField: OrderingFields, orderingMode: OrderingModes,
+  orderingField: OrderingFields,
+  orderingMode: OrderingModes,
 ): Promise<boolean> => {
   const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode);
 
-  if (lastFilm.pk === lastFilmOnPage.data().pk) {
-    return true;
-  }
-  return false;
-
+  return lastFilm.pk === lastFilmOnPage.data().pk;
 };
