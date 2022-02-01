@@ -2,8 +2,8 @@ import { endBefore, getDocs, limit, limitToLast, orderBy, query, QueryDocumentSn
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
-import { OrderingFields } from '../../utils/enums/OrderingFields';
-import { OrderingModes } from '../../utils/enums/OrderingModes';
+import { OrderingFields } from '../../utils/enums/films/OrderingFields';
+import { OrderingModes } from '../../utils/enums/films/OrderingModes';
 
 import { FilmDTO } from './../../interfaces/films/DTO/FilmDTO';
 

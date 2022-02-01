@@ -8,7 +8,7 @@ import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 export class FilmMapper {
   /**
    * Method gets FilmDTO object and then converts it into Film object and returns it.
-   * @param filmDTOObject - FilmDTO object which will be converted into Film object.
+   * @param filmDTOObject - FilmDTO object which need to be converted into Film object.
    * @returns Converted Film object.
    */
   public static mapFilmDTOToFilm(filmDTOObject: FilmDTO): Film {

@@ -4,8 +4,8 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
-import { OrderingFields } from '../enums/OrderingFields';
-import { OrderingModes } from '../enums/OrderingModes';
+import { OrderingFields } from '../enums/films/OrderingFields';
+import { OrderingModes } from '../enums/films/OrderingModes';
 
 /**
  * Function which checks if the current page is the last page possible.

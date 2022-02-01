@@ -10,9 +10,9 @@ import { FilmsService } from '../../services/films/FilmsService';
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 import { Film } from '../../interfaces/films/film/Film';
 
-import { PaginationModes } from '../enums/PaginationModes';
-import { OrderingFields } from '../enums/OrderingFields';
-import { OrderingModes } from '../enums/OrderingModes';
+import { PaginationModes } from '../enums/films/PaginationModes';
+import { OrderingFields } from '../enums/films/OrderingFields';
+import { OrderingModes } from '../enums/films/OrderingModes';
 
 import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';

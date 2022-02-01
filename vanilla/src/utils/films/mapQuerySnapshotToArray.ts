@@ -7,8 +7,8 @@ import { FilmMapper } from './../mappers/FilmMapper';
 
 /**
  * Function maps query snapshot from Firestore to regular array.
- * @param snapshot - Query snapshot with filmDTO data.
- * @returns Array with Film data.
+ * @param snapshot - Query snapshot with filmDTOs data.
+ * @returns Array with Films data.
  */
 export const mapQuerySnapshotToArray = (
   snapshot: QuerySnapshot<FilmDTO>,

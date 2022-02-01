@@ -1,5 +1,5 @@
-import { OrderingModes } from '../enums/OrderingModes';
-import { OrderingFields } from '../enums/OrderingFields';
+import { OrderingModes } from '../enums/films/OrderingModes';
+import { OrderingFields } from '../enums/films/OrderingFields';
 
 import { getNewActiveHeader } from './getNewActiveHeader';
 

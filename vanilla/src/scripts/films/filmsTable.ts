@@ -1,8 +1,8 @@
-import { PaginationModes } from '../../utils/enums/PaginationModes';
+import { PaginationModes } from '../../utils/enums/films/PaginationModes';
 
 import { displayFilmsTable } from '../../utils/films/displayFilmsTable';
 
-import { OrderingFields } from '../../utils/enums/OrderingFields';
+import { OrderingFields } from '../../utils/enums/films/OrderingFields';
 
 const displayFilms = displayFilmsTable();
 
