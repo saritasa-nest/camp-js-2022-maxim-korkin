@@ -4,14 +4,20 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
-import { OrderFields } from './../enums/OrderFields';
+import { OrderingFields } from '../enums/OrderingFields';
+import { OrderingModes } from '../enums/OrderingModes';
 
-import { OrderModes } from './../enums/OrderModes';
-
+/**
+ * Function which checks if the current page is the first page possible.
+ * @param firstFilmOnPage - First film on the current page.
+ * @param orderingField - Current ordering field.
+ * @param orderingMode - Current ordering mode.
+ * @returns True or false.
+ */
 export const isFirstPage = async(
   firstFilmOnPage: QueryDocumentSnapshot<FilmDTO>,
-  orderingField: OrderFields,
-  orderingMode: OrderModes,
+  orderingField: OrderingFields,
+  orderingMode: OrderingModes,
 ): Promise<boolean> => {
   const firstFilm = await FilmsService.fetchFirstFilm(orderingField, orderingMode);
 

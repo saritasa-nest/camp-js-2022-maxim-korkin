@@ -2,9 +2,8 @@ import { endBefore, getDocs, limit, limitToLast, orderBy, query, QueryDocumentSn
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
-import { OrderFields } from '../../utils/enums/OrderFields';
-
-import { OrderModes } from './../../utils/enums/OrderModes';
+import { OrderingFields } from '../../utils/enums/OrderingFields';
+import { OrderingModes } from '../../utils/enums/OrderingModes';
 
 import { FilmDTO } from './../../interfaces/films/DTO/FilmDTO';
 
@@ -22,8 +21,8 @@ export class FilmsService {
    * @returns
    */
   public static fetchFirstPageOfFilms(
-    orderingField: OrderFields,
-    orderingMode: OrderModes,
+    orderingField: OrderingFields,
+    orderingMode: OrderingModes,
     limitOfFilmsOnPage = 2,
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
@@ -41,8 +40,8 @@ export class FilmsService {
    */
   public static fetchNextPageOfFilms(
     lastVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
-    orderingField: OrderFields,
-    orderingMode: OrderModes,
+    orderingField: OrderingFields,
+    orderingMode: OrderingModes,
     limitOfFilmsOnPage = 2,
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(
@@ -65,8 +64,8 @@ export class FilmsService {
    */
   public static fetchPrevPageOfFilms(
     firstVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
-    orderingField: OrderFields,
-    orderingMode: OrderModes,
+    orderingField: OrderingFields,
+    orderingMode: OrderingModes,
     limitOfFilmsOnPage = 2,
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(
@@ -85,7 +84,7 @@ export class FilmsService {
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @returns
    */
-  public static async fetchLastFilm(orderingField: OrderFields, orderingMode: OrderModes): Promise<FilmDTO> {
+  public static async fetchLastFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<FilmDTO> {
     const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limitToLast(1));
 
     const lastFilmSnapshot = await getDocs(lastFilmQuery);
@@ -99,7 +98,7 @@ export class FilmsService {
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @returns
    */
-  public static async fetchFirstFilm(orderingField: OrderFields, orderingMode: OrderModes): Promise<FilmDTO> {
+  public static async fetchFirstFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<FilmDTO> {
     const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(1));
 
     const firstFilmSnapshot = await getDocs(firstFilmQuery);

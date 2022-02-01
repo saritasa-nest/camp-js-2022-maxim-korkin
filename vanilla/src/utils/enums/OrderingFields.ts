@@ -1,7 +1,7 @@
 /**
- * Enumeration for the possible sorting fields.
+ * Enumeration for the possible ordering fields.
  */
-export enum OrderFields {
+export enum OrderingFields {
   EpisodeId = 'fields.episode_id',
   Title = 'fields.title',
   ReleaseDate = 'fields.release_date',

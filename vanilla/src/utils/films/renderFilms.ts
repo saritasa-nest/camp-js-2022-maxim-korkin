@@ -1,5 +1,9 @@
 import { Film } from './../../interfaces/films/film/Film';
 
+/**
+ * Function renders films to the films table.
+ * @param films - Array with the films.
+ */
 export const renderFilms = (films: Film[]): void => {
   const filmsTableBody = document.querySelector('.films-table-body');
 

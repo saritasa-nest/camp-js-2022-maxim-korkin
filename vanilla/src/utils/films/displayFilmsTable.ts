@@ -7,26 +7,19 @@ import { getMutex } from 'simple-mutex-promise';
 
 import { FilmsService } from '../../services/films/FilmsService';
 
-import { PaginationModes } from '../enums/PaginationModes';
-
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
-
 import { Film } from '../../interfaces/films/film/Film';
 
-import { OrderFields } from '../enums/OrderFields';
+import { PaginationModes } from '../enums/PaginationModes';
+import { OrderingFields } from '../enums/OrderingFields';
+import { OrderingModes } from '../enums/OrderingModes';
 
-import { OrderModes } from './../enums/OrderModes';
-
+import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';
-
 import { updatePaginationButtons } from './updatePaginationButtons';
-
 import { isFirstPage } from './isFirstPage';
-
 import { isLastPage } from './isLastPage';
-
 import { mapQuerySnapshotToArray } from './mapQuerySnapshotToArray';
-
 import { renderFilms } from './renderFilms';
 
 /**
@@ -34,27 +27,57 @@ import { renderFilms } from './renderFilms';
  * @returns Function which fetches required list of films and displays it on the page.
  */
 export const displayFilmsTable = (): Function => {
+  /**
+   * Snapshot with the films.
+   */
   let filmDocs: QuerySnapshot<FilmDTO>;
 
-  let films: Film[];
-
+  /**
+   * Last film on the page.
+   */
   let lastFilmDoc: QueryDocumentSnapshot<FilmDTO>;
 
+  /**
+   * First film on the page.
+   */
   let firstFilmDoc: QueryDocumentSnapshot<FilmDTO>;
 
-  let orderingField = OrderFields.EpisodeId;
+  /**
+   * Field used for ordering the results.
+   */
+  let orderingField = OrderingFields.EpisodeId;
 
-  let orderingMode = OrderModes.Ascending;
+  /**
+   * Shows if ordering should be ascending or descending.
+   */
+  let orderingMode = OrderingModes.Ascending;
 
+  /**
+   * Shows if the current page is the first page possible.
+   */
   let onFirstPage: boolean;
 
+  /**
+   * Shows if the current page is the last page possible.
+   */
   let onLastPage: boolean;
 
+  /**
+   * Flag which indicates that one instance of this function is already in progress.
+   */
   let inProgress = false;
 
+  /**
+   * Mutex for making sure that another instance of async function won't have access to resources.
+   */
   const mutex = getMutex();
 
-  return async(mode = PaginationModes.Init, newOrderingField: OrderFields | null = null): Promise<void> => {
+  /**
+   * Function which fetches required films from the firestorm, renders them and updates pagonation buttons and table headers.
+   * @param mode - Shows if we should fetch first, next or previous page.
+   * @param newOrderingField - Shows if we should use specific field to order data. Null if we dont need to change ordering field.
+   */
+  return async(mode = PaginationModes.Init, newOrderingField: OrderingFields | null = null): Promise<void> => {
     if (inProgress === true) {
       return;
     }
@@ -65,12 +88,14 @@ export const displayFilmsTable = (): Function => {
 
     await lock;
 
+    let films: Film[] = [];
+
     if (newOrderingField !== null) {
       if (newOrderingField === orderingField) {
         orderingMode = switchOrderMode(orderingMode);
       } else {
         orderingField = newOrderingField;
-        orderingMode = OrderModes.Ascending;
+        orderingMode = OrderingModes.Ascending;
       }
     }
 
@@ -109,6 +134,7 @@ export const displayFilmsTable = (): Function => {
         onFirstPage = await isFirstPage(firstFilmDoc, orderingField, orderingMode);
         onLastPage = await isLastPage(lastFilmDoc, orderingField, orderingMode);
         updatePaginationButtons(onFirstPage, onLastPage);
+        updateFieldHeaders(orderingField, orderingMode);
         renderFilms(films);
       }
 
