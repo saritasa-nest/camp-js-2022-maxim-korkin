@@ -4,8 +4,14 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
-export const isLastPage = async(lastFilmOnPage: QueryDocumentSnapshot<FilmDTO>, orderingField: string): Promise<boolean> => {
-  const lastFilm = await FilmsService.fetchLastFilm(orderingField);
+import { OrderFields } from './../enums/OrderFields';
+import { OrderModes } from './../enums/OrderModes';
+
+export const isLastPage = async(
+  lastFilmOnPage: QueryDocumentSnapshot<FilmDTO>,
+  orderingField: OrderFields, orderingMode: OrderModes,
+): Promise<boolean> => {
+  const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode);
 
   if (lastFilm.pk === lastFilmOnPage.data().pk) {
     return true;

@@ -7,13 +7,17 @@ import { getMutex } from 'simple-mutex-promise';
 
 import { FilmsService } from '../../services/films/FilmsService';
 
-import { PaginationModes } from '../enums/filmsPaginationModes';
+import { PaginationModes } from '../enums/PaginationModes';
 
 import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 
 import { Film } from '../../interfaces/films/film/Film';
 
-import { SortingFields } from './../enums/sortingFields';
+import { OrderFields } from '../enums/OrderFields';
+
+import { OrderModes } from './../enums/OrderModes';
+
+import { switchOrderMode } from './switchOrderingMode';
 
 import { updatePaginationButtons } from './updatePaginationButtons';
 
@@ -27,7 +31,6 @@ import { renderFilms } from './renderFilms';
 
 /**
  * Closure for fetching and displaying pages with films.
- * @param mode - Describes which page to show. Init - first load, Next - next page, Prev - previous page.
  * @returns Function which fetches required list of films and displays it on the page.
  */
 export const displayFilmsTable = (): Function => {
@@ -39,7 +42,9 @@ export const displayFilmsTable = (): Function => {
 
   let firstFilmDoc: QueryDocumentSnapshot<FilmDTO>;
 
-  let orderingField = SortingFields.EpisodeId;
+  let orderingField = OrderFields.EpisodeId;
+
+  let orderingMode = OrderModes.Ascending;
 
   let onFirstPage: boolean;
 
@@ -49,7 +54,7 @@ export const displayFilmsTable = (): Function => {
 
   const mutex = getMutex();
 
-  return async(mode = PaginationModes.Init, newOrderingField: SortingFields | null = null): Promise<void> => {
+  return async(mode = PaginationModes.Init, newOrderingField: OrderFields | null = null): Promise<void> => {
     if (inProgress === true) {
       return;
     }
@@ -61,7 +66,12 @@ export const displayFilmsTable = (): Function => {
     await lock;
 
     if (newOrderingField !== null) {
-      orderingField = newOrderingField;
+      if (newOrderingField === orderingField) {
+        orderingMode = switchOrderMode(orderingMode);
+      } else {
+        orderingField = newOrderingField;
+        orderingMode = OrderModes.Ascending;
+      }
     }
 
     const filmsTableBody = document.querySelector('.films-table-body');
@@ -69,21 +79,21 @@ export const displayFilmsTable = (): Function => {
     if (filmsTableBody !== null) {
       try {
         if (mode === PaginationModes.Init) {
-          filmDocs = await FilmsService.fetchFirstPageOfFilms(orderingField);
+          filmDocs = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode);
 
           lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
           firstFilmDoc = filmDocs.docs[0];
 
           films = mapQuerySnapshotToArray(filmDocs);
         } else if (mode === PaginationModes.Next && !onLastPage) {
-          filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc, orderingField);
+          filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc, orderingField, orderingMode);
 
           lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
           firstFilmDoc = filmDocs.docs[0];
 
           films = mapQuerySnapshotToArray(filmDocs);
         } else if (mode === PaginationModes.Prev && !onFirstPage) {
-          filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc, orderingField);
+          filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc, orderingField, orderingMode);
 
           lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
           firstFilmDoc = filmDocs.docs[0];
@@ -96,8 +106,8 @@ export const displayFilmsTable = (): Function => {
       }
 
       if (films.length !== 0) {
-        onFirstPage = await isFirstPage(firstFilmDoc, orderingField);
-        onLastPage = await isLastPage(lastFilmDoc, orderingField);
+        onFirstPage = await isFirstPage(firstFilmDoc, orderingField, orderingMode);
+        onLastPage = await isLastPage(lastFilmDoc, orderingField, orderingMode);
         updatePaginationButtons(onFirstPage, onLastPage);
         renderFilms(films);
       }

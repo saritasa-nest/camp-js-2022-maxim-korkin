@@ -1,8 +1,8 @@
-import { PaginationModes } from '../../utils/enums/filmsPaginationModes';
+import { PaginationModes } from '../../utils/enums/PaginationModes';
 
 import { displayFilmsTable } from '../../utils/films/displayFilmsTable';
 
-import { SortingFields } from './../../utils/enums/sortingFields';
+import { OrderFields } from '../../utils/enums/OrderFields';
 
 const displayFilms = displayFilmsTable();
 
@@ -31,30 +31,30 @@ const directorHeader = document.querySelector('.director-header');
 
 if (episodeIdHeader !== null) {
   episodeIdHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, SortingFields.EpisodeId);
+    displayFilms(PaginationModes.Init, OrderFields.EpisodeId);
   });
 }
 
 if (titleHeader !== null) {
   titleHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, SortingFields.Title);
+    displayFilms(PaginationModes.Init, OrderFields.Title);
   });
 }
 
 if (releaseDateHeader !== null) {
   releaseDateHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, SortingFields.ReleaseDate);
+    displayFilms(PaginationModes.Init, OrderFields.ReleaseDate);
   });
 }
 
 if (producerHeader !== null) {
   producerHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, SortingFields.Producer);
+    displayFilms(PaginationModes.Init, OrderFields.Producer);
   });
 }
 
 if (directorHeader !== null) {
   directorHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, SortingFields.Director);
+    displayFilms(PaginationModes.Init, OrderFields.Director);
   });
 }

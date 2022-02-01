@@ -2,6 +2,10 @@ import { endBefore, getDocs, limit, limitToLast, orderBy, query, QueryDocumentSn
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
+import { OrderFields } from '../../utils/enums/OrderFields';
+
+import { OrderModes } from './../../utils/enums/OrderModes';
+
 import { FilmDTO } from './../../interfaces/films/DTO/FilmDTO';
 
 /**
@@ -13,11 +17,16 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
    * @param orderingField - Field to order the results. Default value if 'pk'.
+   * @param orderingMode - Indicates if order should be ascending or descending.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns
    */
-  public static fetchFirstPageOfFilms(orderingField = 'pk', limitOfFilmsOnPage = 2): Promise<QuerySnapshot<FilmDTO>> {
-    const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(limitOfFilmsOnPage));
+  public static fetchFirstPageOfFilms(
+    orderingField: OrderFields,
+    orderingMode: OrderModes,
+    limitOfFilmsOnPage = 2,
+  ): Promise<QuerySnapshot<FilmDTO>> {
+    const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
 
     return getDocs(filmsQuery);
   }
@@ -25,16 +34,23 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load next page.
    * @param lastVisibleFilm - Last film on the current page.
-   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @param orderingField - Field to order the results. Default value is 'pk'.
+   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns
    */
   public static fetchNextPageOfFilms(
     lastVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
-    orderingField = 'pk',
+    orderingField: OrderFields,
+    orderingMode: OrderModes,
     limitOfFilmsOnPage = 2,
   ): Promise<QuerySnapshot<FilmDTO>> {
-    const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(limitOfFilmsOnPage), startAfter(lastVisibleFilm));
+    const filmsQuery = query(
+      FilmsService.filmsCollection,
+      orderBy(orderingField, orderingMode),
+      limit(limitOfFilmsOnPage),
+      startAfter(lastVisibleFilm),
+    );
 
     return getDocs(filmsQuery);
   }
@@ -42,19 +58,23 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previos page.
    * @param firstVisibleFilm - First film on the current page.
-   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @param orderingField - Field to order the results. Default value is 'pk'.
+   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns
    */
   public static fetchPrevPageOfFilms(
     firstVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
-    orderingField = 'pk',
+    orderingField: OrderFields,
+    orderingMode: OrderModes,
     limitOfFilmsOnPage = 2,
   ): Promise<QuerySnapshot<FilmDTO>> {
-    const filmsQuery = query(FilmsService.filmsCollection,
-      orderBy(orderingField),
+    const filmsQuery = query(
+      FilmsService.filmsCollection,
+      orderBy(orderingField, orderingMode),
       limitToLast(limitOfFilmsOnPage),
-      endBefore(firstVisibleFilm));
+      endBefore(firstVisibleFilm),
+    );
 
     return getDocs(filmsQuery);
   }
@@ -62,10 +82,11 @@ export class FilmsService {
   /**
    * Method for getting the last document from the collection ordered by the orderingField.
    * @param orderingField - Field to order the results.
+   * @param orderingMode - Indicates if order should be ascending or descending.
    * @returns
    */
-  public static async fetchLastFilm(orderingField: string): Promise<FilmDTO> {
-    const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limitToLast(1));
+  public static async fetchLastFilm(orderingField: OrderFields, orderingMode: OrderModes): Promise<FilmDTO> {
+    const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limitToLast(1));
 
     const lastFilmSnapshot = await getDocs(lastFilmQuery);
 
@@ -75,10 +96,11 @@ export class FilmsService {
   /**
    * Method for getting the first document from the collection ordered by the orderingField.
    * @param orderingField - Field to order the results.
+   * @param orderingMode - Indicates if order should be ascending or descending.
    * @returns
    */
-  public static async fetchFirstFilm(orderingField: string): Promise<FilmDTO> {
-    const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField), limit(1));
+  public static async fetchFirstFilm(orderingField: OrderFields, orderingMode: OrderModes): Promise<FilmDTO> {
+    const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(1));
 
     const firstFilmSnapshot = await getDocs(firstFilmQuery);
 
