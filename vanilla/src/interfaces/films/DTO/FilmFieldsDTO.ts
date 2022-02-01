@@ -3,7 +3,7 @@
 /**
  * DTO interface describing the fields of film.
  */
-export interface FilmFieldsDTO {
+export interface FilmFieldsDto {
 
   /** An array containing IDs of characters in the film. */
   readonly characters: readonly number[];

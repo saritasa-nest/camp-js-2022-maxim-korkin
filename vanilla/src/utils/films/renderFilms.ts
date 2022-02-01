@@ -12,7 +12,7 @@ export const renderFilms = (films: Film[]): void => {
     films.forEach(film => {
       filmsTableBody.innerHTML += `
       <tr>
-        <td>${film.fields.episodeID}</td>
+        <td>${film.fields.episodeId}</td>
         <td>${film.fields.title}</td>
         <td>${film.fields.releaseDate}</td>
         <td>${film.fields.producer}</td>

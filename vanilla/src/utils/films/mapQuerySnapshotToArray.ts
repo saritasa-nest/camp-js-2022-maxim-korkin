@@ -1,6 +1,6 @@
 import { QuerySnapshot } from 'firebase/firestore';
 
-import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
+import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
 import { Film } from '../../interfaces/films/film/Film';
 
 import { FilmMapper } from './../mappers/FilmMapper';
@@ -8,8 +8,8 @@ import { FilmMapper } from './../mappers/FilmMapper';
 /**
  * Function maps query snapshot from Firestore to regular array.
  * @param snapshot - Query snapshot with filmDTOs data.
- * @returns Array with Films data.
+ * @returns Array with films data.
  */
 export const mapQuerySnapshotToArray = (
-  snapshot: QuerySnapshot<FilmDTO>,
-): Film[] => snapshot.docs.map(filmDTO => FilmMapper.mapFilmDTOToFilm(filmDTO.data()));
+  snapshot: QuerySnapshot<FilmDto>,
+): Film[] => snapshot.docs.map(filmDTO => FilmMapper.fromDto(filmDTO.data()));

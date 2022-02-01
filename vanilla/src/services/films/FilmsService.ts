@@ -1,11 +1,16 @@
-import { endBefore, getDocs, limit, limitToLast, orderBy, query, QueryDocumentSnapshot, QuerySnapshot, startAfter } from 'firebase/firestore';
+import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
 import { OrderingFields } from '../../utils/enums/films/OrderingFields';
 import { OrderingModes } from '../../utils/enums/films/OrderingModes';
 
-import { FilmDTO } from './../../interfaces/films/DTO/FilmDTO';
+import { Film } from '../../interfaces/films/film/Film';
+import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
+
+import { FilmMapper } from './../../utils/mappers/FilmMapper';
+
+import { mapQuerySnapshotToArray } from './../../utils/films/mapQuerySnapshotToArray';
 
 const defaultLimitOfFilms = 2;
 
@@ -13,23 +18,25 @@ const defaultLimitOfFilms = 2;
  * Service class which helps to work with firestore DB.
  */
 export class FilmsService {
-  private static filmsCollection = getCollectionRef<FilmDTO>('films');
+  private static filmsCollection = getCollectionRef<FilmDto>('films');
 
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
    * @param orderingField - Field to order the results. Default value if 'pk'.
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
-   * @returns
+   * @returns Array with films.
    */
-  public static fetchFirstPageOfFilms(
+  public static async fetchFirstPageOfFilms(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
     limitOfFilmsOnPage = defaultLimitOfFilms,
-  ): Promise<QuerySnapshot<FilmDTO>> {
+  ): Promise<Film[]> {
     const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
 
-    return getDocs(filmsQuery);
+    const filmDocs = await getDocs(filmsQuery);
+
+    return mapQuerySnapshotToArray(filmDocs);
   }
 
   /**
@@ -38,22 +45,28 @@ export class FilmsService {
    * @param orderingField - Field to order the results. Default value is 'pk'.
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
-   * @returns
+   * @returns Array with films.
    */
-  public static fetchNextPageOfFilms(
-    lastVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
+  public static async fetchNextPageOfFilms(
+    lastVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
     limitOfFilmsOnPage = defaultLimitOfFilms,
-  ): Promise<QuerySnapshot<FilmDTO>> {
+  ): Promise<Film[]> {
+    const lastVosibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
+
+    const lastVisibleFilmDoc = (await getDocs(lastVosibleFilmQuery)).docs[0];
+
     const filmsQuery = query(
       FilmsService.filmsCollection,
       orderBy(orderingField, orderingMode),
       limit(limitOfFilmsOnPage),
-      startAfter(lastVisibleFilm),
+      startAfter(lastVisibleFilmDoc),
     );
 
-    return getDocs(filmsQuery);
+    const filmDocs = await getDocs(filmsQuery);
+
+    return mapQuerySnapshotToArray(filmDocs);
   }
 
   /**
@@ -62,49 +75,55 @@ export class FilmsService {
    * @param orderingField - Field to order the results. Default value is 'pk'.
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
-   * @returns
+   * @returns Array with films.
    */
-  public static fetchPrevPageOfFilms(
-    firstVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
+  public static async fetchPrevPageOfFilms(
+    firstVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
     limitOfFilmsOnPage = defaultLimitOfFilms,
-  ): Promise<QuerySnapshot<FilmDTO>> {
+  ): Promise<Film[]> {
+    const firstVosibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
+
+    const firstVisibleFilmDoc = (await getDocs(firstVosibleFilmQuery)).docs[0];
+
     const filmsQuery = query(
       FilmsService.filmsCollection,
       orderBy(orderingField, orderingMode),
       limitToLast(limitOfFilmsOnPage),
-      endBefore(firstVisibleFilm),
+      endBefore(firstVisibleFilmDoc),
     );
 
-    return getDocs(filmsQuery);
+    const filmDocs = await getDocs(filmsQuery);
+
+    return mapQuerySnapshotToArray(filmDocs);
   }
 
   /**
    * Method for getting the last document from the collection ordered by the orderingField.
    * @param orderingField - Field to order the results.
    * @param orderingMode - Indicates if order should be ascending or descending.
-   * @returns
+   * @returns Last film in the db.
    */
-  public static async fetchLastFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<FilmDTO> {
+  public static async fetchLastFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<Film> {
     const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limitToLast(1));
 
     const lastFilmSnapshot = await getDocs(lastFilmQuery);
 
-    return lastFilmSnapshot.docs[0].data();
+    return FilmMapper.fromDto(lastFilmSnapshot.docs[0].data());
   }
 
   /**
    * Method for getting the first document from the collection ordered by the orderingField.
    * @param orderingField - Field to order the results.
    * @param orderingMode - Indicates if order should be ascending or descending.
-   * @returns
+   * @returns First film in the db.
    */
-  public static async fetchFirstFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<FilmDTO> {
+  public static async fetchFirstFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<Film> {
     const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(1));
 
     const firstFilmSnapshot = await getDocs(firstFilmQuery);
 
-    return firstFilmSnapshot.docs[0].data();
+    return FilmMapper.fromDto(firstFilmSnapshot.docs[0].data());
   }
 }

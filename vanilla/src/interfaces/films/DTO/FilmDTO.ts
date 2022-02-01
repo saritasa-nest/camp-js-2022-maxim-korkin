@@ -1,12 +1,12 @@
-import { FilmFieldsDTO } from './FilmFieldsDTO';
+import { FilmFieldsDto } from './FilmFieldsDto';
 
 /**
  * Interface describing the film.
  */
-export interface FilmDTO {
+export interface FilmDto {
 
   /** Fileds which describe the film. */
-  readonly fields: FilmFieldsDTO;
+  readonly fields: FilmFieldsDto;
 
   /** Model in DB. */
   readonly model: string;

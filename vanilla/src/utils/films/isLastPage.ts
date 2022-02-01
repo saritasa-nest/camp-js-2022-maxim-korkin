@@ -1,8 +1,6 @@
-import { QueryDocumentSnapshot } from 'firebase/firestore';
-
 import { FilmsService } from '../../services/films/FilmsService';
 
-import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
+import { Film } from '../../interfaces/films/film/Film';
 
 import { OrderingFields } from '../enums/films/OrderingFields';
 import { OrderingModes } from '../enums/films/OrderingModes';
@@ -15,11 +13,11 @@ import { OrderingModes } from '../enums/films/OrderingModes';
  * @returns True or false.
  */
 export const isLastPage = async(
-  lastFilmOnPage: QueryDocumentSnapshot<FilmDTO>,
+  lastFilmOnPage: Film,
   orderingField: OrderingFields,
   orderingMode: OrderingModes,
 ): Promise<boolean> => {
   const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode);
 
-  return lastFilm.pk === lastFilmOnPage.data().pk;
+  return lastFilm.pk === lastFilmOnPage.pk;
 };

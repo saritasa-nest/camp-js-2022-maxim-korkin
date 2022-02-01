@@ -1,13 +1,10 @@
 /* eslint-disable require-atomic-updates */
 // Disabled it since im using a mutex to make sure that only one instance of async function has access to outer variables.
 
-import { QueryDocumentSnapshot, QuerySnapshot } from 'firebase/firestore';
-
 import { getMutex } from 'simple-mutex-promise';
 
 import { FilmsService } from '../../services/films/FilmsService';
 
-import { FilmDTO } from '../../interfaces/films/DTO/FilmDTO';
 import { Film } from '../../interfaces/films/film/Film';
 
 import { PaginationModes } from '../enums/films/PaginationModes';
@@ -19,7 +16,6 @@ import { switchOrderMode } from './switchOrderingMode';
 import { updatePaginationButtons } from './updatePaginationButtons';
 import { isFirstPage } from './isFirstPage';
 import { isLastPage } from './isLastPage';
-import { mapQuerySnapshotToArray } from './mapQuerySnapshotToArray';
 import { renderFilms } from './renderFilms';
 
 /**
@@ -28,19 +24,14 @@ import { renderFilms } from './renderFilms';
  */
 export const displayFilmsTable = (): Function => {
   /**
-   * Snapshot with the films.
-   */
-  let filmDocs: QuerySnapshot<FilmDTO>;
-
-  /**
    * Last film on the page.
    */
-  let lastFilmDoc: QueryDocumentSnapshot<FilmDTO>;
+  let lastFilm: Film;
 
   /**
    * First film on the page.
    */
-  let firstFilmDoc: QueryDocumentSnapshot<FilmDTO>;
+  let firstFilm: Film;
 
   /**
    * Field used for ordering the results.
@@ -104,26 +95,11 @@ export const displayFilmsTable = (): Function => {
     if (filmsTableBody !== null) {
       try {
         if (mode === PaginationModes.Init) {
-          filmDocs = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode);
-
-          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-          firstFilmDoc = filmDocs.docs[0];
-
-          films = mapQuerySnapshotToArray(filmDocs);
+          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode);
         } else if (mode === PaginationModes.Next && !onLastPage) {
-          filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc, orderingField, orderingMode);
-
-          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-          firstFilmDoc = filmDocs.docs[0];
-
-          films = mapQuerySnapshotToArray(filmDocs);
+          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode);
         } else if (mode === PaginationModes.Prev && !onFirstPage) {
-          filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc, orderingField, orderingMode);
-
-          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-          firstFilmDoc = filmDocs.docs[0];
-
-          films = mapQuerySnapshotToArray(filmDocs);
+          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode);
         }
       } catch (error: unknown) {
         inProgress = false;
@@ -131,10 +107,16 @@ export const displayFilmsTable = (): Function => {
       }
 
       if (films.length !== 0) {
-        onFirstPage = await isFirstPage(firstFilmDoc, orderingField, orderingMode);
-        onLastPage = await isLastPage(lastFilmDoc, orderingField, orderingMode);
+        lastFilm = films[films.length - 1];
+        firstFilm = films[0];
+
+        onFirstPage = await isFirstPage(firstFilm, orderingField, orderingMode);
+        onLastPage = await isLastPage(lastFilm, orderingField, orderingMode);
+
         updatePaginationButtons(onFirstPage, onLastPage);
+
         updateFieldHeaders(orderingField, orderingMode);
+
         renderFilms(films);
       }
 
