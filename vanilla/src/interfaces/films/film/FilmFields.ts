@@ -4,7 +4,7 @@
 export interface FilmFields {
 
   /** An array containing IDs of characters in the film. */
-  readonly characters: number[];
+  readonly characterIds: readonly number[];
 
   /** Creation date of the film in the DB. */
   readonly created: Date;
@@ -16,13 +16,13 @@ export interface FilmFields {
   readonly edited: Date;
 
   /** ID of the episode in the series of films. */
-  readonly episodeID: number;
+  readonly episodeId: number;
 
   /** Opening crawl of the film. */
   readonly openingCrawl: string;
 
   /** An array containing IDs of the planets in the film. */
-  readonly planets: number[];
+  readonly planetIds: readonly number[];
 
   /** Producer of the film.*/
   readonly producer: string;
@@ -31,14 +31,14 @@ export interface FilmFields {
   readonly releaseDate: Date;
 
   /** An array containing IDs of the species in the film. */
-  readonly species: number[];
+  readonly specieIds: readonly number[];
 
   /** An array containing IDs of the starships in the film. */
-  readonly starships: number[];
+  readonly starshipIds: readonly number[];
 
   /** Title of the film. */
   readonly title: string;
 
   /** An array containing IDs of the vehicles in the film. */
-  readonly vehicles: number[];
+  readonly vehicleIds: readonly number[];
 }

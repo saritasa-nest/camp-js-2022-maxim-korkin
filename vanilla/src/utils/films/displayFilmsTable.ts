@@ -73,7 +73,7 @@ export const displayFilmsTable = (): Function => {
   const mutex = getMutex();
 
   /**
-   * Function which fetches required films from the firestorm, renders them and updates pagonation buttons and table headers.
+   * Function which fetches required films from the firestore, renders them and updates pagination buttons and table headers.
    * @param mode - Shows if we should fetch first, next or previous page.
    * @param newOrderingField - Shows if we should use specific field to order data. Null if we dont need to change ordering field.
    */

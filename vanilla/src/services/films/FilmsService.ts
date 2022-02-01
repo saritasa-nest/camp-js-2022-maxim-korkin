@@ -7,6 +7,8 @@ import { OrderingModes } from '../../utils/enums/films/OrderingModes';
 
 import { FilmDTO } from './../../interfaces/films/DTO/FilmDTO';
 
+const defaultLimitOfFilms = 2;
+
 /**
  * Service class which helps to work with firestore DB.
  */
@@ -23,7 +25,7 @@ export class FilmsService {
   public static fetchFirstPageOfFilms(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = 2,
+    limitOfFilmsOnPage = defaultLimitOfFilms,
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
 
@@ -42,7 +44,7 @@ export class FilmsService {
     lastVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = 2,
+    limitOfFilmsOnPage = defaultLimitOfFilms,
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(
       FilmsService.filmsCollection,
@@ -66,7 +68,7 @@ export class FilmsService {
     firstVisibleFilm: QueryDocumentSnapshot<FilmDTO>,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = 2,
+    limitOfFilmsOnPage = defaultLimitOfFilms,
   ): Promise<QuerySnapshot<FilmDTO>> {
     const filmsQuery = query(
       FilmsService.filmsCollection,

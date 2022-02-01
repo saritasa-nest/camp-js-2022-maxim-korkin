@@ -8,9 +8,9 @@ export interface Film {
   /** Fileds which describe the film. */
   readonly fields: FilmFields;
 
-  /** Model in DB. */
+  /** Model. */
   readonly model: string;
 
-  /** Primary key(ID) of the film. */
+  /** Primary key of the film. */
   readonly pk: number;
 }

@@ -11,6 +11,6 @@ export interface FilmDTO {
   /** Model in DB. */
   readonly model: string;
 
-  /** Primary key(ID) of the film. */
+  /** Primary key of the film. */
   readonly pk: number;
 }
