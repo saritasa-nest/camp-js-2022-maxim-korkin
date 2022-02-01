@@ -67,27 +67,32 @@ export const displayFilmsTable = (): Function => {
     const filmsTableBody = document.querySelector('.films-table-body');
 
     if (filmsTableBody !== null) {
-      if (mode === PaginationModes.Init) {
-        filmDocs = await FilmsService.fetchFirstPageOfFilms(orderingField);
+      try {
+        if (mode === PaginationModes.Init) {
+          filmDocs = await FilmsService.fetchFirstPageOfFilms(orderingField);
 
-        lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-        firstFilmDoc = filmDocs.docs[0];
+          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+          firstFilmDoc = filmDocs.docs[0];
 
-        films = mapQuerySnapshotToArray(filmDocs);
-      } else if (mode === PaginationModes.Next && !onLastPage) {
-        filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc, orderingField);
+          films = mapQuerySnapshotToArray(filmDocs);
+        } else if (mode === PaginationModes.Next && !onLastPage) {
+          filmDocs = await FilmsService.fetchNextPageOfFilms(lastFilmDoc, orderingField);
 
-        lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-        firstFilmDoc = filmDocs.docs[0];
+          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+          firstFilmDoc = filmDocs.docs[0];
 
-        films = mapQuerySnapshotToArray(filmDocs);
-      } else if (mode === PaginationModes.Prev && !onFirstPage) {
-        filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc, orderingField);
+          films = mapQuerySnapshotToArray(filmDocs);
+        } else if (mode === PaginationModes.Prev && !onFirstPage) {
+          filmDocs = await FilmsService.fetchPrevPageOfFilms(firstFilmDoc, orderingField);
 
-        lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
-        firstFilmDoc = filmDocs.docs[0];
+          lastFilmDoc = filmDocs.docs[filmDocs.docs.length - 1];
+          firstFilmDoc = filmDocs.docs[0];
 
-        films = mapQuerySnapshotToArray(filmDocs);
+          films = mapQuerySnapshotToArray(filmDocs);
+        }
+      } catch (error: unknown) {
+        inProgress = false;
+        release();
       }
 
       if (films.length !== 0) {
