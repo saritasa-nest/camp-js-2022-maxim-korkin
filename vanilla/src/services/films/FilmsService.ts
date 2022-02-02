@@ -12,7 +12,7 @@ import { FilmMapper } from './../../utils/mappers/FilmMapper';
 
 import { mapQuerySnapshotToArray } from './../../utils/films/mapQuerySnapshotToArray';
 
-const defaultLimitOfFilms = 2;
+const DEFAULT_LIMIT_OF_FILMS = 2;
 
 /**
  * Service class which helps to work with firestore DB.
@@ -30,7 +30,7 @@ export class FilmsService {
   public static async fetchFirstPageOfFilms(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = defaultLimitOfFilms,
+    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
 
@@ -51,7 +51,7 @@ export class FilmsService {
     lastVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = defaultLimitOfFilms,
+    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const lastVosibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
 
@@ -81,7 +81,7 @@ export class FilmsService {
     firstVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = defaultLimitOfFilms,
+    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const firstVosibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
 
