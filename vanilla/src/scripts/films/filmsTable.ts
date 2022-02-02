@@ -4,6 +4,8 @@ import { displayFilmsTable } from '../../utils/films/displayFilmsTable';
 
 import { OrderingFields } from '../../utils/enums/films/OrderingFields';
 
+import { addHeaderPagination } from './../../utils/films/addHeaderPagination';
+
 const displayFilms = displayFilmsTable();
 
 displayFilms(PaginationModes.Init);
@@ -24,37 +26,16 @@ if (prevButton !== null) {
 }
 
 const episodeIdHeader = document.querySelector('.episode-id-header');
+addHeaderPagination(episodeIdHeader, OrderingFields.EpisodeId, displayFilms);
+
 const titleHeader = document.querySelector('.title-header');
+addHeaderPagination(titleHeader, OrderingFields.Title, displayFilms);
+
 const releaseDateHeader = document.querySelector('.release-date-header');
+addHeaderPagination(releaseDateHeader, OrderingFields.ReleaseDate, displayFilms);
+
 const producerHeader = document.querySelector('.producer-header');
+addHeaderPagination(producerHeader, OrderingFields.Producer, displayFilms);
+
 const directorHeader = document.querySelector('.director-header');
-
-if (episodeIdHeader !== null) {
-  episodeIdHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, OrderingFields.EpisodeId);
-  });
-}
-
-if (titleHeader !== null) {
-  titleHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, OrderingFields.Title);
-  });
-}
-
-if (releaseDateHeader !== null) {
-  releaseDateHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, OrderingFields.ReleaseDate);
-  });
-}
-
-if (producerHeader !== null) {
-  producerHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, OrderingFields.Producer);
-  });
-}
-
-if (directorHeader !== null) {
-  directorHeader.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, OrderingFields.Director);
-  });
-}
+addHeaderPagination(directorHeader, OrderingFields.Director, displayFilms);
