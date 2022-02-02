@@ -53,9 +53,9 @@ export class FilmsService {
     orderingMode: OrderingModes,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const lastVosibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
+    const lastVisibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
 
-    const lastVisibleFilmDoc = (await getDocs(lastVosibleFilmQuery)).docs[0];
+    const lastVisibleFilmDoc = (await getDocs(lastVisibleFilmQuery)).docs[0];
 
     const filmsQuery = query(
       FilmsService.filmsCollection,
@@ -83,9 +83,9 @@ export class FilmsService {
     orderingMode: OrderingModes,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const firstVosibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
+    const firstVisibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
 
-    const firstVisibleFilmDoc = (await getDocs(firstVosibleFilmQuery)).docs[0];
+    const firstVisibleFilmDoc = (await getDocs(firstVisibleFilmQuery)).docs[0];
 
     const filmsQuery = query(
       FilmsService.filmsCollection,
