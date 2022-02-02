@@ -8,10 +8,13 @@ import { OrderingModes } from '../../utils/enums/films/OrderingModes';
 import { Film } from '../../interfaces/films/film/Film';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
 
+import { FirebaseService } from '../firebase/FirebaseService';
+
 import { FilmMapper } from './../../utils/mappers/FilmMapper';
 
-import { mapQuerySnapshotToArray } from './../../utils/films/mapQuerySnapshotToArray';
-
+/**
+ * Default limit of films on page.
+ */
 const DEFAULT_LIMIT_OF_FILMS = 2;
 
 /**
@@ -36,7 +39,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return mapQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapQuerySnapshotToArray(filmDocs);
   }
 
   /**
@@ -66,7 +69,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return mapQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapQuerySnapshotToArray(filmDocs);
   }
 
   /**
@@ -96,7 +99,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return mapQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapQuerySnapshotToArray(filmDocs);
   }
 
   /**
