@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { FilmFields } from '../../interfaces/films/film/FilmFields';
 import { Film } from '../../interfaces/films/film/Film';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
 import { FilmFieldsDto } from '../../interfaces/films/DTO/FilmFieldsDto';
@@ -10,59 +9,55 @@ import { FilmFieldsDto } from '../../interfaces/films/DTO/FilmFieldsDto';
 export class FilmMapper {
   /**
    * Method gets FilmDTO object and then converts it into Film object and returns it.
-   * @param filmDTOObject - FilmDTO object which need to be converted into Film object.
+   * @param dto - FilmDTO object which need to be converted into Film object.
    * @returns Converted Film object.
    */
-  public static fromDto(filmDTOObject: FilmDto): Film {
-    const newFilmFields: FilmFields = {
-      characterIds: filmDTOObject.fields.characters,
-      created: new Date(filmDTOObject.fields.created),
-      director: filmDTOObject.fields.director,
-      edited: new Date(filmDTOObject.fields.edited),
-      episodeId: filmDTOObject.fields.episode_id,
-      openingCrawl: filmDTOObject.fields.opening_crawl,
-      planetIds: filmDTOObject.fields.planets,
-      producer: filmDTOObject.fields.producer,
-      releaseDate: new Date(filmDTOObject.fields.release_date),
-      specieIds: filmDTOObject.fields.species,
-      starshipIds: filmDTOObject.fields.starships,
-      title: filmDTOObject.fields.title,
-      vehicleIds: filmDTOObject.fields.vehicles,
-    };
-
+  public static fromDto(dto: FilmDto): Film {
+    const { fields } = dto;
     return {
-      fields: newFilmFields,
-      model: filmDTOObject.model,
-      pk: filmDTOObject.pk,
+      characterIds: fields.characters,
+      created: new Date(fields.created),
+      director: fields.director,
+      edited: new Date(fields.edited),
+      episodeId: fields.episode_id,
+      openingCrawl: fields.opening_crawl,
+      planetIds: fields.planets,
+      producer: fields.producer,
+      releaseDate: new Date(fields.release_date),
+      specieIds: fields.species,
+      starshipIds: fields.starships,
+      title: fields.title,
+      vehicleIds: fields.vehicles,
+      pk: dto.pk,
     };
   }
 
   /**
    * Method gets Film object and then converts it into FilmDto object and returns it.
-   * @param filmObject - Film object which need to be converted into FilmDto object.
+   * @param film - Film object which need to be converted into FilmDto object.
    * @returns Converted FilmDto object.
    */
-  public static toDto(filmObject: Film): FilmDto {
+  public static toDto(film: Film): FilmDto {
     const newFilmDtoFields: FilmFieldsDto = {
-      characters: filmObject.fields.characterIds,
-      created: filmObject.fields.created.toISOString(),
-      director: filmObject.fields.director,
-      edited: filmObject.fields.edited.toISOString(),
-      episode_id: filmObject.fields.episodeId,
-      opening_crawl: filmObject.fields.openingCrawl,
-      planets: filmObject.fields.planetIds,
-      producer: filmObject.fields.producer,
-      release_date: filmObject.fields.releaseDate.toISOString(),
-      species: filmObject.fields.specieIds,
-      starships: filmObject.fields.starshipIds,
-      title: filmObject.fields.title,
-      vehicles: filmObject.fields.vehicleIds,
+      characters: film.characterIds,
+      created: film.created.toISOString(),
+      director: film.director,
+      edited: film.edited.toISOString(),
+      episode_id: film.episodeId,
+      opening_crawl: film.openingCrawl,
+      planets: film.planetIds,
+      producer: film.producer,
+      release_date: film.releaseDate.toISOString(),
+      species: film.specieIds,
+      starships: film.starshipIds,
+      title: film.title,
+      vehicles: film.vehicleIds,
     };
 
     return {
       fields: newFilmDtoFields,
-      model: filmObject.model,
-      pk: filmObject.pk,
+      model: 'resources.film',
+      pk: film.pk,
     };
   }
 }
