@@ -98,7 +98,7 @@ export const displayFilmsTable = (): Function => {
           films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode);
         } else if (mode === PaginationModes.Next && !onLastPage) {
           films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode);
-        } else if (mode === PaginationModes.Prev && !onFirstPage) {
+        } else if (!onFirstPage) {
           films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode);
         }
       } catch (error: unknown) {
