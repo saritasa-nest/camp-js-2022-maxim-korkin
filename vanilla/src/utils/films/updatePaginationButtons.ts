@@ -4,8 +4,8 @@
  * @param onLastPage - Shows if we are on the last page of films.
  */
 export const updatePaginationButtons = (onFirstPage: boolean, onLastPage: boolean): void => {
-  const nextButton: HTMLButtonElement | null = document.querySelector('.pagination-next-btn');
-  const prevButton: HTMLButtonElement | null = document.querySelector('.pagination-prev-btn');
+  const nextButton = document.querySelector<HTMLButtonElement>('.pagination-next-btn');
+  const prevButton = document.querySelector<HTMLButtonElement>('.pagination-prev-btn');
 
   if (nextButton !== null) {
     if (onLastPage === true) {

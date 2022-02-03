@@ -10,7 +10,6 @@ import { OrderingModes } from '../enums/films/OrderingModes';
  * @param firstFilmOnPage - First film on the current page.
  * @param orderingField - Current ordering field.
  * @param orderingMode - Current ordering mode.
- * @returns True or false.
  */
 export const isFirstPage = async(
   firstFilmOnPage: Film,
