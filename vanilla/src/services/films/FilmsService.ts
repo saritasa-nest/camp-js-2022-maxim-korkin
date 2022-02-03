@@ -6,9 +6,11 @@ import { OrderingFields } from '../../utils/enums/films/OrderingFields';
 import { OrderingModes } from '../../utils/enums/films/OrderingModes';
 
 import { Film } from '../../interfaces/films/film/Film';
-import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
 
 import { FirebaseService } from '../firebase/FirebaseService';
+import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
+
+import { FirestoreCollections } from '../../utils/enums/FirestoreCollections/FirestoreFollections';
 
 import { FilmMapper } from './../../utils/mappers/FilmMapper';
 
@@ -21,7 +23,7 @@ const DEFAULT_LIMIT_OF_FILMS = 2;
  * Service class which helps to work with firestore DB.
  */
 export class FilmsService {
-  private static filmsCollection = getCollectionRef<FilmDto>('films');
+  private static filmsCollection = getCollectionRef<FilmDto>(FirestoreCollections.Films);
 
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
