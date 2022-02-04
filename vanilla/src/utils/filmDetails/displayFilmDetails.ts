@@ -11,11 +11,9 @@ import { renderMainInformation } from './renderMainInformation';
  * @param film - Film to display information about.
  */
 export const displayFilmDetails = (film: Film): void => {
-  if (film !== null) {
-    renderMainInformation(film);
+  renderMainInformation(film);
 
-    renderListOfCharacters(film.characterIds);
+  renderListOfCharacters(film.characterIds);
 
-    renderListOfPlanets(film.planetIds);
-  }
+  renderListOfPlanets(film.planetIds);
 };

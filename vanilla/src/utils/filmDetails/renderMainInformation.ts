@@ -1,3 +1,4 @@
+import { appendSectionToSelector } from './appendSectionToSelector';
 import { Film } from './../../interfaces/films/film/Film';
 
 /**
@@ -5,19 +6,13 @@ import { Film } from './../../interfaces/films/film/Film';
  * @param film - Film to be rendered.
  */
 export const renderMainInformation = (film: Film): void => {
-  const filmDetailsContainer = document.querySelector('.film-details-container');
+  const mainInformationInnerHtml = `
+    <h2>${film.title}</h2>
+    <p>${film.openingCrawl}</p>
+    <p>Director: ${film.director}</p>
+    <p>Producers: ${film.producer}</p>
+    <p>Release date: ${film.releaseDate.toLocaleDateString()}</p>
+  `;
 
-  if (filmDetailsContainer !== null) {
-    const mainInformation = document.createElement('section');
-
-    mainInformation.innerHTML = `
-      <h2>${film.title}</h2>
-      <p>${film.openingCrawl}</p>
-      <p>Director: ${film.director}</p>
-      <p>Producers: ${film.producer}</p>
-      <p>Release date: ${film.releaseDate.toLocaleDateString()}</p>
-    `;
-
-    filmDetailsContainer.append(mainInformation);
-  }
+  appendSectionToSelector('.film-details-container', mainInformationInnerHtml);
 };

@@ -4,7 +4,7 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { displayFilmDetails } from '../../utils/filmDetails/displayFilmDetails';
 
-import { displayFilmNotFound } from './../../utils/filmDetails/displayFilmNotFound';
+import { displayFilmNotFound } from '../../utils/filmDetails/renderFilmNotFound';
 
 import { auth } from './../../firebase/firebase';
 
