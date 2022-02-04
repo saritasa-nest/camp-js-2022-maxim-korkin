@@ -6,7 +6,7 @@ export function changeNavBarOnSignOut(): void {
   if (navBarButtons !== null) {
     navBarButtons.innerHTML = `
   <li>
-    <a class="modal-trigger" href="#signin">Sign In</a>
+    <a class="nav-signin modal-trigger" href="#signin">Sign In</a>
   </li>
   <li>
     <a class="modal-trigger" href="#signup">Sign Up</a>
