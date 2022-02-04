@@ -1,6 +1,5 @@
 /**
  * Function displays film not found page.
- * @param characterIds - Array with the ids of the charecters.
  */
 export const displayFilmNotFound = (): void => {
   const filmDetailsContainer = document.querySelector('.film-details-container');
