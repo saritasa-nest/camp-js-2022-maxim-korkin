@@ -4,7 +4,7 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
 
-import { displayFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
+import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
 
 import { auth } from './../../firebase/firebase';
 
@@ -22,7 +22,7 @@ onAuthStateChanged(auth, async user => {
       if (film !== null) {
         displayFilmDetails(film);
       } else {
-        displayFilmNotFound();
+        renderFilmNotFound();
       }
     } else {
       document.location = '/';
