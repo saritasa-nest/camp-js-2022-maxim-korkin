@@ -1,7 +1,24 @@
 :root {
-  --error-color: #FF0000
+  --error-color: #FF0000;
+  --table-header: rgb(231, 231, 231);
 }
 
 .form-error-message {
   color: var(--error-color);
+}
+
+.films-table-container th {
+  cursor: pointer;
+}
+
+.films-table-container th:hover {
+  background-color: var(--table-header);
+}
+
+.active-header.ascending::after {
+  content: url("./imgs/up_arrow_12px.png");
+}
+
+.active-header.descending::after {
+  content: url("./imgs/down_arrow_12px.png")
 }

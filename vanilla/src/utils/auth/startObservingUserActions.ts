@@ -1,10 +1,10 @@
 import { onAuthStateChanged, Unsubscribe } from 'firebase/auth';
 
-import { auth } from '../firebase/firebase';
+import { auth } from '../../firebase/firebase';
 
-import { changeNavBarOnSignIn } from './changeNavBarOnSignIn';
+import { changeNavBarOnSignIn } from '../auth/changeNavBarOnSignIn';
 
-import { changeNavBarOnSignOut } from './changeNavBarOnSignOut';
+import { changeNavBarOnSignOut } from '../auth/changeNavBarOnSignOut';
 
 /**
  * Method for changing the page when the user signs in or out.

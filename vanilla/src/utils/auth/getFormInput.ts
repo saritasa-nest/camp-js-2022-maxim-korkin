@@ -1,4 +1,4 @@
-import { FormFields } from '../interfaces/FormFields';
+import { FormFields } from '../../interfaces/auth/FormFields';
 
 import { setFormErrorMessage } from './setFormErrorMessage';
 

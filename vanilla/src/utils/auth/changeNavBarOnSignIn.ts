@@ -1,4 +1,4 @@
-import { AuthService } from './../services/AuthService';
+import { AuthService } from '../../services/auth/AuthService';
 
 /**
  * Function for changing navbar when the user signs in.

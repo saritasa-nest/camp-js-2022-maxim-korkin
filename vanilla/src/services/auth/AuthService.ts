@@ -1,9 +1,9 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
 
-import { auth } from '../firebase/firebase';
+import { auth } from '../../firebase/firebase';
 
 /**
- * Firebase authentication service.
+ * Service class which helps to work with firebase authentication.
  */
 export class AuthService {
 /**

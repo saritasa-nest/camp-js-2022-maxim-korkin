@@ -23,6 +23,29 @@
       </ul>
     </nav>
 
+    
+    <div class="films-table-container">
+      <table class="highlight centered">
+        <caption hidden>Star wars films</caption>
+        <thead>
+          <tr>
+            <th class="episode-id-header">Episode ID</th>
+            <th class="title-header">Title</th>
+            <th class="release-date-header">Release date</th>
+            <th class="producer-header">Producer</th>
+            <th class="director-header">Director</th>
+          </tr>
+        </thead>
+        <tbody class="films-table-body">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-btns-container">
+      <button type="button" class="pagination-prev-btn" disabled>prev</button>
+      <button type="button" class="pagination-next-btn" disabled>next</button>
+    </div>
+
     <div id="signin" class="modal">
       <div class="modal-content">
         <h2>Sign In</h2>
@@ -60,8 +83,10 @@
         </form>
       </div>
     </div>
+
     <script type="module" src="./index.ts"></script>
-    <script type="module" src="./scripts/signup.ts"></script>
-    <script type="module" src="./scripts/signin.ts"></script>
+    <script type="module" src="./scripts/auth/signup.ts"></script>
+    <script type="module" src="./scripts/auth/signin.ts"></script>
+    <script type="module" src="./scripts/films/filmsTable.ts"></script>
   </body>
 </html>
