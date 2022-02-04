@@ -1,11 +1,31 @@
 import { onAuthStateChanged } from 'firebase/auth';
 
+import { FilmsService } from '../../services/films/FilmsService';
+
+import { displayFilmDetails } from '../../utils/filmDetails/displayFilmDetails';
+
+import { displayFilmNotFound } from './../../utils/filmDetails/displayFilmNotFound';
+
 import { auth } from './../../firebase/firebase';
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
   if (user === null) {
     document.location = '/';
   } else {
-    console.log('user is signed in');
+    const params = new URLSearchParams(location.search);
+
+    const primaryKey = params.get('pk');
+
+    if (primaryKey !== null) {
+      const film = await FilmsService.fetchFilmByPrimaryKey(Number(primaryKey));
+
+      if (film !== null) {
+        displayFilmDetails(film);
+      } else {
+        displayFilmNotFound();
+      }
+    } else {
+      document.location = '/';
+    }
   }
 });
