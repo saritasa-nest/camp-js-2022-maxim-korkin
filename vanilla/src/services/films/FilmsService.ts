@@ -135,7 +135,7 @@ export class FilmsService {
   /**
    * Method for getting film with provided primary key.
    * @param primaryKey - Primary key of the film.
-   * @returns Film with provided primary key or null if the film with such primary key doenst exist.
+   * @returns Film with provided primary key or null if the film with such primary key doesnt exist.
    */
   public static async fetchFilmByPrimaryKey(primaryKey: number): Promise<Film | null> {
     const filmQuery = query(FilmsService.filmsCollection, where('pk', '==', primaryKey));
