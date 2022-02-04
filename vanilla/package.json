@@ -9,7 +9,7 @@
     "stylelint": "npx stylelint ./src/*.css"
   },
   "devDependencies": {
-    "@chernodub/eslint-config": "^2.0.4",
+    "@chernodub/eslint-config": "^2.1.0",
     "@types/materialize-css": "^1.0.11",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "stylelint": "^14.3.0",

@@ -11,7 +11,7 @@ export const renderFilms = (films: Film[]): void => {
     filmsTableBody.innerHTML = '';
     films.forEach(film => {
       filmsTableBody.innerHTML += `
-      <tr>
+      <tr onclick="document.location = '/films/film/?id=${film.pk}'">
         <td>${film.episodeId}</td>
         <td>${film.title}</td>
         <td>${film.releaseDate}</td>
