@@ -1,5 +1,5 @@
-import { PaginationModes } from './../enums/films/PaginationModes';
-import { OrderingFields } from './../enums/films/OrderingFields';
+import { PaginationModes } from '../../enums/films/PaginationModes';
+import { OrderingFields } from '../../enums/films/OrderingFields';
 
 /**
  * Function which adds event listeners to table headers for changing ordering field.

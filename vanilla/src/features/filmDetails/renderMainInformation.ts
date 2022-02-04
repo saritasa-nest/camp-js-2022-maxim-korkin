@@ -1,5 +1,6 @@
+import { Film } from '../../interfaces/films/film/Film';
+
 import { appendSectionToSelector } from './appendSectionToSelector';
-import { Film } from './../../interfaces/films/film/Film';
 
 /**
  * Function renders main information about the film.

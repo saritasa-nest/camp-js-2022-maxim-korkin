@@ -2,9 +2,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import { FilmsService } from '../../services/films/FilmsService';
 
-import { displayFilmDetails } from '../../utils/filmDetails/displayFilmDetails';
+import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
 
-import { displayFilmNotFound } from '../../utils/filmDetails/renderFilmNotFound';
+import { displayFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
 
 import { auth } from './../../firebase/firebase';
 

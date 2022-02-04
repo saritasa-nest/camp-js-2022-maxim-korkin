@@ -1,4 +1,4 @@
-import { Film } from './../../interfaces/films/film/Film';
+import { Film } from '../../interfaces/films/film/Film';
 
 import { renderListOfPlanets } from './renderListOfPlanets';
 

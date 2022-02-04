@@ -2,7 +2,7 @@ import { QuerySnapshot } from 'firebase/firestore';
 
 import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
 import { Film } from '../../interfaces/films/film/Film';
-import { FilmMapper } from '../../utils/mappers/FilmMapper';
+import { FilmMapper } from '../../mappers/FilmMapper';
 
 /**
  * Service class with utility functions related to Firebase.

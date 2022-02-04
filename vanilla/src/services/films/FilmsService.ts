@@ -2,17 +2,17 @@ import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, whe
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
-import { OrderingFields } from '../../utils/enums/films/OrderingFields';
-import { OrderingModes } from '../../utils/enums/films/OrderingModes';
+import { OrderingFields } from '../../enums/films/OrderingFields';
+import { OrderingModes } from '../../enums/films/OrderingModes';
 
 import { Film } from '../../interfaces/films/film/Film';
 
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 
-import { FirestoreCollections } from '../../utils/enums/FirestoreCollections/FirestoreFollections';
+import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
 
-import { FilmMapper } from './../../utils/mappers/FilmMapper';
+import { FilmMapper } from '../../mappers/FilmMapper';
 
 /**
  * Default limit of films on page.
