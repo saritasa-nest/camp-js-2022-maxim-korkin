@@ -1,10 +1,10 @@
-import { PaginationModes } from '../../utils/enums/films/PaginationModes';
+import { PaginationModes } from '../../enums/films/PaginationModes';
 
-import { displayFilmsTable } from '../../utils/films/displayFilmsTable';
+import { displayFilmsTable } from '../../features/films/displayFilmsTable';
 
-import { OrderingFields } from '../../utils/enums/films/OrderingFields';
+import { OrderingFields } from '../../enums/films/OrderingFields';
 
-import { addHeaderPagination } from './../../utils/films/addHeaderPagination';
+import { addHeaderPagination } from '../../features/films/addHeaderPagination';
 
 const displayFilms = displayFilmsTable();
 

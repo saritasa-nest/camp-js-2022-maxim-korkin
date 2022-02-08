@@ -1,4 +1,4 @@
-import { OrderingModes } from '../enums/films/OrderingModes';
+import { OrderingModes } from '../../enums/films/OrderingModes';
 
 /**
  * Function switches ordering mode.

@@ -1,4 +1,4 @@
-import { OrderingFields } from '../enums/films/OrderingFields';
+import { OrderingFields } from '../../enums/films/OrderingFields';
 
 /**
  * Function which finds correct table header by ordering field and returns it.

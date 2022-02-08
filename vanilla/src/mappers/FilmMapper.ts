@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Film } from '../../interfaces/films/film/Film';
-import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
-import { FilmFieldsDto } from '../../interfaces/films/DTO/FilmFieldsDto';
+import { Film } from '../interfaces/films/film/Film';
+import { FilmDto } from '../interfaces/films/DTO/FilmDto';
+import { FilmFieldsDto } from '../interfaces/films/DTO/FilmFieldsDto';
 
 /**
  * Class for mapping Film and FilmDTO objects to each other.

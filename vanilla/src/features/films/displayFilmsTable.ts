@@ -7,9 +7,9 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { Film } from '../../interfaces/films/film/Film';
 
-import { PaginationModes } from '../enums/films/PaginationModes';
-import { OrderingFields } from '../enums/films/OrderingFields';
-import { OrderingModes } from '../enums/films/OrderingModes';
+import { PaginationModes } from '../../enums/films/PaginationModes';
+import { OrderingFields } from '../../enums/films/OrderingFields';
+import { OrderingModes } from '../../enums/films/OrderingModes';
 
 import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';

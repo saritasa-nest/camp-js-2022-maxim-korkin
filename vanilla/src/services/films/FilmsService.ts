@@ -2,17 +2,17 @@ import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, whe
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
-import { OrderingFields } from '../../utils/enums/films/OrderingFields';
-import { OrderingModes } from '../../utils/enums/films/OrderingModes';
+import { OrderingFields } from '../../enums/films/OrderingFields';
+import { OrderingModes } from '../../enums/films/OrderingModes';
 
 import { Film } from '../../interfaces/films/film/Film';
 
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 
-import { FirestoreCollections } from '../../utils/enums/FirestoreCollections/FirestoreFollections';
+import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
 
-import { FilmMapper } from './../../utils/mappers/FilmMapper';
+import { FilmMapper } from '../../mappers/FilmMapper';
 
 /**
  * Default limit of films on page.
@@ -130,5 +130,21 @@ export class FilmsService {
     const firstFilmSnapshot = await getDocs(firstFilmQuery);
 
     return FilmMapper.fromDto(firstFilmSnapshot.docs[0].data());
+  }
+
+  /**
+   * Method for getting film with provided primary key.
+   * @param primaryKey - Primary key of the film.
+   * @returns Film with provided primary key or null if the film with such primary key doesnt exist.
+   */
+  public static async fetchFilmByPrimaryKey(primaryKey: number): Promise<Film | null> {
+    const filmQuery = query(FilmsService.filmsCollection, where('pk', '==', primaryKey));
+
+    const querySnapshot = await getDocs(filmQuery);
+
+    if (querySnapshot.docs.length !== 0) {
+      return FilmMapper.fromDto(querySnapshot.docs[0].data());
+    }
+    return null;
   }
 }

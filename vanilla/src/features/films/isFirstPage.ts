@@ -2,8 +2,8 @@ import { FilmsService } from '../../services/films/FilmsService';
 
 import { Film } from '../../interfaces/films/film/Film';
 
-import { OrderingFields } from '../enums/films/OrderingFields';
-import { OrderingModes } from '../enums/films/OrderingModes';
+import { OrderingFields } from '../../enums/films/OrderingFields';
+import { OrderingModes } from '../../enums/films/OrderingModes';
 
 /**
  * Function which checks if the current page is the first page possible.

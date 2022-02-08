@@ -2,9 +2,9 @@ import { FirebaseError } from 'firebase/app';
 
 import { AuthService } from '../../services/auth/AuthService';
 
-import { getFormInput } from '../../utils/auth/getFormInput';
-import { closeModal } from '../../utils/auth/closeModal';
-import { setFormErrorMessage } from '../../utils/auth/setFormErrorMessage';
+import { getFormInput } from '../../features/auth/getFormInput';
+import { closeModal } from '../../features/auth/closeModal';
+import { setFormErrorMessage } from '../../features/auth/setFormErrorMessage';
 
 import { FormFields } from '../../interfaces/auth/FormFields';
 

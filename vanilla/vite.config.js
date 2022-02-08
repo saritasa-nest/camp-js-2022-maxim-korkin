@@ -12,7 +12,8 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: [
-        resolve(root, 'index.html')
+        resolve(root, 'index.html'),
+        resolve(root, 'films', 'film', 'index.html')
       ]
     }
   }
