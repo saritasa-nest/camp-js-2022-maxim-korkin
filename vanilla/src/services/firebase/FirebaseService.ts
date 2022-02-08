@@ -4,16 +4,29 @@ import { FilmDto } from '../../interfaces/films/DTO/FilmDto';
 import { Film } from '../../interfaces/films/film/Film';
 import { FilmMapper } from '../../mappers/FilmMapper';
 
+import { Character } from './../../interfaces/characters/character/Character';
+import { CharacterMapper } from './../../mappers/CharacterMapper';
+import { CharacterDto } from './../../interfaces/characters/DTO/CharacterDto';
+
 /**
  * Service class with utility functions related to Firebase.
  */
 export class FirebaseService {
   /**
    * Method maps query snapshot from Firestore to regular array.
-   * @param snapshot - Query snapshot with filmDTOs data.
+   * @param snapshot - Query snapshot with FilmDtos data.
    * @returns Array with films data.
    */
-  public static mapQuerySnapshotToArray(snapshot: QuerySnapshot<FilmDto>): Film[] {
+  public static mapFilmsQuerySnapshotToArray(snapshot: QuerySnapshot<FilmDto>): Film[] {
     return snapshot.docs.map(dto => FilmMapper.fromDto(dto.data()));
+  }
+
+  /**
+   * Method maps query snapshot from Firestore to regular array.
+   * @param snapshot - Query snapshot with CharacterDtos data.
+   * @returns Array with characters data.
+   */
+  public static mapCharactersQuerySnapshotToArray(snapshot: QuerySnapshot<CharacterDto>): Character[] {
+    return snapshot.docs.map(dto => CharacterMapper.fromDto(dto.data()));
   }
 }

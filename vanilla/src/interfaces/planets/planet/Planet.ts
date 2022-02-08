@@ -7,13 +7,13 @@ export interface Planet {
   readonly climate: string;
 
   /** Creation date of the planet in the DB. */
-  readonly created: string;
+  readonly created: Date;
 
   /** Diameter of the planet. */
   readonly diameter: string;
 
   /** Edition date of the planet in the DB. */
-  readonly edited: string;
+  readonly edited: Date;
 
   /** Gravity of the planet. */
   readonly gravity: string;
@@ -31,7 +31,7 @@ export interface Planet {
   readonly rotationPeriod: string;
 
   /** Surface water of the planet. */
-  readonly surfacePater: string;
+  readonly surfaceWater: string;
 
   /** Terrain of the planet. */
   readonly terrain: string;

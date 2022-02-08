@@ -20,7 +20,7 @@ import { FilmMapper } from '../../mappers/FilmMapper';
 const DEFAULT_LIMIT_OF_FILMS = 2;
 
 /**
- * Service class which helps to work with firestore DB.
+ * Service class which helps to work with films in firestore DB.
  */
 export class FilmsService {
   private static filmsCollection = getCollectionRef<FilmDto>(FirestoreCollections.Films);
@@ -41,7 +41,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return FirebaseService.mapQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapFilmsQuerySnapshotToArray(filmDocs);
   }
 
   /**
@@ -71,7 +71,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return FirebaseService.mapQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapFilmsQuerySnapshotToArray(filmDocs);
   }
 
   /**
@@ -101,7 +101,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return FirebaseService.mapQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapFilmsQuerySnapshotToArray(filmDocs);
   }
 
   /**

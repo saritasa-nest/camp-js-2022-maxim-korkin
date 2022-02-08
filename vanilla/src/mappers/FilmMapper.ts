@@ -4,7 +4,7 @@ import { FilmDto } from '../interfaces/films/DTO/FilmDto';
 import { FilmFieldsDto } from '../interfaces/films/DTO/FilmFieldsDto';
 
 /**
- * Class for mapping Film and FilmDTO objects to each other.
+ * Class for mapping Film and FilmDto objects to each other.
  */
 export class FilmMapper {
   /**
