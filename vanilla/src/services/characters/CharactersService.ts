@@ -16,9 +16,9 @@ export class CharactersService {
   private static charactersCollection = getCollectionRef<CharacterDto>(FirestoreCollections.Characters);
 
   /**
-   * Fetches planets from the firestore with the given primary keys.
-   * @param primaryKeys - Array containing primary keys of the planets.
-   * @returns Array with the planets data.
+   * Fetches characters from the firestore with the given primary keys.
+   * @param primaryKeys - Array containing primary keys of the characters.
+   * @returns Array with the characters data.
    */
   public static async fetchCharactersListByPrimaryKeys(primaryKeys: number[]): Promise<Character[]> {
     const charactersQuery = query(this.charactersCollection, where('pk', 'in', primaryKeys));
