@@ -2,6 +2,8 @@ import { query, where, getDocs } from 'firebase/firestore';
 
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
 
+import { splitArray } from '../../utils/splitArray';
+
 import { FirebaseService } from './../firebase/FirebaseService';
 
 import { Planet } from './../../interfaces/planets/planet/Planet';
@@ -20,11 +22,31 @@ export class PlanetsService {
    * @param primaryKeys - Array containing primary keys of the planets.
    * @returns Array with the planets data.
    */
-  public static async fetchPlanetsListByPrimaryKeys(primaryKeys: number[]): Promise<Planet[]> {
-    const planetsQuery = query(this.planetsCollection, where('pk', 'in', primaryKeys));
+  public static async fetchPlanetsListByPrimaryKeys(primaryKeys: readonly number[]): Promise<Planet[]> {
+    const splitedPrimaryKeys = splitArray<number>(primaryKeys);
 
-    const planetsSnapshot = await getDocs(planetsQuery);
+    const planets: Planet[] = [];
 
-    return FirebaseService.mapPlanetsQuerySnapshotToArray(planetsSnapshot);
+    const promisesList = [];
+
+    /**
+     * Fetches up to ten planets.
+     * @param subArray - Subarray of primary keys.
+     */
+    const fetchUpToTenPlanets = async(subArray: number[]): Promise<void> => {
+      const planetsQuery = query(this.planetsCollection, where('pk', 'in', subArray));
+
+      const planetsSnapshot = await getDocs(planetsQuery);
+
+      planets.push(...FirebaseService.mapPlanetsQuerySnapshotToArray(planetsSnapshot));
+    };
+
+    for (const subArray of splitedPrimaryKeys) {
+      promisesList.push(fetchUpToTenPlanets(subArray));
+    }
+
+    await Promise.all(promisesList);
+
+    return planets;
   }
 }
