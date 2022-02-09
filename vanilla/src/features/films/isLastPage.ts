@@ -15,8 +15,9 @@ export const isLastPage = async(
   lastFilmOnPage: Film,
   orderingField: OrderingFields,
   orderingMode: OrderingModes,
+  valueSearch: string
 ): Promise<boolean> => {
-  const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode);
+  const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode, valueSearch);
 
   return lastFilm.pk === lastFilmOnPage.pk;
 };

@@ -12,6 +12,14 @@ displayFilms(PaginationModes.Init);
 
 const nextButton = document.querySelector('.pagination-next-btn');
 const prevButton = document.querySelector('.pagination-prev-btn');
+const searchInput = document.querySelector<HTMLInputElement>('.search-input');
+const searchButton = document.querySelector<HTMLButtonElement>('.search-btn');
+
+if(searchButton !== null){
+  searchButton.addEventListener('click', () => {
+    displayFilms(PaginationModes.Init, OrderingFields.Title, searchInput?.value);
+  });
+}
 
 if (nextButton !== null) {
   nextButton.addEventListener('click', () => {

@@ -68,7 +68,7 @@ export const displayFilmsTable = (): Function => {
    * @param mode - Shows if we should fetch first, next or previous page.
    * @param newOrderingField - Shows if we should use specific field to order data. Null if we dont need to change ordering field.
    */
-  return async(mode = PaginationModes.Init, newOrderingField: OrderingFields | null = null): Promise<void> => {
+  return async(mode = PaginationModes.Init, newOrderingField: OrderingFields | null = null, valueSearch: string): Promise<void> => {
     if (inProgress === true) {
       return;
     }
@@ -95,11 +95,11 @@ export const displayFilmsTable = (): Function => {
     if (filmsTableBody !== null) {
       try {
         if (mode === PaginationModes.Init) {
-          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode);
+          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode, valueSearch);
         } else if (mode === PaginationModes.Next && !onLastPage) {
-          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode);
+          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode, valueSearch);
         } else if (!onFirstPage) {
-          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode);
+          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode, valueSearch);
         }
       } catch (error: unknown) {
         inProgress = false;
@@ -110,8 +110,8 @@ export const displayFilmsTable = (): Function => {
         lastFilm = films[films.length - 1];
         firstFilm = films[0];
 
-        onFirstPage = await isFirstPage(firstFilm, orderingField, orderingMode);
-        onLastPage = await isLastPage(lastFilm, orderingField, orderingMode);
+        onFirstPage = await isFirstPage(firstFilm, orderingField, orderingMode, valueSearch);
+        onLastPage = await isLastPage(lastFilm, orderingField, orderingMode, valueSearch);
 
         updatePaginationButtons(onFirstPage, onLastPage);
 

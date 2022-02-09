@@ -22,3 +22,21 @@
 .active-header.descending::after {
   content: url("./imgs/down_arrow_12px.png")
 }
+
+.search {
+  position: relative;
+  width: 250px;
+}
+
+.search-btn {
+  position: absolute;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  background-image: url("./imgs/icon-search-32px.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}

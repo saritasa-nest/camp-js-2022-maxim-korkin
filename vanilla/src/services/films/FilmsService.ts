@@ -1,4 +1,4 @@
-import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { endBefore, getDocs, limit, limitToLast, orderBy, query, QueryConstraint, startAfter, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
@@ -19,6 +19,16 @@ import { FilmMapper } from '../../mappers/FilmMapper';
  */
 const DEFAULT_LIMIT_OF_FILMS = 2;
 
+function getQueryConstraint( orderingField: OrderingFields, orderingMode: OrderingModes, valueSearch: string): QueryConstraint[]{
+  if (valueSearch) {
+    return [ where(OrderingFields.Title, '>=', valueSearch),
+      where(OrderingFields.Title, '<=', `${valueSearch}~`),
+      orderBy(OrderingFields.Title, orderingMode)]
+  }
+    return [orderBy(orderingField, orderingMode)];
+
+}
+
 /**
  * Service class which helps to work with firestore DB.
  */
@@ -35,9 +45,14 @@ export class FilmsService {
   public static async fetchFirstPageOfFilms(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
+    valueSearch: string,
+    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS
   ): Promise<Film[]> {
-    const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
+    const queryConstraints: QueryConstraint[] = [
+      limit(limitOfFilmsOnPage),
+      ...getQueryConstraint(orderingField, orderingMode, valueSearch)];
+
+    const filmsQuery = query(FilmsService.filmsCollection, ...queryConstraints);
 
     const filmDocs = await getDocs(filmsQuery);
 
@@ -56,17 +71,22 @@ export class FilmsService {
     lastVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
+    valueSearch: string,
+    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS
   ): Promise<Film[]> {
-    const lastVisibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
+    const lastVisibleFilmQuery = valueSearch ?
+    query(FilmsService.filmsCollection, where(OrderingFields.Title, '==', lastVisibleFilm.title)) :
+    query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
 
     const lastVisibleFilmDoc = (await getDocs(lastVisibleFilmQuery)).docs[0];
 
+    const queryConstraints: QueryConstraint[] = [
+      limit(limitOfFilmsOnPage),
+      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+      startAfter(lastVisibleFilmDoc)];
     const filmsQuery = query(
       FilmsService.filmsCollection,
-      orderBy(orderingField, orderingMode),
-      limit(limitOfFilmsOnPage),
-      startAfter(lastVisibleFilmDoc),
+      ...queryConstraints
     );
 
     const filmDocs = await getDocs(filmsQuery);
@@ -86,17 +106,22 @@ export class FilmsService {
     firstVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
+    valueSearch: string,
+    limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS
   ): Promise<Film[]> {
-    const firstVisibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
+       const firstVisibleFilmQuery = valueSearch ?
+       query(FilmsService.filmsCollection, where(OrderingFields.Title, '==', firstVisibleFilm.title)) :
+       query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
+       const firstVisibleFilmDoc = (await getDocs(firstVisibleFilmQuery)).docs[0];
 
-    const firstVisibleFilmDoc = (await getDocs(firstVisibleFilmQuery)).docs[0];
+      const queryConstraints: QueryConstraint[] = [
+       limitToLast(limitOfFilmsOnPage),
+       ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+        endBefore(firstVisibleFilmDoc)];
 
     const filmsQuery = query(
       FilmsService.filmsCollection,
-      orderBy(orderingField, orderingMode),
-      limitToLast(limitOfFilmsOnPage),
-      endBefore(firstVisibleFilmDoc),
+      ...queryConstraints
     );
 
     const filmDocs = await getDocs(filmsQuery);
@@ -110,8 +135,20 @@ export class FilmsService {
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @returns Last film in the db.
    */
-  public static async fetchLastFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<Film> {
-    const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limitToLast(1));
+  public static async fetchLastFilm(
+    orderingField: OrderingFields,
+    orderingMode: OrderingModes,
+    valueSearch: string
+  ): Promise<Film> {
+    const queryConstraints: QueryConstraint[] = [
+      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+      limitToLast(1)
+    ];
+
+    const lastFilmQuery = query(
+      FilmsService.filmsCollection,
+      ...queryConstraints
+    );
 
     const lastFilmSnapshot = await getDocs(lastFilmQuery);
 
@@ -124,8 +161,20 @@ export class FilmsService {
    * @param orderingMode - Indicates if order should be ascending or descending.
    * @returns First film in the db.
    */
-  public static async fetchFirstFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<Film> {
-    const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(1));
+  public static async fetchFirstFilm(
+    orderingField: OrderingFields,
+    orderingMode: OrderingModes,
+    valueSearch: string
+  ): Promise<Film> {
+    const queryConstraints: QueryConstraint[] = [
+      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+      limit(1)
+    ];
+
+    const firstFilmQuery = query(
+      FilmsService.filmsCollection,
+      ...queryConstraints
+    );
 
     const firstFilmSnapshot = await getDocs(firstFilmQuery);
 

@@ -15,8 +15,8 @@ export const isFirstPage = async(
   firstFilmOnPage: Film,
   orderingField: OrderingFields,
   orderingMode: OrderingModes,
+  valueSearch: string
 ): Promise<boolean> => {
-  const firstFilm = await FilmsService.fetchFirstFilm(orderingField, orderingMode);
-
+ const firstFilm = await FilmsService.fetchFirstFilm(orderingField, orderingMode, valueSearch);
   return firstFilm.pk === firstFilmOnPage.pk;
 };

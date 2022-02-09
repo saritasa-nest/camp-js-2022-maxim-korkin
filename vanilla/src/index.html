@@ -22,11 +22,15 @@
         </li>
       </ul>
     </nav>
-
-    
+    <div class="search">
+      <input type="search" class="search-input" placeholder="Search" />
+      <button type="button" class="search-btn"></button>
+    </div>
     <div class="films-table-container">
       <table class="highlight centered">
-        <caption hidden>Star wars films</caption>
+        <caption hidden>
+          Star wars films
+        </caption>
         <thead>
           <tr>
             <th class="episode-id-header">Episode ID</th>
@@ -36,8 +40,7 @@
             <th class="director-header">Director</th>
           </tr>
         </thead>
-        <tbody class="films-table-body">
-        </tbody>
+        <tbody class="films-table-body"></tbody>
       </table>
     </div>
 
@@ -55,7 +58,12 @@
             <label for="signin-email">Email address</label>
           </div>
           <div class="input-field">
-            <input type="password" name="password" id="signin-password" required />
+            <input
+              type="password"
+              name="password"
+              id="signin-password"
+              required
+            />
             <label for="signin-password"> Password</label>
           </div>
           <button type="submit" class="btn yellow darken-2 zdepth-1">
@@ -74,7 +82,12 @@
             <label for="signup-email">Email address</label>
           </div>
           <div class="input-field">
-            <input type="password" name="password" id="signup-password" required />
+            <input
+              type="password"
+              name="password"
+              id="signup-password"
+              required
+            />
             <label for="signup-password"> Password</label>
           </div>
           <button type="submit" class="btn yellow darken-2 zdepth-1">
