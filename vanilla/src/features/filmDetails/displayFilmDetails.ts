@@ -15,5 +15,5 @@ export const displayFilmDetails = async(film: Film): Promise<void> => {
 
   await renderListOfCharacters(film.characterIds);
 
-  renderListOfPlanets(film.planetIds);
+  await renderListOfPlanets(film.planetIds);
 };
