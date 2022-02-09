@@ -10,10 +10,10 @@ import { renderMainInformation } from './renderMainInformation';
  * Function which displays information about the film.
  * @param film - Film to display information about.
  */
-export const displayFilmDetails = (film: Film): void => {
+export const displayFilmDetails = async(film: Film): Promise<void> => {
   renderMainInformation(film);
 
-  renderListOfCharacters(film.characterIds);
+  await renderListOfCharacters(film.characterIds);
 
   renderListOfPlanets(film.planetIds);
 };

@@ -2,6 +2,8 @@ import { query, where, getDocs } from 'firebase/firestore';
 
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
 
+import { splitArray } from './../../utils/splitArray';
+
 import { FirebaseService } from './../firebase/FirebaseService';
 
 import { Character } from './../../interfaces/characters/character/Character';
@@ -20,11 +22,32 @@ export class CharactersService {
    * @param primaryKeys - Array containing primary keys of the characters.
    * @returns Array with the characters data.
    */
-  public static async fetchCharactersListByPrimaryKeys(primaryKeys: number[]): Promise<Character[]> {
-    const charactersQuery = query(this.charactersCollection, where('pk', 'in', primaryKeys));
+  public static async fetchCharactersListByPrimaryKeys(primaryKeys: readonly number[]): Promise<Character[]> {
 
-    const charactersSnapshot = await getDocs(charactersQuery);
+    const splitedPrimaryKeys = splitArray<number>(primaryKeys);
 
-    return FirebaseService.mapCharactersQuerySnapshotToArray(charactersSnapshot);
+    const characters: Character[] = [];
+
+    const promisesList = [];
+
+    /**
+     * Fetches up to ten characters.
+     * @param subArray - Subarray of primary keys.
+     */
+    const fetchUpToTenCharacters = async(subArray: number[]): Promise<void> => {
+      const charactersQuery = query(this.charactersCollection, where('pk', 'in', subArray));
+
+      const charactersSnapshot = await getDocs(charactersQuery);
+
+      characters.push(...FirebaseService.mapCharactersQuerySnapshotToArray(charactersSnapshot));
+    };
+
+    for (const subArray of splitedPrimaryKeys) {
+      promisesList.push(fetchUpToTenCharacters(subArray));
+    }
+
+    await Promise.all(promisesList);
+
+    return characters;
   }
 }
