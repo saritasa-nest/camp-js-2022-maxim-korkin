@@ -1,4 +1,4 @@
-import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 
@@ -146,5 +146,19 @@ export class FilmsService {
       return FilmMapper.fromDto(querySnapshot.docs[0].data());
     }
     return null;
+  }
+
+  /**
+   * Method for deleting film with provided primary key.
+   * @param primaryKey - Primary key of the film to delete.
+   */
+  public static async deleteFilmByPrimaryKey(primaryKey: number): Promise<void> {
+    const filmQuery = query(FilmsService.filmsCollection, where('pk', '==', primaryKey));
+
+    const querySnapshot = await getDocs(filmQuery);
+
+    const documentReference = querySnapshot.docs[0].ref;
+
+    await deleteDoc(documentReference);
   }
 }

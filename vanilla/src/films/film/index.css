@@ -1,3 +1,11 @@
+:root {
+  --body-margin: 0 10px;
+}
+
+body {
+  margin: var(--body-margin);
+}
+
 .film-details-container {
   display: flex;
   flex-direction: column;
