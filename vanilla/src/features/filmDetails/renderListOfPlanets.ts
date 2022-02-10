@@ -6,13 +6,17 @@ import { appendSectionToSelector } from './appendSectionToSelector';
  * @param planetIds - Array with the ids of the planets.
  */
 export const renderListOfPlanets = async(planetIds: readonly number[]): Promise<void> => {
-  const listOfPlanets = await PlanetsService.fetchPlanetsListByPrimaryKeys(planetIds);
-
   let listOfPlanetsInnerHtml = '<h3>List of planets</h3>';
 
-  listOfPlanets.forEach((planet, index) => {
-    listOfPlanetsInnerHtml += `<p>${index + 1})${planet.name}</p>`;
-  });
+  try {
+    const listOfPlanets = await PlanetsService.fetchPlanetsListByPrimaryKeys(planetIds);
+
+    listOfPlanets.forEach((planet, index) => {
+      listOfPlanetsInnerHtml += `<p>${index + 1})${planet.name}</p>`;
+    });
+  } catch (error: unknown) {
+    listOfPlanetsInnerHtml += '<p>Failed to load list of planets</p>';
+  }
 
   appendSectionToSelector('.film-details-container', listOfPlanetsInnerHtml);
 };
