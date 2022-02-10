@@ -1,12 +1,10 @@
-import { query, where, getDocs } from 'firebase/firestore';
-
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
 
 import { splitArray } from '../../utils/splitArray';
 
-import { PlanetMapper } from './../../mappers/PlanetMapper';
+import { fetchUpToTenEnteties } from '../fetchUpToTenEnteties';
 
-import { FirebaseService } from './../firebase/FirebaseService';
+import { PlanetMapper } from './../../mappers/PlanetMapper';
 
 import { Planet } from './../../interfaces/planets/planet/Planet';
 import { PlanetDto } from './../../interfaces/planets/DTO/PlanetDto';
@@ -31,20 +29,13 @@ export class PlanetsService {
 
     const promisesList = [];
 
-    /**
-     * Fetches up to ten planets.
-     * @param subArray - Subarray of primary keys.
-     */
-    const fetchUpToTenPlanets = async(subArray: number[]): Promise<void> => {
-      const planetsQuery = query(this.planetsCollection, where('pk', 'in', subArray));
-
-      const planetsSnapshot = await getDocs(planetsQuery);
-
-      planets.push(...FirebaseService.mapQuerySnapshotToArray<PlanetDto, Planet>(planetsSnapshot, PlanetMapper.fromDto));
-    };
-
     for (const subArray of splitedPrimaryKeys) {
-      promisesList.push(fetchUpToTenPlanets(subArray));
+      promisesList.push(fetchUpToTenEnteties<PlanetDto, Planet>(
+        this.planetsCollection,
+        subArray,
+        planets,
+        PlanetMapper.fromDto,
+      ));
     }
 
     await Promise.all(promisesList);
