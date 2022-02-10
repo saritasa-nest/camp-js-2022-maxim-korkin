@@ -67,6 +67,7 @@ export const displayFilmsTable = (): Function => {
    * Function which fetches required films from the firestore, renders them and updates pagination buttons and table headers.
    * @param mode - Shows if we should fetch first, next or previous page.
    * @param newOrderingField - Shows if we should use specific field to order data. Null if we dont need to change ordering field.
+   * @param valueSearch - Shows by what value in the field we should search.
    */
   return async(mode = PaginationModes.Init, newOrderingField: OrderingFields | null = null, valueSearch: string): Promise<void> => {
     if (inProgress === true) {

@@ -10,12 +10,13 @@ import { OrderingModes } from '../../enums/films/OrderingModes';
  * @param firstFilmOnPage - First film on the current page.
  * @param orderingField - Current ordering field.
  * @param orderingMode - Current ordering mode.
+ * @param valueSearch - Shows by what value in the field we should search.
  */
 export const isFirstPage = async(
   firstFilmOnPage: Film,
   orderingField: OrderingFields,
   orderingMode: OrderingModes,
-  valueSearch: string
+  valueSearch: string,
 ): Promise<boolean> => {
  const firstFilm = await FilmsService.fetchFirstFilm(orderingField, orderingMode, valueSearch);
   return firstFilm.pk === firstFilmOnPage.pk;

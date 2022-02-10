@@ -15,7 +15,7 @@ const prevButton = document.querySelector('.pagination-prev-btn');
 const searchInput = document.querySelector<HTMLInputElement>('.search-input');
 const searchButton = document.querySelector<HTMLButtonElement>('.search-btn');
 
-if(searchButton !== null){
+if (searchButton !== null) {
   searchButton.addEventListener('click', () => {
     displayFilms(PaginationModes.Init, OrderingFields.Title, searchInput?.value);
   });

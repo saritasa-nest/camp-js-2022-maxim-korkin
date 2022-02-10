@@ -10,12 +10,13 @@ import { OrderingModes } from '../../enums/films/OrderingModes';
  * @param lastFilmOnPage - Last film on the current page.
  * @param orderingField - Current ordering field.
  * @param orderingMode - Current ordering mode.
+ * @param valueSearch - Shows by what value in the field we should search.
  */
 export const isLastPage = async(
   lastFilmOnPage: Film,
   orderingField: OrderingFields,
   orderingMode: OrderingModes,
-  valueSearch: string
+  valueSearch: string,
 ): Promise<boolean> => {
   const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode, valueSearch);
 
