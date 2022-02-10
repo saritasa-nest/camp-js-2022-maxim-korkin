@@ -1,9 +1,5 @@
-:root {
-  --body-margin: 0 10px;
-}
-
 body {
-  margin: var(--body-margin);
+  margin: 0 10px;
 }
 
 .film-details-container {
