@@ -41,7 +41,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return FirebaseService.mapFilmsQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapQuerySnapshotToArray<FilmDto, Film>(filmDocs, FilmMapper.fromDto);
   }
 
   /**
@@ -71,7 +71,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return FirebaseService.mapFilmsQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapQuerySnapshotToArray<FilmDto, Film>(filmDocs, FilmMapper.fromDto);
   }
 
   /**
@@ -101,7 +101,7 @@ export class FilmsService {
 
     const filmDocs = await getDocs(filmsQuery);
 
-    return FirebaseService.mapFilmsQuerySnapshotToArray(filmDocs);
+    return FirebaseService.mapQuerySnapshotToArray<FilmDto, Film>(filmDocs, FilmMapper.fromDto);
   }
 
   /**

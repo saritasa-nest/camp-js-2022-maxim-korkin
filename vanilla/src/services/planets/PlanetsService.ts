@@ -4,6 +4,8 @@ import { FirestoreCollections } from '../../enums/FirestoreCollections/Firestore
 
 import { splitArray } from '../../utils/splitArray';
 
+import { PlanetMapper } from './../../mappers/PlanetMapper';
+
 import { FirebaseService } from './../firebase/FirebaseService';
 
 import { Planet } from './../../interfaces/planets/planet/Planet';
@@ -38,7 +40,7 @@ export class PlanetsService {
 
       const planetsSnapshot = await getDocs(planetsQuery);
 
-      planets.push(...FirebaseService.mapPlanetsQuerySnapshotToArray(planetsSnapshot));
+      planets.push(...FirebaseService.mapQuerySnapshotToArray<PlanetDto, Planet>(planetsSnapshot, PlanetMapper.fromDto));
     };
 
     for (const subArray of splitedPrimaryKeys) {

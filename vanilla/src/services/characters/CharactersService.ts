@@ -2,6 +2,8 @@ import { query, where, getDocs } from 'firebase/firestore';
 
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
 
+import { CharacterMapper } from './../../mappers/CharacterMapper';
+
 import { splitArray } from './../../utils/splitArray';
 
 import { FirebaseService } from './../firebase/FirebaseService';
@@ -39,7 +41,7 @@ export class CharactersService {
 
       const charactersSnapshot = await getDocs(charactersQuery);
 
-      characters.push(...FirebaseService.mapCharactersQuerySnapshotToArray(charactersSnapshot));
+      characters.push(...FirebaseService.mapQuerySnapshotToArray<CharacterDto, Character>(charactersSnapshot, CharacterMapper.fromDto));
     };
 
     for (const subArray of splitedPrimaryKeys) {
