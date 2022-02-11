@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import { Character } from '../interfaces/characters/character/Character';
+
 import { CharacterFieldsDto } from './../interfaces/characters/DTO/CharacterFieldsDto';
 import { CharacterDto } from './../interfaces/characters/DTO/CharacterDto';
 
-import { Character } from '../interfaces/characters/character/Character';
 
 /**
  * Class for mapping Character and CharacterDto objects to each other.
