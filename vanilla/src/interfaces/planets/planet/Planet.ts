@@ -1,5 +1,5 @@
 /**
- * Interface desctibing the planet.
+ * Interface describing the planet.
  */
 export interface Planet {
 

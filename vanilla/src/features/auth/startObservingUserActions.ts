@@ -3,7 +3,6 @@ import { onAuthStateChanged, Unsubscribe } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 
 import { changeNavBarOnSignIn } from './changeNavBarOnSignIn';
-
 import { changeNavBarOnSignOut } from './changeNavBarOnSignOut';
 
 /**

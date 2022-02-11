@@ -1,9 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth';
 
 import { FilmsService } from '../../services/films/FilmsService';
-
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
-
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
 
 import { auth } from './../../firebase/firebase';

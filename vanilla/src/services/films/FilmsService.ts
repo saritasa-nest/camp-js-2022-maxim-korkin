@@ -1,17 +1,12 @@
 import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
-
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
-
 import { Film } from '../../interfaces/films/film/Film';
-
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
-
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
-
 import { FilmMapper } from '../../mappers/FilmMapper';
 
 /**
@@ -75,7 +70,7 @@ export class FilmsService {
   }
 
   /**
-   * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previos page.
+   * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previous page.
    * @param firstVisibleFilm - First film on the current page.
    * @param orderingField - Field to order the results. Default value is 'pk'.
    * @param orderingMode - Indicates if order should be ascending or descending.
@@ -135,7 +130,7 @@ export class FilmsService {
   /**
    * Method for getting film with provided primary key.
    * @param primaryKey - Primary key of the film.
-   * @returns Film with provided primary key or null if the film with such primary key doesnt exist.
+   * @returns Film with provided primary key or null if the film with such primary key doesn't exist.
    */
   public static async fetchFilmByPrimaryKey(primaryKey: number): Promise<Film | null> {
     const filmQuery = query(FilmsService.filmsCollection, where('pk', '==', primaryKey));
