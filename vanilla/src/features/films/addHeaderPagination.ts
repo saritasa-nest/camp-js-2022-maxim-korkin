@@ -10,7 +10,7 @@ import { OrderingFields } from '../../enums/films/OrderingFields';
 export const addHeaderPagination = (header: Element | null, orderingField: OrderingFields, displayFunction: Function): void => {
   if (header !== null) {
     header.addEventListener('click', () => {
-      displayFunction(PaginationModes.Init, orderingField);
+      displayFunction({ mode: PaginationModes.Init, newOrderingField: orderingField });
     });
   }
 };

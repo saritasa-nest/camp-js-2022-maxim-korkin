@@ -8,7 +8,7 @@ import { addHeaderPagination } from '../../features/films/addHeaderPagination';
 
 const displayFilms = displayFilmsTable();
 
-displayFilms(PaginationModes.Init);
+displayFilms();
 
 const nextButton = document.querySelector('.pagination-next-btn');
 const prevButton = document.querySelector('.pagination-prev-btn');
@@ -17,19 +17,26 @@ const searchButton = document.querySelector<HTMLButtonElement>('.search-btn');
 
 if (searchButton !== null) {
   searchButton.addEventListener('click', () => {
-    displayFilms(PaginationModes.Init, OrderingFields.Title, searchInput?.value);
+    if (searchInput?.value === '') {
+      return;
+    }
+    displayFilms({
+      mode: PaginationModes.Init,
+      newOrderingField: OrderingFields.Title,
+      valueSearch: searchInput?.value,
+    });
   });
 }
 
 if (nextButton !== null) {
   nextButton.addEventListener('click', () => {
-    displayFilms(PaginationModes.Next);
+    displayFilms({ mode: PaginationModes.Next });
   });
 }
 
 if (prevButton !== null) {
   prevButton.addEventListener('click', () => {
-    displayFilms(PaginationModes.Prev);
+    displayFilms({ mode: PaginationModes.Prev });
   });
 }
 

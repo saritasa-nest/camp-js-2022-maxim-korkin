@@ -11,6 +11,8 @@ import { PaginationModes } from '../../enums/films/PaginationModes';
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
 
+import { FetchOptionsFilterSort } from '../../interfaces/options/FetchOptionsFilterSort';
+
 import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';
 import { updatePaginationButtons } from './updatePaginationButtons';
@@ -63,13 +65,17 @@ export const displayFilmsTable = (): Function => {
    */
   const mutex = getMutex();
 
+  const DEFAULT_OPTIONS: FetchOptionsFilterSort = {
+    mode: PaginationModes.Init,
+    newOrderingField: null,
+    valueSearch: undefined,
+  };
+
   /**
    * Function which fetches required films from the firestore, renders them and updates pagination buttons and table headers.
-   * @param mode - Shows if we should fetch first, next or previous page.
-   * @param newOrderingField - Shows if we should use specific field to order data. Null if we dont need to change ordering field.
-   * @param valueSearch - Shows by what value in the field we should search.
+   * @param options Options for initialization, sorting and filtering.
    */
-  return async(mode = PaginationModes.Init, newOrderingField: OrderingFields | null = null, valueSearch: string): Promise<void> => {
+  return async(options: FetchOptionsFilterSort = DEFAULT_OPTIONS): Promise<void> => {
     if (inProgress === true) {
       return;
     }
@@ -82,11 +88,13 @@ export const displayFilmsTable = (): Function => {
 
     let films: Film[] = [];
 
-    if (newOrderingField !== null) {
-      if (newOrderingField === orderingField) {
+    if (options.newOrderingField !== null) {
+      if (options.newOrderingField === orderingField) {
         orderingMode = switchOrderMode(orderingMode);
       } else {
-        orderingField = newOrderingField;
+        if (options.newOrderingField) {
+          orderingField = options.newOrderingField;
+        }
         orderingMode = OrderingModes.Ascending;
       }
     }
@@ -95,12 +103,12 @@ export const displayFilmsTable = (): Function => {
 
     if (filmsTableBody !== null) {
       try {
-        if (mode === PaginationModes.Init) {
-          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode, valueSearch);
-        } else if (mode === PaginationModes.Next && !onLastPage) {
-          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode, valueSearch);
+        if (options.mode === PaginationModes.Init) {
+          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode, options.valueSearch);
+        } else if (options.mode === PaginationModes.Next && !onLastPage) {
+          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode, options.valueSearch);
         } else if (!onFirstPage) {
-          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode, valueSearch);
+          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode, options.valueSearch);
         }
       } catch (error: unknown) {
         inProgress = false;
@@ -111,8 +119,8 @@ export const displayFilmsTable = (): Function => {
         lastFilm = films[films.length - 1];
         firstFilm = films[0];
 
-        onFirstPage = await isFirstPage(firstFilm, orderingField, orderingMode, valueSearch);
-        onLastPage = await isLastPage(lastFilm, orderingField, orderingMode, valueSearch);
+        onFirstPage = await isFirstPage({ film: firstFilm, orderingField, orderingMode, valueSearch: options.valueSearch });
+        onLastPage = await isLastPage({ film: lastFilm, orderingField, orderingMode, valueSearch: options.valueSearch });
 
         updatePaginationButtons(onFirstPage, onLastPage);
 
