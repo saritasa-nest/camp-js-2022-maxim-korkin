@@ -5,7 +5,6 @@ import { Character } from '../interfaces/characters/character/Character';
 import { CharacterFieldsDto } from './../interfaces/characters/DTO/CharacterFieldsDto';
 import { CharacterDto } from './../interfaces/characters/DTO/CharacterDto';
 
-
 /**
  * Class for mapping Character and CharacterDto objects to each other.
  */
