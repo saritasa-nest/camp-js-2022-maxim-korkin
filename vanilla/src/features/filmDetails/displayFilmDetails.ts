@@ -1,9 +1,7 @@
 import { Film } from '../../interfaces/films/film/Film';
 
 import { renderListOfPlanets } from './renderListOfPlanets';
-
 import { renderListOfCharacters } from './renderListOfCharacters';
-
 import { renderMainInformation } from './renderMainInformation';
 
 /**

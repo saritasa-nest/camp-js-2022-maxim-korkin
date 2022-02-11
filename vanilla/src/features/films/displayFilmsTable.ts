@@ -4,9 +4,7 @@
 import { getMutex } from 'simple-mutex-promise';
 
 import { FilmsService } from '../../services/films/FilmsService';
-
 import { Film } from '../../interfaces/films/film/Film';
-
 import { PaginationModes } from '../../enums/films/PaginationModes';
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';

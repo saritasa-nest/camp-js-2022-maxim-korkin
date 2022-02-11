@@ -1,13 +1,9 @@
 import { onAuthStateChanged } from 'firebase/auth';
-
 import { Modal } from 'materialize-css';
 
 import { FilmsService } from '../../services/films/FilmsService';
-
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
-
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
-
 import { confirmDeletion } from '../../features/filmDetails/confirmDeletion';
 
 import { auth } from './../../firebase/firebase';

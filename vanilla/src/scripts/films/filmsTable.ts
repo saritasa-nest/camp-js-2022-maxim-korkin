@@ -1,9 +1,6 @@
 import { PaginationModes } from '../../enums/films/PaginationModes';
-
 import { displayFilmsTable } from '../../features/films/displayFilmsTable';
-
 import { OrderingFields } from '../../enums/films/OrderingFields';
-
 import { addHeaderPagination } from '../../features/films/addHeaderPagination';
 
 const displayFilms = displayFilmsTable();
