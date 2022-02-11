@@ -1,14 +1,10 @@
-import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
-
-import { fetchUpToTenEnteties } from '../fetchUpToTenEnteties';
+import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
+import { fetchUpToTenEntities } from '../fetchUpToTenEntities';
 
 import { CharacterMapper } from './../../mappers/CharacterMapper';
-
 import { splitArray } from './../../utils/splitArray';
-
 import { Character } from './../../interfaces/characters/character/Character';
 import { CharacterDto } from './../../interfaces/characters/DTO/CharacterDto';
-
 import { getCollectionRef } from './../../firebase/getCollection';
 
 /**
@@ -23,14 +19,14 @@ export class CharactersService {
    * @returns Array with the characters data.
    */
   public static async fetchCharactersListByPrimaryKeys(primaryKeys: readonly number[]): Promise<Character[]> {
-    const splitedPrimaryKeys = splitArray<number>(primaryKeys);
+    const splittedPrimaryKeys = splitArray<number>(primaryKeys);
 
     const characters: Character[] = [];
 
     const promisesList = [];
 
-    for (const subArray of splitedPrimaryKeys) {
-      promisesList.push(fetchUpToTenEnteties<CharacterDto, Character>(
+    for (const subArray of splittedPrimaryKeys) {
+      promisesList.push(fetchUpToTenEntities<CharacterDto, Character>(
         this.charactersCollection,
         subArray,
         characters,

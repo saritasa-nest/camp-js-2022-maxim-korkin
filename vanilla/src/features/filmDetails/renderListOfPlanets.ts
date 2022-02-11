@@ -1,21 +1,20 @@
-import { PlanetsService } from './../../services/planets/PlanetsService';
+import { Planet } from '../../interfaces/planets/planet/Planet';
+
 import { appendSectionToSelector } from './appendSectionToSelector';
 
 /**
  * Function renders list of planets of the film.
- * @param planetIds - Array with the ids of the planets.
+ * @param listOfPlanets - Array containing planets data or null in case of failing loading the list of planets.
  */
-export const renderListOfPlanets = async(planetIds: readonly number[]): Promise<void> => {
+export const renderListOfPlanets = (listOfPlanets: Planet[]): void => {
   let listOfPlanetsInnerHtml = '<h3>List of planets</h3>';
 
-  try {
-    const listOfPlanets = await PlanetsService.fetchPlanetsListByPrimaryKeys(planetIds);
-
+  if (listOfPlanets === null) {
+    listOfPlanetsInnerHtml += '<p>Failed to load list of planets.</p>';
+  } else {
     listOfPlanets.forEach((planet, index) => {
       listOfPlanetsInnerHtml += `<p>${index + 1})${planet.name}</p>`;
     });
-  } catch (error: unknown) {
-    listOfPlanetsInnerHtml += '<p>Failed to load list of planets</p>';
   }
 
   appendSectionToSelector('.film-details-container', listOfPlanetsInnerHtml);

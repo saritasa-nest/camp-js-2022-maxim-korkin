@@ -9,7 +9,7 @@ import { FirebaseService } from './firebase/FirebaseService';
  * @param entetiesList - Array with enteties.
  * @param fromDtoMapper - Mapper method which performs mapping.
  */
-export async function fetchUpToTenEnteties<TDto, TData>(
+export async function fetchUpToTenEntities<TDto, TData>(
   collection: CollectionReference<TDto>,
   subArray: number[],
   entetiesList: TData[],

@@ -1,8 +1,8 @@
-import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
+import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 
 import { splitArray } from '../../utils/splitArray';
 
-import { fetchUpToTenEnteties } from '../fetchUpToTenEnteties';
+import { fetchUpToTenEntities } from '../fetchUpToTenEntities';
 
 import { PlanetMapper } from './../../mappers/PlanetMapper';
 
@@ -23,14 +23,14 @@ export class PlanetsService {
    * @returns Array with the planets data.
    */
   public static async fetchPlanetsListByPrimaryKeys(primaryKeys: readonly number[]): Promise<Planet[]> {
-    const splitedPrimaryKeys = splitArray<number>(primaryKeys);
+    const splittedPrimaryKeys = splitArray<number>(primaryKeys);
 
     const planets: Planet[] = [];
 
     const promisesList = [];
 
-    for (const subArray of splitedPrimaryKeys) {
-      promisesList.push(fetchUpToTenEnteties<PlanetDto, Planet>(
+    for (const subArray of splittedPrimaryKeys) {
+      promisesList.push(fetchUpToTenEntities<PlanetDto, Planet>(
         this.planetsCollection,
         subArray,
         planets,

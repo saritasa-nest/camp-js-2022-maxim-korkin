@@ -10,7 +10,7 @@ import { Film } from '../../interfaces/films/film/Film';
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 
-import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreFollections';
+import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 
 import { FilmMapper } from '../../mappers/FilmMapper';
 
