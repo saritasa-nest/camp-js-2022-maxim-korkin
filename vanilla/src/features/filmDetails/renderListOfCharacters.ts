@@ -2,7 +2,7 @@ import { appendSectionToSelector } from './appendSectionToSelector';
 
 /**
  * Function renders list of characters of the film.
- * @param characterIds - Array with the ids of the charecters.
+ * @param characterIds - Array with the ids of the characters.
  */
 export const renderListOfCharacters = (characterIds: readonly number[]): void => {
   const listOfCharactersInnerHtml = `
