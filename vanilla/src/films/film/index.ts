@@ -1,8 +1,10 @@
 import { onAuthStateChanged } from 'firebase/auth';
+import { Modal } from 'materialize-css';
 
 import { FilmsService } from '../../services/films/FilmsService';
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
+import { confirmDeletion } from '../../features/filmDetails/confirmDeletion';
 
 import { auth } from './../../firebase/firebase';
 
@@ -19,6 +21,15 @@ onAuthStateChanged(auth, async user => {
 
       if (film !== null) {
         displayFilmDetails(film);
+
+        const modelElems = document.querySelectorAll('.modal');
+        Modal.init(modelElems);
+
+        const confirmDeletionButton = document.querySelector<HTMLButtonElement>('.confirm-deletion-btn');
+
+        confirmDeletionButton?.addEventListener('click', () => {
+          confirmDeletion(Number(primaryKey));
+        });
       } else {
         renderFilmNotFound();
       }
