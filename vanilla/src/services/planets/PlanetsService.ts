@@ -1,11 +1,10 @@
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { splitArray } from '../../utils/splitArray';
 import { fetchUpToTenEntities } from '../fetchUpToTenEntities';
-
-import { PlanetMapper } from './../../mappers/PlanetMapper';
-import { Planet } from './../../interfaces/planets/planet/Planet';
-import { PlanetDto } from './../../interfaces/planets/DTO/PlanetDto';
-import { getCollectionRef } from './../../firebase/getCollection';
+import { PlanetMapper } from '../../mappers/PlanetMapper';
+import { Planet } from '../../interfaces/planets/domain/Planet';
+import { PlanetDto } from '../../interfaces/planets/DTO/PlanetDto';
+import { getCollectionRef } from '../../firebase/getCollection';
 
 /**
  * Service class which helps to work with planets in firestore DB.

@@ -1,4 +1,4 @@
-import { Character } from '../../interfaces/characters/character/Character';
+import { Character } from '../../interfaces/characters/domain/Character';
 
 import { appendSectionToSelector } from './appendSectionToSelector';
 

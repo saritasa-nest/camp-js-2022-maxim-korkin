@@ -1,4 +1,4 @@
-import { Planet } from '../../interfaces/planets/planet/Planet';
+import { Planet } from '../../interfaces/planets/domain/Planet';
 
 import { appendSectionToSelector } from './appendSectionToSelector';
 

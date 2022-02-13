@@ -3,7 +3,7 @@ import { endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, whe
 import { getCollectionRef } from '../../firebase/getCollection';
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
-import { Film } from '../../interfaces/films/film/Film';
+import { Film } from '../../interfaces/films/domain/Film';
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';

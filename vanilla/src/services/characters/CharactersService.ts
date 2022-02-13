@@ -1,11 +1,10 @@
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { fetchUpToTenEntities } from '../fetchUpToTenEntities';
-
-import { CharacterMapper } from './../../mappers/CharacterMapper';
-import { splitArray } from './../../utils/splitArray';
-import { Character } from './../../interfaces/characters/character/Character';
-import { CharacterDto } from './../../interfaces/characters/DTO/CharacterDto';
-import { getCollectionRef } from './../../firebase/getCollection';
+import { CharacterMapper } from '../../mappers/CharacterMapper';
+import { splitArray } from '../../utils/splitArray';
+import { Character } from '../../interfaces/characters/domain/Character';
+import { CharacterDto } from '../../interfaces/characters/DTO/CharacterDto';
+import { getCollectionRef } from '../../firebase/getCollection';
 
 /**
  * Service class which helps to work with characters in firestore DB.

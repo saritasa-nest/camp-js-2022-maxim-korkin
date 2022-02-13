@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { PlanetFieldsDto } from './../interfaces/planets/DTO/PlanetFieldsDto';
-import { Planet } from './../interfaces/planets/planet/Planet';
-import { PlanetDto } from './../interfaces/planets/DTO/PlanetDto';
+import { Planet } from '../interfaces/planets/domain/Planet';
+import { PlanetDto } from '../interfaces/planets/DTO/PlanetDto';
+import { PlanetFieldsDto } from '../interfaces/planets/DTO/PlanetFieldsDto';
 
 /**
  * Class for mapping Planet and PlanetDto objects to each other.

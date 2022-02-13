@@ -1,7 +1,7 @@
-import { Film } from '../../interfaces/films/film/Film';
+import { Film } from '../../interfaces/films/domain/Film';
+import { PlanetsService } from '../../services/planets/PlanetsService';
+import { CharactersService } from '../../services/characters/CharactersService';
 
-import { PlanetsService } from './../../services/planets/PlanetsService';
-import { CharactersService } from './../../services/characters/CharactersService';
 import { renderListOfPlanets } from './renderListOfPlanets';
 import { renderListOfCharacters } from './renderListOfCharacters';
 import { renderMainInformation } from './renderMainInformation';
@@ -14,17 +14,17 @@ export const displayFilmDetails = async(film: Film): Promise<void> => {
   renderMainInformation(film);
 
   try {
-    const listOfCharacters = await CharactersService.fetchCharactersListByPrimaryKeys(film.characterIds);
+    const characters = await CharactersService.fetchCharactersListByPrimaryKeys(film.characterIds);
 
-    renderListOfCharacters(listOfCharacters);
+    renderListOfCharacters(characters);
   } catch (error: unknown) {
     renderListOfCharacters(null);
   }
 
   try {
-    const listOfPlanets = await PlanetsService.fetchPlanetsListByPrimaryKeys(film.characterIds);
+    const planets = await PlanetsService.fetchPlanetsListByPrimaryKeys(film.characterIds);
 
-    renderListOfPlanets(listOfPlanets);
+    renderListOfPlanets(planets);
   } catch (error: unknown) {
     renderListOfCharacters(null);
   }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Film } from '../interfaces/films/film/Film';
+
+import { Film } from '../interfaces/films/domain/Film';
 import { FilmDto } from '../interfaces/films/DTO/FilmDto';
 import { FilmFieldsDto } from '../interfaces/films/DTO/FilmFieldsDto';
 
