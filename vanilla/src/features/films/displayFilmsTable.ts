@@ -4,9 +4,7 @@
 import { getMutex } from 'simple-mutex-promise';
 
 import { FilmsService } from '../../services/films/FilmsService';
-
-import { Film } from '../../interfaces/films/film/Film';
-
+import { Film } from '../../interfaces/films/domain/Film';
 import { PaginationModes } from '../../enums/films/PaginationModes';
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
@@ -61,6 +59,11 @@ export const displayFilmsTable = (): Function => {
   let inProgress = false;
 
   /**
+   * The actual search value entered by the user.
+   */
+  let newValueSearch: undefined | string;
+
+  /**
    * Mutex for making sure that another instance of async function won't have access to resources.
    */
   const mutex = getMutex();
@@ -98,17 +101,22 @@ export const displayFilmsTable = (): Function => {
         orderingMode = OrderingModes.Ascending;
       }
     }
-
+    if (options.valueSearch !== undefined) {
+      newValueSearch = options.valueSearch;
+    }
+    if (options.valueSearch === '') {
+      newValueSearch = undefined;
+    }
     const filmsTableBody = document.querySelector('.films-table-body');
 
     if (filmsTableBody !== null) {
       try {
         if (options.mode === PaginationModes.Init) {
-          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode, options.valueSearch);
+          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode, newValueSearch);
         } else if (options.mode === PaginationModes.Next && !onLastPage) {
-          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode, options.valueSearch);
+          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode, newValueSearch);
         } else if (!onFirstPage) {
-          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode, options.valueSearch);
+          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode, newValueSearch);
         }
       } catch (error: unknown) {
         inProgress = false;
@@ -119,8 +127,8 @@ export const displayFilmsTable = (): Function => {
         lastFilm = films[films.length - 1];
         firstFilm = films[0];
 
-        onFirstPage = await isFirstPage({ film: firstFilm, orderingField, orderingMode, valueSearch: options.valueSearch });
-        onLastPage = await isLastPage({ film: lastFilm, orderingField, orderingMode, valueSearch: options.valueSearch });
+        onFirstPage = await isFirstPage({ film: firstFilm, orderingField, orderingMode, valueSearch: newValueSearch });
+        onLastPage = await isLastPage({ film: lastFilm, orderingField, orderingMode, valueSearch: newValueSearch });
 
         updatePaginationButtons(onFirstPage, onLastPage);
 

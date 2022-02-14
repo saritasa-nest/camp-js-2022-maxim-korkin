@@ -1,6 +1,6 @@
 :root {
   --error-color: #FF0000;
-  --table-header: rgb(231, 231, 231);
+  --table-header-hover-color: rgb(231, 231, 231);
 }
 
 .form-error-message {
@@ -12,7 +12,7 @@
 }
 
 .films-table-container th:hover {
-  background-color: var(--table-header);
+  background-color: var(--table-header-hover-color);
 }
 
 .active-header.ascending::after {
@@ -36,4 +36,7 @@
   border: none;
   background: url("./imgs/icon-search-32px.png") transparent center no-repeat;
   cursor: pointer;
+}
+.pagination-btns-container {
+  margin: 10px;
 }

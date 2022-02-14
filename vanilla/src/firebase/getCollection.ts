@@ -1,11 +1,11 @@
 import { collection, CollectionReference, DocumentData } from 'firebase/firestore';
 
-import { FirestoreCollections } from '../enums/FirestoreCollections/FirestoreFollections';
+import { FirestoreCollections } from '../enums/FirestoreCollections/FirestoreCollections';
 
 import { firestoreDB } from './firebase';
 
 /**
- * Function for gettig the collection reference with the given doc types.
+ * Function for getting the collection reference with the given doc types.
  * @param collectionName - Name of the collection in the firestore.
  * @returns Collection reference.
  */

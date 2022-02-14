@@ -5,7 +5,7 @@ import { FilmFieldsDto } from './FilmFieldsDto';
  */
 export interface FilmDto {
 
-  /** Fileds which describe the film. */
+  /** Fields which describe the film. */
   readonly fields: FilmFieldsDto;
 
   /** Model in DB. */

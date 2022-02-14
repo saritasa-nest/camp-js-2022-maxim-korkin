@@ -1,5 +1,5 @@
 import { auth } from '../../firebase/firebase';
-import { Film } from '../../interfaces/films/film/Film';
+import { Film } from '../../interfaces/films/domain/Film';
 
 /**
  * Function for handling row click which checks if the user is signed in and if not opens sign in window.

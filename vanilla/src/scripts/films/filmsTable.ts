@@ -1,9 +1,6 @@
 import { PaginationModes } from '../../enums/films/PaginationModes';
-
 import { displayFilmsTable } from '../../features/films/displayFilmsTable';
-
 import { OrderingFields } from '../../enums/films/OrderingFields';
-
 import { addHeaderPagination } from '../../features/films/addHeaderPagination';
 
 const displayFilms = displayFilmsTable();
@@ -18,6 +15,11 @@ const searchButton = document.querySelector<HTMLButtonElement>('.search-btn');
 if (searchButton !== null) {
   searchButton.addEventListener('click', () => {
     if (searchInput?.value === '') {
+      displayFilms({
+        mode: PaginationModes.Init,
+        newOrderingField: OrderingFields.EpisodeId,
+        valueSearch: searchInput?.value,
+      });
       return;
     }
     displayFilms({
