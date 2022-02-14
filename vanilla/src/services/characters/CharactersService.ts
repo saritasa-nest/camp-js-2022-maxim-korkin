@@ -1,3 +1,6 @@
+import { query, getDocs } from 'firebase/firestore';
+
+import { FirebaseService } from '../firebase/FirebaseService';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { fetchUpToTenEntities } from '../fetchUpToTenEntities';
 import { CharacterMapper } from '../../mappers/CharacterMapper';
@@ -36,5 +39,17 @@ export class CharactersService {
     await Promise.all(promisesList);
 
     return characters;
+  }
+
+  /**
+   * Fetches all characters from the firestore.
+   * @returns Array with the characters data.
+   */
+  public static async fetchAllCharacters(): Promise<Character[]> {
+    const charactersQuery = query(this.charactersCollection);
+
+    const snapshot = await getDocs(charactersQuery);
+
+    return FirebaseService.mapQuerySnapshotToArray<CharacterDto, Character>(snapshot, CharacterMapper.fromDto);
   }
 }

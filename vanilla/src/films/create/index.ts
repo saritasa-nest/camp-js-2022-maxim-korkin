@@ -1,5 +1,6 @@
 import { Datepicker } from 'materialize-css';
 
+import { CharactersService } from '../../services/characters/CharactersService';
 import { removeProducerInput } from '../../features/filmForm/removeProducerInput';
 import { addProducerInput } from '../../features/filmForm/addProducerInput';
 import { createFilmForm } from '../../features/filmForm/createFilmForm';
@@ -9,7 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
   Datepicker.init(elems);
 });
 
-const form = createFilmForm();
+const characters = await CharactersService.fetchAllCharacters();
+
+const form = createFilmForm(characters);
 
 const container = document.querySelector('.film-creation-container');
 container?.append(form);
