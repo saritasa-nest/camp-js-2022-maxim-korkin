@@ -12,6 +12,9 @@ export function changeNavBarOnSignIn(email: string): void {
       <div>${email}</div>
     </li>
     <li>
+      <a href="/films/create/">Create Film</a>
+    </li>
+    <li>
       <a class="signout">Sign Out</a>
     </li>`;
 
