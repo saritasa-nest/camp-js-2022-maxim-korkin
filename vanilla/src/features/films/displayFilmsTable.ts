@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable require-atomic-updates */
 // Disabled it since im using a mutex to make sure that only one instance of async function has access to outer variables.
 
@@ -18,11 +19,13 @@ import { isFirstPage } from './isFirstPage';
 import { isLastPage } from './isLastPage';
 import { renderFilms } from './renderFilms';
 
+export type DisplayFunction = (options?: Partial<FetchOptionsFilterSort>) => void;
+
 /**
  * Closure for fetching and displaying pages with films.
  * @returns Function which fetches required list of films and displays it on the page.
  */
-export const displayFilmsTable = (): Function => {
+export const displayFilmsTable = (): DisplayFunction => {
   /**
    * Last film on the page.
    */
@@ -61,7 +64,7 @@ export const displayFilmsTable = (): Function => {
   /**
    * The actual search value entered by the user.
    */
-  let newValueSearch: undefined | string;
+  let newValueSearch: null | string;
 
   /**
    * Mutex for making sure that another instance of async function won't have access to resources.
@@ -71,14 +74,14 @@ export const displayFilmsTable = (): Function => {
   const DEFAULT_OPTIONS: FetchOptionsFilterSort = {
     mode: PaginationModes.Init,
     newOrderingField: null,
-    valueSearch: undefined,
+    valueSearch: null,
   };
 
   /**
    * Function which fetches required films from the firestore, renders them and updates pagination buttons and table headers.
    * @param options Options for initialization, sorting and filtering.
    */
-  return async(options: FetchOptionsFilterSort = DEFAULT_OPTIONS): Promise<void> => {
+  return async(options: Partial<FetchOptionsFilterSort> = DEFAULT_OPTIONS): Promise<void> => {
     if (inProgress === true) {
       return;
     }
@@ -100,11 +103,11 @@ export const displayFilmsTable = (): Function => {
       }
 
     }
-    if (options.valueSearch !== undefined) {
+    if (options.valueSearch) {
       newValueSearch = options.valueSearch;
     }
     if (options.valueSearch === '') {
-      newValueSearch = undefined;
+      newValueSearch = null;
     }
     const filmsTableBody = document.querySelector('.films-table-body');
 
@@ -125,8 +128,20 @@ export const displayFilmsTable = (): Function => {
       if (films.length !== 0) {
         lastFilm = films[films.length - 1];
         firstFilm = films[0];
-        onFirstPage = await isFirstPage({ film: firstFilm, orderingField, orderingMode, valueSearch: newValueSearch });
-        onLastPage = await isLastPage({ film: lastFilm, orderingField, orderingMode, valueSearch: newValueSearch });
+        onFirstPage = await isFirstPage({
+          film: firstFilm,
+          orderingField,
+          orderingMode,
+          valueSearch: newValueSearch,
+          newOrderingField: null,
+        });
+        onLastPage = await isLastPage({
+          film: lastFilm,
+          orderingField,
+          orderingMode,
+          valueSearch: newValueSearch,
+          newOrderingField: null,
+        });
       } else {
         onFirstPage = true;
         onLastPage = true;

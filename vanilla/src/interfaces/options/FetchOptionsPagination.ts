@@ -1,6 +1,6 @@
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
-import { Film } from '../films/film/Film';
+import { Film } from '../films/domain/Film';
 
 import { FetchOptionsFilterSort } from './FetchOptionsFilterSort';
 
@@ -13,6 +13,6 @@ export interface FetchOptionsPagination extends FetchOptionsFilterSort{
   /** Current ordering field.*/
   orderingMode: OrderingModes;
 
-  /** Urrent ordering mode.*/
+  /** Current ordering mode.*/
   orderingField: OrderingFields;
 }

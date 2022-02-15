@@ -8,8 +8,8 @@ export interface FetchOptionsFilterSort {
   mode?: PaginationModes;
 
   /** Shows if we should use specific field to order data. Null if we dont need to change ordering field.*/
-  newOrderingField?: OrderingFields | null;
+  newOrderingField: OrderingFields | null;
 
   /** Shows by what value in the field we should search.*/
-  valueSearch: string | undefined;
+  valueSearch: string | null;
 }

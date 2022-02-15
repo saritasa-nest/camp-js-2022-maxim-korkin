@@ -21,7 +21,7 @@ const DEFAULT_LIMIT_OF_FILMS = 2;
  * @param valueSearch - Shows by what value in the field we should search.
  * @returns Array with query constraint.
  */
-function getQueryConstraint(orderingField: OrderingFields, orderingMode: OrderingModes, valueSearch: string | undefined):
+function getQueryConstraint(orderingField: OrderingFields, orderingMode: OrderingModes, valueSearch: string | null | undefined):
  QueryConstraint[] {
   if (valueSearch) {
     return [
@@ -52,7 +52,7 @@ export class FilmsService {
   public static async fetchFirstPageOfFilms(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    valueSearch: string | undefined,
+    valueSearch: string | null,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const queryConstraints: QueryConstraint[] = [
@@ -80,7 +80,7 @@ export class FilmsService {
     lastVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    valueSearch: string | undefined,
+    valueSearch: string | null,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const lastVisibleFilmQuery = valueSearch ?
@@ -117,7 +117,7 @@ export class FilmsService {
     firstVisibleFilm: Film,
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    valueSearch: string | undefined,
+    valueSearch: string | null,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const firstVisibleFilmQuery = valueSearch ?
@@ -151,7 +151,7 @@ export class FilmsService {
   public static async fetchLastFilm(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    valueSearch: string | undefined,
+    valueSearch: string | null | undefined,
   ): Promise<Film> {
     const queryConstraints: QueryConstraint[] = [
       ...getQueryConstraint(orderingField, orderingMode, valueSearch),
@@ -178,7 +178,7 @@ export class FilmsService {
   public static async fetchFirstFilm(
     orderingField: OrderingFields,
     orderingMode: OrderingModes,
-    valueSearch: string | undefined,
+    valueSearch: string | null | undefined,
   ): Promise<Film> {
     const queryConstraints: QueryConstraint[] = [
       ...getQueryConstraint(orderingField, orderingMode, valueSearch),
