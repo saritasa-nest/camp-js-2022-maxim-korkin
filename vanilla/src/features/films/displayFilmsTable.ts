@@ -94,12 +94,11 @@ export const displayFilmsTable = (): Function => {
     if (options.newOrderingField !== null) {
       if (options.newOrderingField === orderingField) {
         orderingMode = switchOrderMode(orderingMode);
-      } else {
-        if (options.newOrderingField) {
-          orderingField = options.newOrderingField;
-        }
+      } else if (options.newOrderingField) {
+        orderingField = options.newOrderingField;
         orderingMode = OrderingModes.Ascending;
       }
+
     }
     if (options.valueSearch !== undefined) {
       newValueSearch = options.valueSearch;
@@ -126,16 +125,17 @@ export const displayFilmsTable = (): Function => {
       if (films.length !== 0) {
         lastFilm = films[films.length - 1];
         firstFilm = films[0];
-
         onFirstPage = await isFirstPage({ film: firstFilm, orderingField, orderingMode, valueSearch: newValueSearch });
         onLastPage = await isLastPage({ film: lastFilm, orderingField, orderingMode, valueSearch: newValueSearch });
-
-        updatePaginationButtons(onFirstPage, onLastPage);
-
-        updateFieldHeaders(orderingField, orderingMode);
-
-        renderFilms(films);
+      } else {
+        onFirstPage = true;
+        onLastPage = true;
       }
+      updatePaginationButtons(onFirstPage, onLastPage);
+
+      updateFieldHeaders(orderingField, orderingMode);
+
+      renderFilms(films);
 
       inProgress = false;
       release();
