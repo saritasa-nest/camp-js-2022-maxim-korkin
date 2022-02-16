@@ -1,0 +1,19 @@
+.film-creation-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.film-creation-form {
+  width: 50%;
+}
+
+.producers-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.producers-btns-container {
+  align-self: center;
+}

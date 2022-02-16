@@ -1,6 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { Modal } from 'materialize-css';
 
+import { getPrimaryKeyFromSearchParams } from '../../utils/getPrimaryKeyFromSearchParams';
 import { FilmsService } from '../../services/films/FilmsService';
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
@@ -12,12 +13,10 @@ onAuthStateChanged(auth, async user => {
   if (user === null) {
     document.location = '/';
   } else {
-    const params = new URLSearchParams(location.search);
-
-    const primaryKey = params.get('pk');
+    const primaryKey = getPrimaryKeyFromSearchParams();
 
     if (primaryKey !== null) {
-      const film = await FilmsService.fetchFilmByPrimaryKey(Number(primaryKey));
+      const film = await FilmsService.fetchFilmByPrimaryKey(primaryKey);
 
       if (film !== null) {
         displayFilmDetails(film);
@@ -28,10 +27,10 @@ onAuthStateChanged(auth, async user => {
         const confirmDeletionButton = document.querySelector<HTMLButtonElement>('.confirm-deletion-btn');
 
         confirmDeletionButton?.addEventListener('click', () => {
-          confirmDeletion(Number(primaryKey));
+          confirmDeletion(primaryKey);
         });
 
-        initEditLink(Number(primaryKey));
+        initEditLink(primaryKey);
       } else {
         renderFilmNotFound();
       }

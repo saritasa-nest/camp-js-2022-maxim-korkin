@@ -6,6 +6,6 @@ export const initEditLink = (primaryKey: number): void => {
   const editLink = document.querySelector<HTMLAnchorElement>('.edit-link');
 
   if (editLink !== null) {
-    editLink.href = `/films/edit/?pk=${primaryKey}/`;
+    editLink.href = `/films/edit/?pk=${primaryKey}`;
   }
 };
