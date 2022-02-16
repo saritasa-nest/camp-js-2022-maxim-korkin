@@ -15,7 +15,7 @@ export const addProducerInput = (): void => {
   producerInput.classList.add('input-field', 'producer-input');
 
   producerInput.innerHTML = `
-    <input id="producers-input-${producerInputsCount + 1}" type="text">
+    <input name="producer" id="producers-input-${producerInputsCount + 1}" type="text">
     <label for="producers-input-${producerInputsCount + 1}">Producer</label>
   `;
 

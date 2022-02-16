@@ -1,4 +1,4 @@
-import { deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { addDoc, deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 import { OrderingFields } from '../../enums/films/OrderingFields';
@@ -155,5 +155,27 @@ export class FilmsService {
     const documentReference = querySnapshot.docs[0].ref;
 
     await deleteDoc(documentReference);
+  }
+
+  /**
+   * Method for getting the highest primary key of the films.
+   * @returns Highest existing primary key.
+   */
+  public static async getMaximumPrimaryKey(): Promise<number> {
+    const filmQuery = query(FilmsService.filmsCollection, orderBy('pk', 'desc'), limit(1));
+
+    const querySnapshot = await getDocs(filmQuery);
+
+    return (querySnapshot.docs.length !== 0) ? querySnapshot.docs[0].data().pk : 1;
+  }
+
+  /**
+   * Method for adding a new film to firestore DB.
+   * @param film - Film to add.
+   */
+  public static async addFilm(film: Film): Promise<void> {
+    const filmDto = FilmMapper.toDto(film);
+
+    await addDoc(FilmsService.filmsCollection, filmDto);
   }
 }
