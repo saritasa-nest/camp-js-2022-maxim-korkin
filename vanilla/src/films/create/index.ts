@@ -12,7 +12,12 @@ import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm
 
 document.addEventListener('DOMContentLoaded', () => {
   const elems = document.querySelectorAll('.datepicker');
-  Datepicker.init(elems);
+
+  const options = {
+    format: 'dd.mm.yyyy',
+  };
+
+  Datepicker.init(elems, options);
 });
 
 const form = createFilmForm();
