@@ -8,8 +8,7 @@ import { fillCharacters } from '../../features/filmForm/fillCharacters';
 import { CharactersService } from '../../services/characters/CharactersService';
 import { PlanetsService } from '../../services/planets/PlanetsService';
 import { FilmsService } from '../../services/films/FilmsService';
-import { getFormValues } from '../../features/filmForm/getFormValues';
-import { Film } from '../../interfaces/films/domain/Film';
+import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
 
 document.addEventListener('DOMContentLoaded', () => {
   const elems = document.querySelectorAll('.datepicker');
@@ -45,14 +44,10 @@ form.addEventListener('submit', async event => {
 
   const highestPrimaryKey = await FilmsService.getMaximumPrimaryKey();
 
-  const formValues = getFormValues(form);
+  const newFilm = composeFilmFromForm(form, highestPrimaryKey + 1);
 
-  const newFilm: Film = {
-    ...formValues,
-    pk: highestPrimaryKey + 1,
-  };
-
-  await FilmsService.addFilm(newFilm);
-
-  document.location = '/';
+  if (newFilm !== null) {
+    await FilmsService.addFilm(newFilm);
+    document.location = '/';
+  }
 });
