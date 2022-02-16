@@ -1,7 +1,7 @@
 /**
- * Interface describing the film.
+ * Interface describing values of the fields in the film form.
  */
-export interface Film {
+export interface FilmFormValues {
 
   /** An array containing IDs of characters in the film. */
   readonly characterIds: readonly number[];
@@ -26,7 +26,4 @@ export interface Film {
 
   /** Title of the film. */
   readonly title: string;
-
-  /** Primary key of the film. */
-  readonly pk: number;
 }

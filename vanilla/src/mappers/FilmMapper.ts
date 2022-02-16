@@ -17,18 +17,13 @@ export class FilmMapper {
     const { fields } = dto;
     return {
       characterIds: fields.characters,
-      created: new Date(fields.created),
       director: fields.director,
-      edited: new Date(fields.edited),
       episodeId: fields.episode_id,
       openingCrawl: fields.opening_crawl,
       planetIds: fields.planets,
       producer: fields.producer,
       releaseDate: new Date(fields.release_date),
-      specieIds: fields.species,
-      starshipIds: fields.starships,
       title: fields.title,
-      vehicleIds: fields.vehicles,
       pk: dto.pk,
     };
   }
@@ -36,23 +31,33 @@ export class FilmMapper {
   /**
    * Method gets Film object and then converts it into FilmDto object and returns it.
    * @param film - Film object which need to be converted into FilmDto object.
+   * @param created - Date of creation.
+   * @param edited - Date of edition.
+   * @param specieIds - Array containing primary keys of species.
+   * @param starshipIds - Array containing primary keys of starships.
+   * @param vehicleIds - Array containing primary keys of vehicles.
    * @returns Converted FilmDto object.
    */
-  public static toDto(film: Film): FilmDto {
+  public static toDto(film: Film,
+    created = new Date(),
+    edited = new Date(),
+    specieIds: number[] = [],
+    starshipIds: number[] = [],
+    vehicleIds: number[] = []): FilmDto {
     const newFilmDtoFields: FilmFieldsDto = {
       characters: film.characterIds,
-      created: film.created.toISOString(),
+      created: created.toISOString(),
       director: film.director,
-      edited: film.edited.toISOString(),
+      edited: edited.toISOString(),
       episode_id: film.episodeId,
       opening_crawl: film.openingCrawl,
       planets: film.planetIds,
       producer: film.producer,
       release_date: film.releaseDate.toISOString(),
-      species: film.specieIds,
-      starships: film.starshipIds,
+      species: specieIds,
+      starships: starshipIds,
       title: film.title,
-      vehicles: film.vehicleIds,
+      vehicles: vehicleIds,
     };
 
     return {

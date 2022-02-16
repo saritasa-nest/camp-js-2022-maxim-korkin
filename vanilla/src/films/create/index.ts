@@ -8,7 +8,8 @@ import { fillCharacters } from '../../features/filmForm/fillCharacters';
 import { CharactersService } from '../../services/characters/CharactersService';
 import { PlanetsService } from '../../services/planets/PlanetsService';
 import { FilmsService } from '../../services/films/FilmsService';
-import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
+import { getFormValues } from '../../features/filmForm/getFormValues';
+import { Film } from '../../interfaces/films/domain/Film';
 
 document.addEventListener('DOMContentLoaded', () => {
   const elems = document.querySelectorAll('.datepicker');
@@ -42,7 +43,16 @@ removeProducerButton?.addEventListener('click', removeProducerInput);
 form.addEventListener('submit', async event => {
   event.preventDefault();
 
-  const film = await composeFilmFromForm(form);
+  const highestPrimaryKey = await FilmsService.getMaximumPrimaryKey();
 
-  await FilmsService.addFilm(film);
+  const formValues = getFormValues(form);
+
+  const newFilm: Film = {
+    ...formValues,
+    pk: highestPrimaryKey + 1,
+  };
+
+  await FilmsService.addFilm(newFilm);
+
+  document.location = '/';
 });
