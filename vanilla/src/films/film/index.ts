@@ -5,8 +5,8 @@ import { FilmsService } from '../../services/films/FilmsService';
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
 import { confirmDeletion } from '../../features/filmDetails/confirmDeletion';
-
-import { auth } from './../../firebase/firebase';
+import { initEditLink } from '../../features/filmDetails/initEditLink';
+import { auth } from '../../firebase/firebase';
 
 onAuthStateChanged(auth, async user => {
   if (user === null) {
@@ -30,6 +30,8 @@ onAuthStateChanged(auth, async user => {
         confirmDeletionButton?.addEventListener('click', () => {
           confirmDeletion(Number(primaryKey));
         });
+
+        initEditLink(Number(primaryKey));
       } else {
         renderFilmNotFound();
       }
