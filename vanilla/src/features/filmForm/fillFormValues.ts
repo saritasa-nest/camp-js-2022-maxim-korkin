@@ -2,6 +2,11 @@ import { addProducerInput } from './addProducerInput';
 import { fillSingleValue } from './fillSingleValue';
 import { Film } from './../../interfaces/films/domain/Film';
 
+/**
+ * Function for filling form inputs with film values.
+ * @param form - Form to fill.
+ * @param film - Film to get values from.
+ */
 export const fillFormValues = (form: HTMLFormElement, film: Film): void => {
   fillSingleValue('#title-input', film.title);
 

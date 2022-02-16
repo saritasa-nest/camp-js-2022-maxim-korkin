@@ -4,7 +4,6 @@ import { getPrimaryKeyFromSearchParams } from '../../utils/getPrimaryKeyFromSear
 import { initFilmForm } from '../../features/filmForm/initFilmForm';
 import { createFilmForm } from '../../features/filmForm/createFilmForm';
 import { FilmsService } from '../../services/films/FilmsService';
-import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
 import { fillFormValues } from '../../features/filmForm/fillFormValues';
 
 document.addEventListener('DOMContentLoaded', () => {
