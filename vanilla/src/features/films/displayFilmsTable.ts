@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable require-atomic-updates */
 // Disabled it since im using a mutex to make sure that only one instance of async function has access to outer variables.
 
@@ -11,6 +10,8 @@ import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
 
 import { FetchOptionsFilterSort } from '../../interfaces/options/FetchOptionsFilterSort';
+
+import { ParametersPagination } from '../../interfaces/films/domain/ParametersPagination';
 
 import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';
@@ -125,27 +126,8 @@ export const displayFilmsTable = (): DisplayFunction => {
         release();
       }
 
-      if (films.length !== 0) {
-        lastFilm = films[films.length - 1];
-        firstFilm = films[0];
-        onFirstPage = await isFirstPage({
-          film: firstFilm,
-          orderingField,
-          orderingMode,
-          valueSearch: newValueSearch,
-          newOrderingField: null,
-        });
-        onLastPage = await isLastPage({
-          film: lastFilm,
-          orderingField,
-          orderingMode,
-          valueSearch: newValueSearch,
-          newOrderingField: null,
-        });
-      } else {
-        onFirstPage = true;
-        onLastPage = true;
-      }
+     ({ lastFilm, firstFilm, onFirstPage, onLastPage } = await getParametersPagination(films, orderingField, orderingMode, newValueSearch));
+
       updatePaginationButtons(onFirstPage, onLastPage);
 
       updateFieldHeaders(orderingField, orderingMode);
@@ -157,3 +139,42 @@ export const displayFilmsTable = (): DisplayFunction => {
     }
   };
 };
+
+/**
+ * Returns the first and last films on the page and whether the given page is the first or last.
+ * @param films Array of films per page.
+ * @param orderingField The field by which the movies are sorted.
+ * @param orderingMode Shows if ordering should be ascending or descending.
+ * @param newValueSearch The actual search value entered by the user..
+ */
+async function getParametersPagination(films: Film[], orderingField: OrderingFields,
+  orderingMode: OrderingModes, newValueSearch: string | null): Promise<ParametersPagination> {
+  let lastFilm: Film;
+  let firstFilm: Film;
+  let onFirstPage: boolean;
+  let onLastPage: boolean;
+  if (films.length !== 0) {
+    lastFilm = films[films.length - 1];
+    firstFilm = films[0];
+    onFirstPage = await isFirstPage({
+      film: firstFilm,
+      orderingField,
+      orderingMode,
+      valueSearch: newValueSearch,
+      newOrderingField: null,
+    });
+    onLastPage = await isLastPage({
+      film: lastFilm,
+      orderingField,
+      orderingMode,
+      valueSearch: newValueSearch,
+      newOrderingField: null,
+    });
+  } else {
+    lastFilm = films[0];
+    firstFilm = films[0];
+    onFirstPage = true;
+    onLastPage = true;
+  }
+  return { lastFilm, firstFilm, onFirstPage, onLastPage };
+}
