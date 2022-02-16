@@ -1,16 +1,13 @@
-import { Character } from './../../interfaces/characters/domain/Character';
-
 /**
  * Function creates HTML form element with the film fields inputs.
- * @param characters - Array with the characters data.
  * @returns Created form element.
  */
-export const createFilmForm = (characters: Character[]): HTMLFormElement => {
+export const createFilmForm = (): HTMLFormElement => {
   const form = document.createElement('form');
 
   form.classList.add('film-creation-form');
 
-  let formInnerHTML = `
+  form.innerHTML = `
     <div class="input-field">
       <input id="title-input" type="text">
       <label for="title-input">Title</label>
@@ -39,18 +36,13 @@ export const createFilmForm = (characters: Character[]): HTMLFormElement => {
       <input id="release-date-input" type="date">
       <label for="release-date-input">Release date</label>
     </div>
+    <fieldset class="characters-container">
+      <legend>Characters</legend>
+    </fieldset>
+    <fieldset class="planets-container">
+      <legend>Planets</legend>
+    </fieldset>
   `;
-
-  characters.forEach(character => {
-    formInnerHTML += `
-      <label>
-        <input type="checkbox" name="${character.pk}">
-        <span>${character.name}</span>
-      </label>
-    `;
-  });
-
-  form.innerHTML = formInnerHTML;
 
   return form;
 };
