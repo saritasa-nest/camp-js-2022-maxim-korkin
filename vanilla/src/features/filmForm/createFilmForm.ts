@@ -31,7 +31,7 @@ export const createFilmForm = (characters: Character[]): HTMLFormElement => {
         </div>
       </div>
       <div class="producers-btns-container">
-        <button type="button" class="btn remove-producer-button">-</button>
+        <button type="button" class="btn remove-producer-button" disabled>-</button>
         <button type="button" class="btn add-producer-button">+</button>
       </div>
     </div>
