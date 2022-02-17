@@ -3,7 +3,7 @@ import { Film } from '../../interfaces/films/domain/Film';
 /**
  * Function for getting film values from the form and creating film object.
  * @param form - Form to get values from.
- * @param primaryKey - Primary key of the new film.
+ * @param primaryKey - Primary key of the film.
  * @returns - New film object.
  */
 export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): Film | null => {

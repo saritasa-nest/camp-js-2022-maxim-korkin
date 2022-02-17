@@ -7,7 +7,7 @@ export const getPrimaryKeyFromSearchParams = (): number | null => {
 
   const primaryKey = Number(params.get('pk'));
 
-  if (isNaN(primaryKey)) {
+  if (isNaN(primaryKey) || primaryKey === 0) {
     return null;
   }
   return primaryKey;

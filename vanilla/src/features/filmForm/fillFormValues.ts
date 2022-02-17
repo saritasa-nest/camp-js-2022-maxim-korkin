@@ -1,6 +1,7 @@
 import { addProducerInput } from './addProducerInput';
 import { fillSingleValue } from './fillSingleValue';
 import { Film } from './../../interfaces/films/domain/Film';
+import { fillCheckboxFieldset } from './fillChechboxFieldset';
 
 /**
  * Function for filling form inputs with film values.
@@ -33,7 +34,9 @@ export const fillFormValues = (form: HTMLFormElement, film: Film): void => {
 
   fillSingleValue('#release-date-input', dateString);
 
-  // TODO: characters and planets values filling
+  fillCheckboxFieldset('.characters-container', film.characterIds);
+
+  fillCheckboxFieldset('.planets-container', film.planetIds);
 
   const openingCrawlInput = form.querySelector('#opening-crawl-input');
 
