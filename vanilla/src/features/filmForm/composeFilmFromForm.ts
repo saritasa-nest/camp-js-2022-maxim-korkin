@@ -13,7 +13,7 @@ export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): 
   const openingCrawl = data.get('opening-crawl');
   const episodeId = data.get('episode-id');
   const director = data.get('director');
-  const producer = data.getAll('producer');
+  const producers = data.getAll('producer');
   const releaseDate = data.get('release-date');
 
   const characterIds = data.getAll('character');
@@ -24,7 +24,7 @@ export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): 
     openingCrawl === null ||
     episodeId === null ||
     director === null ||
-    producer.length === 0 ||
+    producers.length === 0 ||
     releaseDate === null) {
       return null;
     }
@@ -34,7 +34,9 @@ export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): 
     openingCrawl: openingCrawl as string,
     episodeId: Number(episodeId),
     director: director as string,
-    producer: producer.toString(),
+    producer: producers
+      .map(producer => String(producer))
+      .reduce((accumulator, producer) => `${accumulator}, ${producer}`),
     releaseDate: new Date(releaseDate as string),
     characterIds: characterIds.map(pk => Number(pk)),
     planetIds: planetIds.map(pk => Number(pk)),
