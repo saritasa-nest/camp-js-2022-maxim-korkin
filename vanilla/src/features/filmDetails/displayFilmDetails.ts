@@ -22,7 +22,7 @@ export const displayFilmDetails = async(film: Film): Promise<void> => {
   }
 
   try {
-    const planets = await PlanetsService.fetchPlanetsListByPrimaryKeys(film.characterIds);
+    const planets = await PlanetsService.fetchPlanetsListByPrimaryKeys(film.planetIds);
 
     renderListOfPlanets(planets);
   } catch (error: unknown) {
