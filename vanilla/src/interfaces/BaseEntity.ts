@@ -3,13 +3,15 @@
  */
 export interface BaseEntity {
 
-  /**
-   * Primary key.
-   */
+  /** Primary key. */
   readonly pk: number;
 
-  /**
-   * Name.
-   */
+  /** Name. */
   readonly name: string;
+
+  /** Creation date of the entity in the DB. */
+  readonly created: Date;
+
+  /** Edition date of the entity in the DB. */
+  readonly edited: Date;
 }
