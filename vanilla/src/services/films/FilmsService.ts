@@ -1,4 +1,4 @@
-import { addDoc, deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { addDoc, deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, updateDoc, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 import { OrderingFields } from '../../enums/films/OrderingFields';
@@ -170,12 +170,37 @@ export class FilmsService {
   }
 
   /**
-   * Method for adding a new film to firestore DB.
+   * Method for adding a new film to the firestore DB.
    * @param film - Film to add.
    */
   public static async addFilm(film: Film): Promise<void> {
     const filmDto = FilmMapper.toDto(film);
 
     await addDoc(FilmsService.filmsCollection, filmDto);
+  }
+
+  /**
+   * Method for updating film in the firestore DB.
+   * @param film - Film with the new values.
+   */
+  public static async updateFilm(film: Film): Promise<void> {
+    const filmQuery = query(FilmsService.filmsCollection, where('pk', '==', film.pk));
+
+    const querySnapshot = await getDocs(filmQuery);
+
+    const documentReference = querySnapshot.docs[0].ref;
+
+    const oldFilm = querySnapshot.docs[0].data();
+
+    const newFilm = FilmMapper.toDto(
+      film,
+      new Date(oldFilm.fields.created),
+      new Date(),
+      oldFilm.fields.species,
+      oldFilm.fields.starships,
+      oldFilm.fields.vehicles,
+    );
+
+    await updateDoc(documentReference, newFilm);
   }
 }

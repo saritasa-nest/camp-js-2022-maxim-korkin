@@ -46,7 +46,7 @@ export const createFilmForm = (): HTMLFormElement => {
     <fieldset class="planets-container">
       <legend>Planets</legend>
     </fieldset>
-    <button type="submit" class="btn submit-button">Create</button>
+    <button type="submit" class="btn submit-button">Submit</button>
   `;
 
   return form;

@@ -36,7 +36,11 @@ if (primaryKey !== null) {
 
     const newFilm = composeFilmFromForm(form, primaryKey);
 
-  // TODO: add film updating
+    if (newFilm !== null) {
+      await FilmsService.updateFilm(newFilm);
+
+      document.location = '/';
+    }
 });
   }
 } else {

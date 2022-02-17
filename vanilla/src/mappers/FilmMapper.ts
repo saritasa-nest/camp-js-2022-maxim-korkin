@@ -41,9 +41,9 @@ export class FilmMapper {
   public static toDto(film: Film,
     created = new Date(),
     edited = new Date(),
-    specieIds: number[] = [],
-    starshipIds: number[] = [],
-    vehicleIds: number[] = []): FilmDto {
+    specieIds: readonly number[] = [],
+    starshipIds: readonly number[] = [],
+    vehicleIds: readonly number[] = []): FilmDto {
     const newFilmDtoFields: FilmFieldsDto = {
       characters: film.characterIds,
       created: created.toISOString(),
