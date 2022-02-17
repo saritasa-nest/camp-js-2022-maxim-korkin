@@ -8,11 +8,11 @@ import { Character } from '../../interfaces/characters/domain/Character';
  * @param checkboxName - Name which to give to checkboxes.
  */
 export const fillFieldset = (selector: string, entities: Character[] | Planet[], checkboxName: string): void => {
-  const charactersContainer = document.querySelector<HTMLFieldSetElement>(selector);
+  const fieldSet = document.querySelector<HTMLFieldSetElement>(selector);
 
-  if (charactersContainer !== null) {
+  if (fieldSet !== null) {
     entities.forEach(entity => {
-      charactersContainer.innerHTML += `
+      fieldSet.innerHTML += `
         <label>
           <input type="checkbox" name="${checkboxName}" value="${entity.pk}">
           <span>${entity.name}</span>
