@@ -1,5 +1,4 @@
-import { Planet } from '../../interfaces/planets/domain/Planet';
-import { Character } from '../../interfaces/characters/domain/Character';
+import { BaseEntity } from '../../interfaces/BaseEntity';
 
 /**
  * Function for adding checkboxes with possible entities to the fieldset.
@@ -7,7 +6,7 @@ import { Character } from '../../interfaces/characters/domain/Character';
  * @param entities - List of entities.
  * @param checkboxName - Name which to give to checkboxes.
  */
-export const addCheckboxes = (selector: string, entities: Character[] | Planet[], checkboxName: string): void => {
+export const addCheckboxes = <T extends BaseEntity>(selector: string, entities: T[], checkboxName: string): void => {
   const fieldSet = document.querySelector<HTMLFieldSetElement>(selector);
 
   if (fieldSet !== null) {
