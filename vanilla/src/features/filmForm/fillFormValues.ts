@@ -1,7 +1,9 @@
+import { Film } from '../../interfaces/films/domain/Film';
+import { getDateString } from '../../utils/getDateString';
+
 import { addProducerInput } from './addProducerInput';
 import { fillSingleValue } from './fillSingleValue';
-import { Film } from './../../interfaces/films/domain/Film';
-import { fillCheckboxFieldset } from './fillChechboxFieldset';
+import { fillCheckboxFieldset } from './fillCheckboxFieldset';
 
 /**
  * Function for filling form inputs with film values.
@@ -26,11 +28,7 @@ export const fillFormValues = (form: HTMLFormElement, film: Film): void => {
     }
   });
 
-  const year = film.releaseDate.getFullYear();
-  const month = `0${film.releaseDate.getMonth()}`.slice(-2);
-  const day = `0${film.releaseDate.getDate()}`.slice(-2);
-
-  const dateString = `${year}-${month}-${day}`;
+  const dateString = getDateString(film.releaseDate);
 
   fillSingleValue('#release-date-input', dateString);
 
