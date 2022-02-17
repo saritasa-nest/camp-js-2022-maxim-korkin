@@ -7,7 +7,7 @@ import { Character } from '../../interfaces/characters/domain/Character';
  * @param entities - List of entities.
  * @param checkboxName - Name which to give to checkboxes.
  */
-export const fillFieldset = (selector: string, entities: Character[] | Planet[], checkboxName: string): void => {
+export const addCheckboxes = (selector: string, entities: Character[] | Planet[], checkboxName: string): void => {
   const fieldSet = document.querySelector<HTMLFieldSetElement>(selector);
 
   if (fieldSet !== null) {
