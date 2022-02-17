@@ -1,8 +1,7 @@
 import { CharactersService } from '../../services/characters/CharactersService';
 import { PlanetsService } from '../../services/planets/PlanetsService';
 
-import { fillCharacters } from './fillCharacters';
-import { fillPlanets } from './fillPlanets';
+import { fillFieldset } from './fillFieldset';
 import { removeProducerInput } from './removeProducerInput';
 import { addProducerInput } from './addProducerInput';
 
@@ -13,11 +12,11 @@ import { addProducerInput } from './addProducerInput';
 export const initFilmForm = async(form: HTMLFormElement): Promise<void> => {
   const characters = await CharactersService.fetchAllCharacters();
 
-  fillCharacters(form, characters);
+  fillFieldset('.characters-container', characters, 'character');
 
   const planets = await PlanetsService.fetchAllPlanets();
 
-  fillPlanets(form, planets);
+  fillFieldset('.planets-container', planets, 'planet');
 
   const addProducerButton = form.querySelector('.add-producer-button');
   addProducerButton?.addEventListener('click', addProducerInput);
