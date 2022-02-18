@@ -3,6 +3,8 @@
 import { Film } from '../interfaces/films/domain/Film';
 import { FilmDto } from '../interfaces/films/DTO/FilmDto';
 import { FilmFieldsDto } from '../interfaces/films/DTO/FilmFieldsDto';
+import { getDateString } from '../utils/getDateString';
+import { EditableFilmFieldsDto } from '../interfaces/films/DTO/EditableFilmFieldsDto';
 
 /**
  * Class for mapping Film and FilmDto objects to each other.
@@ -31,39 +33,48 @@ export class FilmMapper {
   /**
    * Method gets Film object and then converts it into FilmDto object and returns it.
    * @param film - Film object which need to be converted into FilmDto object.
-   * @param created - Date of creation.
-   * @param edited - Date of edition.
-   * @param specieIds - Array containing primary keys of species.
-   * @param starshipIds - Array containing primary keys of starships.
-   * @param vehicleIds - Array containing primary keys of vehicles.
    * @returns Converted FilmDto object.
    */
-  public static toDto(film: Film,
-    created = new Date(),
-    edited = new Date(),
-    specieIds: readonly number[] = [],
-    starshipIds: readonly number[] = [],
-    vehicleIds: readonly number[] = []): FilmDto {
+  public static toDto(film: Film): FilmDto {
     const newFilmDtoFields: FilmFieldsDto = {
       characters: film.characterIds,
-      created: created.toISOString(),
+      created: (new Date()).toISOString(),
       director: film.director,
-      edited: edited.toISOString(),
+      edited: (new Date()).toISOString(),
       episode_id: film.episodeId,
       opening_crawl: film.openingCrawl,
       planets: film.planetIds,
       producer: film.producer,
-      release_date: film.releaseDate.toISOString(),
-      species: specieIds,
-      starships: starshipIds,
+      release_date: film.releaseDate,
+      species: [],
+      starships: [],
       title: film.title,
-      vehicles: vehicleIds,
+      vehicles: [],
     };
 
     return {
       fields: newFilmDtoFields,
       model: 'resources.film',
       pk: film.pk,
+    };
+  }
+
+  /**
+   * Method gets Film object and then converts it into EditableFilmFieldsDto object and returns it.
+   * @param film - Film object which need to be converted into EditableFilmFieldsDto object.
+   * @returns Converted EditableFilmFieldsDto object.
+   */
+  public static toEditableFieldsDto(film: Film): EditableFilmFieldsDto {
+    return {
+      'fields.characters': film.characterIds,
+      'fields.director': film.director,
+      'fields.edited': (new Date()).toISOString(),
+      'fields.episode_id': film.episodeId,
+      'fields.opening_crawl': film.openingCrawl,
+      'fields.planets': film.planetIds,
+      'fields.producer': film.producer,
+      'fields.release_date': getDateString(film.releaseDate),
+      'fields.title': film.title,
     };
   }
 }

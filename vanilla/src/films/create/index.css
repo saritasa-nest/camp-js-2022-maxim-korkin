@@ -1,12 +1,16 @@
+.header {
+  text-align: center;
+}
+
 .film-creation-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
-.film-creation-form {
+.film-creation__form {
   width: 50%;
+  justify-self: center;
+  align-self: center;
 }
 
 .producers-container {

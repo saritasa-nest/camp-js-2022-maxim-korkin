@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { Modal } from 'materialize-css';
 
-import { getPrimaryKeyFromSearchParams } from '../../utils/getPrimaryKeyFromSearchParams';
+import { getSearchParam } from '../../utils/getSearchParam';
 import { FilmsService } from '../../services/films/FilmsService';
 import { displayFilmDetails } from '../../features/filmDetails/displayFilmDetails';
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
@@ -13,9 +13,9 @@ onAuthStateChanged(auth, async user => {
   if (user === null) {
     document.location = '/';
   } else {
-    const primaryKey = getPrimaryKeyFromSearchParams();
+    const primaryKey = Number(getSearchParam('pk'));
 
-    if (primaryKey !== null) {
+    if (!isNaN(primaryKey) && primaryKey !== 0) {
       const film = await FilmsService.fetchFilmByPrimaryKey(primaryKey);
 
       if (film !== null) {

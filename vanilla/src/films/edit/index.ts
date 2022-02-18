@@ -1,7 +1,7 @@
 import { Datepicker } from 'materialize-css';
 
 import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
-import { getPrimaryKeyFromSearchParams } from '../../utils/getPrimaryKeyFromSearchParams';
+import { getSearchParam } from '../../utils/getSearchParam';
 import { initFilmForm } from '../../features/filmForm/initFilmForm';
 import { createFilmForm } from '../../features/filmForm/createFilmForm';
 import { FilmsService } from '../../services/films/FilmsService';
@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Datepicker.init(elems, options);
 });
-const primaryKey = getPrimaryKeyFromSearchParams();
+const primaryKey = Number(getSearchParam('pk'));
 
-if (primaryKey !== null) {
+if (!isNaN(primaryKey) && primaryKey !== 0) {
   const form = createFilmForm();
 
   const container = document.querySelector('.film-creation-container');
@@ -32,16 +32,16 @@ if (primaryKey !== null) {
     fillFormValues(form, film);
 
     form.addEventListener('submit', async event => {
-    event.preventDefault();
+      event.preventDefault();
 
-    const newFilm = composeFilmFromForm(form, primaryKey);
+      const newFilm = composeFilmFromForm(form, primaryKey);
 
-    if (newFilm !== null) {
-      await FilmsService.updateFilm(newFilm);
+      if (newFilm !== null) {
+        await FilmsService.updateFilm(newFilm);
 
-      document.location = '/';
-    }
-});
+        document.location = '/';
+      }
+    });
   }
 } else {
   document.location = '/';

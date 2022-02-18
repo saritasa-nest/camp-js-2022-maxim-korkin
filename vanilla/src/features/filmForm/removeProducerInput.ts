@@ -1,13 +1,17 @@
 import { switchRemoveProducerButton } from './switchRemoveProducerButton';
 
+const MIN_COUNT_OF_INPUTS = 1;
+
+const COUNT_OF_INPUTS_FOR_BUTTON_DISABLING = 2;
+
 /**
  * Function removes the last producer text input in the film form.
  */
 export const removeProducerInput = (): void => {
   const producerInputsCount = document.querySelectorAll('.producer-input').length;
 
-  if (producerInputsCount > 1) {
-    if (producerInputsCount === 2) {
+  if (producerInputsCount > MIN_COUNT_OF_INPUTS) {
+    if (producerInputsCount === COUNT_OF_INPUTS_FOR_BUTTON_DISABLING) {
       switchRemoveProducerButton();
     }
 

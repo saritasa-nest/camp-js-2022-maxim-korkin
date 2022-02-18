@@ -4,9 +4,9 @@
  * @returns String representation of date.
  */
 export const getDateString = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = `0${date.getMonth()}`.slice(-2);
-  const day = `0${date.getDate()}`.slice(-2);
+  const year = `${date.getFullYear()}`.padStart(4, '0');
+  const month = `${date.getMonth()}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 };

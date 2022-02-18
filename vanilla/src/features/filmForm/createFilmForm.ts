@@ -5,7 +5,7 @@
 export const createFilmForm = (): HTMLFormElement => {
   const form = document.createElement('form');
 
-  form.classList.add('film-creation-form');
+  form.classList.add('film-creation__form');
 
   form.innerHTML = `
     <div class="input-field">

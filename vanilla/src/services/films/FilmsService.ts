@@ -190,17 +190,8 @@ export class FilmsService {
 
     const documentReference = querySnapshot.docs[0].ref;
 
-    const oldFilm = querySnapshot.docs[0].data();
+    const newFilmFields = FilmMapper.toEditableFieldsDto(film);
 
-    const newFilm = FilmMapper.toDto(
-      film,
-      new Date(oldFilm.fields.created),
-      new Date(),
-      oldFilm.fields.species,
-      oldFilm.fields.starships,
-      oldFilm.fields.vehicles,
-    );
-
-    await updateDoc(documentReference, newFilm);
+    await updateDoc(documentReference, { ...newFilmFields });
   }
 }

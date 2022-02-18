@@ -1,12 +1,14 @@
 import { switchRemoveProducerButton } from './switchRemoveProducerButton';
 
+const COUNT_OF_INPUTS_FOR_BUTTON_ENABLING = 1;
+
 /**
  * Function creates a new producer text input in the film form.
  */
 export const addProducerInput = (): void => {
   const producerInputsCount = document.querySelectorAll('.producer-input').length;
 
-  if (producerInputsCount === 1) {
+  if (producerInputsCount === COUNT_OF_INPUTS_FOR_BUTTON_ENABLING) {
     switchRemoveProducerButton();
   }
 
