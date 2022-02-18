@@ -3,6 +3,7 @@
 /**
  * Interface describing editable fields of film in firestore DB so they can be updated.
  * Every field of this interface is a field of fields object of film documents in firestore DB.
+ * So they can be updated without overriding fields object.
  */
 export interface EditableFilmFieldsDto {
 
