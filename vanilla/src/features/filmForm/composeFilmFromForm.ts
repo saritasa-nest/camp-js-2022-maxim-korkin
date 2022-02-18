@@ -4,7 +4,6 @@ import { Film } from '../../interfaces/films/domain/Film';
  * Function for getting film values from the form and creating film object.
  * @param form - Form to get values from.
  * @param primaryKey - Primary key of the film.
- * @returns - New film object.
  */
 export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): Film | null => {
   const data = new FormData(form);
@@ -34,9 +33,7 @@ export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): 
     openingCrawl: openingCrawl as string,
     episodeId: Number(episodeId),
     director: director as string,
-    producer: producers
-      .map(producer => String(producer))
-      .reduce((accumulator, producer) => `${accumulator}, ${producer}`),
+    producer: producers.join(', '),
     releaseDate: new Date(releaseDate as string),
     characterIds: characterIds.map(pk => Number(pk)),
     planetIds: planetIds.map(pk => Number(pk)),
