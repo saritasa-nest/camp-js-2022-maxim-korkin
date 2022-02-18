@@ -15,6 +15,11 @@ import { FilmMapper } from '../../mappers/FilmMapper';
 const DEFAULT_LIMIT_OF_FILMS = 2;
 
 /**
+ * Character to search for the first letters in the string.
+ */
+const SEARCH_SYMBOL = '~';
+
+/**
  * Returns the query limits, including filtering, if applicable.
  * @param orderingField - Field to order the results. Default value if 'pk'.
  * @param orderingMode - Indicates if order should be ascending or descending.
@@ -26,7 +31,7 @@ function getQueryConstraint(orderingField: OrderingFields, orderingMode: Orderin
   if (valueSearch) {
     return [
       where(OrderingFields.Title, '>=', valueSearch),
-      where(OrderingFields.Title, '<=', `${valueSearch}~`),
+      where(OrderingFields.Title, '<=', valueSearch + SEARCH_SYMBOL),
       orderBy(OrderingFields.Title, orderingMode),
     ];
   }

@@ -1,4 +1,4 @@
-import { Film } from './Film';
+import { Film } from '../films/domain/Film';
 
 /**
  * The first and last films on the page and whether the given page is the first or last.
@@ -6,14 +6,14 @@ import { Film } from './Film';
 export interface ParametersPagination {
 
   /** * Last film on the page.*/
-  lastFilm: Film;
+  readonly lastFilm: Film;
 
   /** * First film on the page.*/
-  firstFilm: Film;
+  readonly firstFilm: Film;
 
   /** * Is the current page the first. */
-  onFirstPage: boolean;
+  readonly onFirstPage: boolean;
 
   /** * Is the current page the last.*/
-  onLastPage: boolean;
+  readonly onLastPage: boolean;
 }

@@ -11,7 +11,7 @@ import { OrderingModes } from '../../enums/films/OrderingModes';
 
 import { FetchOptionsFilterSort } from '../../interfaces/options/FetchOptionsFilterSort';
 
-import { ParametersPagination } from '../../interfaces/films/domain/ParametersPagination';
+import { ParametersPagination } from '../../interfaces/options/ParametersPagination';
 
 import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';
