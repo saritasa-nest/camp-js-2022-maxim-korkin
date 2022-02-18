@@ -4,7 +4,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 /**
- *
+ * Nav bar component.
  */
 @Component({
   selector: 'sw-nav',
