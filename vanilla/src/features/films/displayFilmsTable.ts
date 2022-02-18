@@ -115,11 +115,11 @@ export const displayFilmsTable = (): DisplayFunction => {
     if (filmsTableBody !== null) {
       try {
         if (options.mode === PaginationModes.Init) {
-          films = await FilmsService.fetchFirstPageOfFilms(orderingField, orderingMode, newValueSearch);
+          films = await FilmsService.fetchFirstPageOfFilms({ orderingField, orderingMode, valueSearch: newValueSearch });
         } else if (options.mode === PaginationModes.Next && !onLastPage) {
-          films = await FilmsService.fetchNextPageOfFilms(lastFilm, orderingField, orderingMode, newValueSearch);
+          films = await FilmsService.fetchNextPageOfFilms(lastFilm, { orderingField, orderingMode, valueSearch: newValueSearch });
         } else if (!onFirstPage) {
-          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, orderingField, orderingMode, newValueSearch);
+          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, { orderingField, orderingMode, valueSearch: newValueSearch });
         }
       } catch (error: unknown) {
         inProgress = false;

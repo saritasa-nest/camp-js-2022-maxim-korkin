@@ -8,6 +8,7 @@ import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { FilmMapper } from '../../mappers/FilmMapper';
+import { FetchOptionsPagination } from '../../interfaces/options/FetchOptionsPagination';
 
 /**
  * Default limit of films on page.
@@ -48,21 +49,18 @@ export class FilmsService {
 
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
-   * @param orderingField - Field to order the results. Default value if 'pk'.
-   * @param orderingMode - Indicates if order should be ascending or descending.
-   * @param valueSearch - Shows by what value in the field we should search.
+   * @param options - Field to order the results. Default value if 'pk'. Indicates if order should be ascending or descending.
+   * Shows by what value in the field we should search.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchFirstPageOfFilms(
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
-    valueSearch: string | null,
+    options: Pick<FetchOptionsPagination, 'valueSearch' | 'orderingMode' | 'orderingField' >,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const queryConstraints: QueryConstraint[] = [
       limit(limitOfFilmsOnPage),
-      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+      ...getQueryConstraint(options.orderingField, options.orderingMode, options.valueSearch),
     ];
 
     const filmsQuery = query(FilmsService.filmsCollection, ...queryConstraints);
@@ -75,20 +73,17 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load next page.
    * @param lastVisibleFilm - Last film on the current page.
-   * @param orderingField - Field to order the results. Default value is 'pk'.
-   * @param orderingMode - Indicates if order should be ascending or descending.
-   * @param valueSearch - Shows by what value in the field we should search.
+   * @param options - Field to order the results. Default value is 'pk'. Indicates if order should be ascending or descending.
+   * Shows by what value in the field we should search.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchNextPageOfFilms(
     lastVisibleFilm: Film,
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
-    valueSearch: string | null,
+    options: Pick<FetchOptionsPagination, 'valueSearch' | 'orderingMode' | 'orderingField' >,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const lastVisibleFilmQuery = valueSearch ?
+    const lastVisibleFilmQuery = options.valueSearch ?
       query(FilmsService.filmsCollection, where(OrderingFields.Title, '==', lastVisibleFilm.title)) :
       query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
 
@@ -96,7 +91,7 @@ export class FilmsService {
 
     const queryConstraints: QueryConstraint[] = [
       limit(limitOfFilmsOnPage),
-      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+      ...getQueryConstraint(options.orderingField, options.orderingMode, options.valueSearch),
       startAfter(lastVisibleFilmDoc),
     ];
     const filmsQuery = query(
@@ -112,27 +107,24 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previous page.
    * @param firstVisibleFilm - First film on the current page.
-   * @param orderingField - Field to order the results. Default value is 'pk'.
-   * @param orderingMode - Indicates if order should be ascending or descending.
-   * @param valueSearch - Shows by what value in the field we should search.
+   * @param options - Field to order the results. Default value is 'pk'.Indicates if order should be ascending or descending.
+   * Shows by what value in the field we should search.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchPrevPageOfFilms(
     firstVisibleFilm: Film,
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
-    valueSearch: string | null,
+    options: Pick<FetchOptionsPagination, 'valueSearch' | 'orderingMode' | 'orderingField' >,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const firstVisibleFilmQuery = valueSearch ?
+    const firstVisibleFilmQuery = options.valueSearch ?
       query(FilmsService.filmsCollection, where(OrderingFields.Title, '==', firstVisibleFilm.title)) :
       query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
     const firstVisibleFilmDoc = (await getDocs(firstVisibleFilmQuery)).docs[0];
 
     const queryConstraints: QueryConstraint[] = [
       limitToLast(limitOfFilmsOnPage),
-      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+      ...getQueryConstraint(options.orderingField, options.orderingMode, options.valueSearch),
       endBefore(firstVisibleFilmDoc),
     ];
 
