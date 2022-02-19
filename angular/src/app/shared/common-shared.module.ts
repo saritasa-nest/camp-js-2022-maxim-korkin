@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 /**
- * Shared module.
+ * Module for shared components, animations, directives and pipes.
  */
 @NgModule({
   declarations: [NavbarComponent],
