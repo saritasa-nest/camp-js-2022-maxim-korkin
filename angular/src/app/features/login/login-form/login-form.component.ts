@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
 /**
  * Component with login form.
@@ -11,6 +12,15 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 })
 export class LoginFormComponent {
 
-  public constructor() { }
+  /**
+   * FormControl instance for email input field.
+   */
+  public emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
 
+  /**
+   * FormControl instance for password input field.
+   */
+  public passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
+
+  public constructor() { }
 }

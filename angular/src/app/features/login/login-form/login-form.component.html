@@ -2,10 +2,10 @@
   <h1 class="login-form__header">Login</h1>
   <mat-form-field appearance="fill">
     <mat-label>Email</mat-label>
-    <input type="email" matInput />
+    <input type="email" matInput [formControl]="emailControl" />
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Password</mat-label>
-    <input type="text" matInput />
+    <input type="text" matInput [formControl]="passwordControl" />
   </mat-form-field>
 </form>
