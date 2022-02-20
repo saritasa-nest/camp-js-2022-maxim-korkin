@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonSharedModule } from './shared/common-shared.module';
+import { NavbarModule } from './features/navbar/navbar.module';
 
 /** Root module. */
 @NgModule({
@@ -15,6 +16,7 @@ import { CommonSharedModule } from './shared/common-shared.module';
     AppRoutingModule,
     CommonSharedModule,
     BrowserAnimationsModule,
+    NavbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
