@@ -1,5 +1,9 @@
+import { FirebaseError } from 'firebase/app';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+
 import { AuthService } from 'src/app/core/services/auth.service';
 
 /**
@@ -13,7 +17,15 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class LoginFormComponent {
 
-  public constructor(public readonly authService: AuthService) { }
+  public constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+  ) {}
+
+  /**
+   * Stream for login errors.
+   */
+  public logInError$ = new Subject<string | null>();
 
   /**
    * FormControl instance for email input field.
@@ -30,7 +42,13 @@ export class LoginFormComponent {
    */
   public onSubmit(): void {
     this.authService.signIn(this.emailControl.value, this.passwordControl.value).subscribe({
-      // TODO(Maxim K.): error handling.
+      next: () => {
+        this.logInError$.next(null);
+        this.router.navigate(['/']);
+      },
+      error: (error: FirebaseError) => {
+        this.logInError$.next(error.message);
+      },
     });
   }
 }
