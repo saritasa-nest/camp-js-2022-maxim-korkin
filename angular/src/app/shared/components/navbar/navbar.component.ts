@@ -12,13 +12,13 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class NavbarComponent {
 
-  public constructor(public authService: AuthService) { }
+  public constructor(public readonly authService: AuthService) { }
 
   /**
    * Method for signing out when the user click sign out button.
    */
   public signOut(): void {
-    this.authService.signOut().subscribe(() => this.authService.isSignedIn$.next(false));
+    this.authService.signOut().subscribe();
   }
 
 }

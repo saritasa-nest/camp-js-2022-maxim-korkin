@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
   public constructor(private authService: AuthService) {}
 
   /**
-   * CanActivate guard which checks if the user is signed in.
+   * CanActivate guard which allows links only for authenticated users.
    * @returns
    */
   public canActivate(

@@ -2,7 +2,6 @@
   <mat-toolbar color="primary">
     <a routerLink="/" class="navbar__link"><div>SW Films</div></a>
     <span class="navbar__spacer"></span>
-    <span>{{ authService.isSignedIn$ | async }}</span>
     <div *ngIf="authService.isSignedIn$ | async; else loggedIn">
       <span (click)="signOut()"> Logout </span>
     </div>

@@ -1,7 +1,8 @@
 import { signInWithEmailAndPassword, signOut, UserCredential } from 'firebase/auth';
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { defer, Observable, Subject } from 'rxjs';
+import { defer, map, Observable } from 'rxjs';
+import { authState } from 'rxfire/auth';
 
 /**
  * Service for firebase authentication.
@@ -12,9 +13,13 @@ export class AuthService {
   /**
    * Stream showing if the user is signed in or not.
    */
-  public isSignedIn$ = new Subject<boolean>();
+  public isSignedIn$: Observable<boolean>;
 
-  public constructor(private auth: Auth) {}
+  public constructor(private readonly auth: Auth) {
+    this.isSignedIn$ = authState(auth).pipe(
+      map(user => user !== null),
+    );
+  }
 
   /**
    * Method for logging in with email and password.
