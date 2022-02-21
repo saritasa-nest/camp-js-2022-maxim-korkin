@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class LoginFormComponent {
 
-  public constructor(private authService: AuthService) { }
+  public constructor(public authService: AuthService) { }
 
   /**
    * FormControl instance for email input field.
@@ -29,6 +29,10 @@ export class LoginFormComponent {
    * Method for logging when the form is submitted.
    */
   public onSubmit(): void {
-    this.authService.login(this.emailControl.value, this.passwordControl.value);
+    this.authService.signIn(this.emailControl.value, this.passwordControl.value).subscribe({
+      next: () => this.authService.isSignedIn$.next(true),
+
+      // TODO(Maxim K.): error handling.
+    });
   }
 }

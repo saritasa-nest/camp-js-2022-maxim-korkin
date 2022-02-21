@@ -10,8 +10,8 @@ import { LoginModule } from './features/login/login.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonSharedModule } from './shared/common-shared.module';
-import { NavbarModule } from './features/navbar/navbar.module';
 import { AuthService } from './core/services/auth.service';
+import { AuthGuard } from './core/guards/auth.guard';
 
 /** Root module. */
 @NgModule({
@@ -23,10 +23,9 @@ import { AuthService } from './core/services/auth.service';
     provideAuth(() => getAuth()),
     CommonSharedModule,
     BrowserAnimationsModule,
-    NavbarModule,
     LoginModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
