@@ -2,13 +2,12 @@ import { deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, star
 
 import { getCollectionRef } from '../../firebase/getCollection';
 import { OrderingFields } from '../../enums/films/OrderingFields';
-import { OrderingModes } from '../../enums/films/OrderingModes';
 import { Film } from '../../interfaces/films/domain/Film';
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { FilmMapper } from '../../mappers/FilmMapper';
-import { FetchOptionsPagination } from '../../interfaces/options/FetchOptionsPagination';
+import { QueryConstraintParameters } from '../../interfaces/options/QueryConstraintParameters';
 
 /**
  * Default limit of films on page.
@@ -22,21 +21,19 @@ const SEARCH_SYMBOL = '~';
 
 /**
  * Returns the query limits, including filtering, if applicable.
- * @param orderingField - Field to order the results. Default value if 'pk'.
- * @param orderingMode - Indicates if order should be ascending or descending.
- * @param valueSearch - Shows by what value in the field we should search.
+ * @param options -  Parameters for generating a query constraint.
  * @returns Array with query constraint.
  */
-function getQueryConstraint(orderingField: OrderingFields, orderingMode: OrderingModes, valueSearch: string | null | undefined):
- QueryConstraint[] {
-  if (valueSearch) {
+function getQueryConstraint(options: QueryConstraintParameters):
+ readonly QueryConstraint[] {
+  if (options.valueSearch) {
     return [
-      where(OrderingFields.Title, '>=', valueSearch),
-      where(OrderingFields.Title, '<=', valueSearch + SEARCH_SYMBOL),
-      orderBy(OrderingFields.Title, orderingMode),
+      where(OrderingFields.Title, '>=', options.valueSearch),
+      where(OrderingFields.Title, '<=', options.valueSearch + SEARCH_SYMBOL),
+      orderBy(OrderingFields.Title, options.orderingMode),
     ];
   }
-  return [orderBy(orderingField, orderingMode)];
+  return [orderBy(options.orderingField, options.orderingMode)];
 
 }
 
@@ -49,18 +46,17 @@ export class FilmsService {
 
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
-   * @param options - Field to order the results. Default value if 'pk'. Indicates if order should be ascending or descending.
-   * Shows by what value in the field we should search.
+   * @param options - Parameters for generating a query constraint.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchFirstPageOfFilms(
-    options: Pick<FetchOptionsPagination, 'valueSearch' | 'orderingMode' | 'orderingField' >,
+    options: QueryConstraintParameters,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const queryConstraints: QueryConstraint[] = [
+    const queryConstraints: readonly QueryConstraint[] = [
       limit(limitOfFilmsOnPage),
-      ...getQueryConstraint(options.orderingField, options.orderingMode, options.valueSearch),
+      ...getQueryConstraint(options),
     ];
 
     const filmsQuery = query(FilmsService.filmsCollection, ...queryConstraints);
@@ -73,14 +69,13 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load next page.
    * @param lastVisibleFilm - Last film on the current page.
-   * @param options - Field to order the results. Default value is 'pk'. Indicates if order should be ascending or descending.
-   * Shows by what value in the field we should search.
+   * @param options - Parameters for generating a query constraint.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchNextPageOfFilms(
     lastVisibleFilm: Film,
-    options: Pick<FetchOptionsPagination, 'valueSearch' | 'orderingMode' | 'orderingField' >,
+    options: QueryConstraintParameters,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const lastVisibleFilmQuery = options.valueSearch ?
@@ -89,9 +84,9 @@ export class FilmsService {
 
     const lastVisibleFilmDoc = (await getDocs(lastVisibleFilmQuery)).docs[0];
 
-    const queryConstraints: QueryConstraint[] = [
+    const queryConstraints: readonly QueryConstraint[] = [
       limit(limitOfFilmsOnPage),
-      ...getQueryConstraint(options.orderingField, options.orderingMode, options.valueSearch),
+      ...getQueryConstraint(options),
       startAfter(lastVisibleFilmDoc),
     ];
     const filmsQuery = query(
@@ -107,14 +102,13 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previous page.
    * @param firstVisibleFilm - First film on the current page.
-   * @param options - Field to order the results. Default value is 'pk'.Indicates if order should be ascending or descending.
-   * Shows by what value in the field we should search.
+   * @param options - Parameters for generating a query constraint.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchPrevPageOfFilms(
     firstVisibleFilm: Film,
-    options: Pick<FetchOptionsPagination, 'valueSearch' | 'orderingMode' | 'orderingField' >,
+    options: QueryConstraintParameters,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
     const firstVisibleFilmQuery = options.valueSearch ?
@@ -122,9 +116,9 @@ export class FilmsService {
       query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
     const firstVisibleFilmDoc = (await getDocs(firstVisibleFilmQuery)).docs[0];
 
-    const queryConstraints: QueryConstraint[] = [
+    const queryConstraints: readonly QueryConstraint[] = [
       limitToLast(limitOfFilmsOnPage),
-      ...getQueryConstraint(options.orderingField, options.orderingMode, options.valueSearch),
+      ...getQueryConstraint(options),
       endBefore(firstVisibleFilmDoc),
     ];
 
@@ -140,18 +134,14 @@ export class FilmsService {
 
   /**
    * Method for getting the last document from the collection ordered by the orderingField.
-   * @param orderingField - Field to order the results.
-   * @param orderingMode - Indicates if order should be ascending or descending.
-   * @param valueSearch - Shows by what value in the field we should search.
+   * @param options - Parameters for generating a query constraint.
    * @returns Last film in the db.
    */
   public static async fetchLastFilm(
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
-    valueSearch: string | null | undefined,
+    options: QueryConstraintParameters,
   ): Promise<Film> {
-    const queryConstraints: QueryConstraint[] = [
-      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+    const queryConstraints: readonly QueryConstraint[] = [
+      ...getQueryConstraint(options),
       limitToLast(1),
     ];
 
@@ -167,18 +157,14 @@ export class FilmsService {
 
   /**
    * Method for getting the first document from the collection ordered by the orderingField.
-   * @param orderingField - Field to order the results.
-   * @param orderingMode - Indicates if order should be ascending or descending.
-   * @param valueSearch - Shows by what value in the field we should search.
+   * @param options - Parameters for generating a query constraint.
    * @returns First film in the db.
    */
   public static async fetchFirstFilm(
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
-    valueSearch: string | null | undefined,
+    options: QueryConstraintParameters,
   ): Promise<Film> {
-    const queryConstraints: QueryConstraint[] = [
-      ...getQueryConstraint(orderingField, orderingMode, valueSearch),
+    const queryConstraints: readonly QueryConstraint[] = [
+      ...getQueryConstraint(options),
       limit(1),
     ];
 

@@ -1,7 +1,7 @@
 import { PaginationModes } from '../../enums/films/PaginationModes';
 import { OrderingFields } from '../../enums/films/OrderingFields';
 
-import { DisplayFunction } from './displayFilmsTable';
+import { FilmsTable } from './displayFilmsTable';
 
 /**
  * Function which adds event listeners to table headers for changing ordering field.
@@ -9,10 +9,10 @@ import { DisplayFunction } from './displayFilmsTable';
  * @param orderingField - Field to order by.
  * @param displayFunction - Function which fetches and displays films in the table.
  */
-export const addHeaderPagination = (header: Element | null, orderingField: OrderingFields, displayFunction: DisplayFunction): void => {
+export const addHeaderPagination = (header: Element | null, orderingField: OrderingFields): void => {
   if (header !== null) {
     header.addEventListener('click', () => {
-      displayFunction({ mode: PaginationModes.Init, newOrderingField: orderingField });
+      FilmsTable.displayFilmsTable({ mode: PaginationModes.Init, newOrderingField: orderingField });
     });
   }
 };

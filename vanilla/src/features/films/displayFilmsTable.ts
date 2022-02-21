@@ -9,9 +9,11 @@ import { PaginationModes } from '../../enums/films/PaginationModes';
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
 
-import { FetchOptionsFilterSort } from '../../interfaces/options/FetchOptionsFilterSort';
+import { FilterSortOptions } from '../../interfaces/options/FilterSortOptions';
 
-import { ParametersPagination } from '../../interfaces/options/ParametersPagination';
+import { PageParameters } from '../../interfaces/options/PageParameters';
+
+import { QueryConstraintParameters } from '../../interfaces/options/QueryConstraintParameters';
 
 import { updateFieldHeaders } from './updateFieldHeaders';
 import { switchOrderMode } from './switchOrderingMode';
@@ -20,161 +22,169 @@ import { isFirstPage } from './isFirstPage';
 import { isLastPage } from './isLastPage';
 import { renderFilms } from './renderFilms';
 
-export type DisplayFunction = (options?: Partial<FetchOptionsFilterSort>) => void;
-
 /**
  * Closure for fetching and displaying pages with films.
  * @returns Function which fetches required list of films and displays it on the page.
  */
-export const displayFilmsTable = (): DisplayFunction => {
+export class FilmsTable {
   /**
-   * Last film on the page.
+   * Last film on the page or null if the page is empty.
    */
-  let lastFilm: Film;
+  private static lastFilm: Film | null = null;
 
   /**
-   * First film on the page.
+   * First film on the page or null if the page is empty.
    */
-  let firstFilm: Film;
+  private static firstFilm: Film | null = null;
 
   /**
    * Field used for ordering the results.
    */
-  let orderingField = OrderingFields.EpisodeId;
+  private static orderingField = OrderingFields.EpisodeId;
 
   /**
    * Shows if ordering should be ascending or descending.
    */
-  let orderingMode = OrderingModes.Ascending;
+  private static orderingMode = OrderingModes.Ascending;
 
   /**
    * Shows if the current page is the first page possible.
    */
-  let onFirstPage: boolean;
+  private static onFirstPage: boolean;
 
   /**
    * Shows if the current page is the last page possible.
    */
-  let onLastPage: boolean;
+  private static onLastPage: boolean;
 
   /**
    * Flag which indicates that one instance of this function is already in progress.
    */
-  let inProgress = false;
+  private static inProgress = false;
 
   /**
    * The actual search value entered by the user.
    */
-  let newValueSearch: null | string;
+  private static newValueSearch: null | string;
 
   /**
    * Mutex for making sure that another instance of async function won't have access to resources.
    */
-  const mutex = getMutex();
+  private static mutex = getMutex();
 
-  const DEFAULT_OPTIONS: FetchOptionsFilterSort = {
+  private static DEFAULT_OPTIONS: FilterSortOptions = {
     mode: PaginationModes.Init,
     newOrderingField: null,
     valueSearch: null,
   };
 
+  private static queryConstraintParameters: QueryConstraintParameters;
+
   /**
    * Function which fetches required films from the firestore, renders them and updates pagination buttons and table headers.
    * @param options Options for initialization, sorting and filtering.
    */
-  return async(options: Partial<FetchOptionsFilterSort> = DEFAULT_OPTIONS): Promise<void> => {
-    if (inProgress === true) {
+  public static async displayFilmsTable(options: Partial<FilterSortOptions> = this.DEFAULT_OPTIONS): Promise<void> {
+    if (this.inProgress === true) {
       return;
     }
 
-    inProgress = true;
+    this.inProgress = true;
 
-    const [lock, release] = mutex.getLock();
+    const [lock, release] = this.mutex.getLock();
 
     await lock;
 
     let films: Film[] = [];
 
     if (options.newOrderingField !== null) {
-      if (options.newOrderingField === orderingField) {
-        orderingMode = switchOrderMode(orderingMode);
+      if (options.newOrderingField === this.orderingField) {
+        this.orderingMode = switchOrderMode(this.orderingMode);
       } else if (options.newOrderingField) {
-        orderingField = options.newOrderingField;
-        orderingMode = OrderingModes.Ascending;
+        this.orderingField = options.newOrderingField;
+        this.orderingMode = OrderingModes.Ascending;
       }
 
     }
     if (options.valueSearch) {
-      newValueSearch = options.valueSearch;
+      this.newValueSearch = options.valueSearch;
     }
     if (options.valueSearch === '') {
-      newValueSearch = null;
+      this.newValueSearch = null;
     }
     const filmsTableBody = document.querySelector('.films-table-body');
+
+    this.queryConstraintParameters = {
+      orderingField: this.orderingField,
+      orderingMode: this.orderingMode,
+      valueSearch: this.newValueSearch,
+    };
 
     if (filmsTableBody !== null) {
       try {
         if (options.mode === PaginationModes.Init) {
-          films = await FilmsService.fetchFirstPageOfFilms({ orderingField, orderingMode, valueSearch: newValueSearch });
-        } else if (options.mode === PaginationModes.Next && !onLastPage) {
-          films = await FilmsService.fetchNextPageOfFilms(lastFilm, { orderingField, orderingMode, valueSearch: newValueSearch });
-        } else if (!onFirstPage) {
-          films = await FilmsService.fetchPrevPageOfFilms(firstFilm, { orderingField, orderingMode, valueSearch: newValueSearch });
+          films = await FilmsService.fetchFirstPageOfFilms(this.queryConstraintParameters);
+        } else if (options.mode === PaginationModes.Next && !this.onLastPage && this.lastFilm) {
+          films = await FilmsService.fetchNextPageOfFilms(this.lastFilm, this.queryConstraintParameters);
+        } else if (!this.onFirstPage && this.firstFilm) {
+          films = await FilmsService.fetchPrevPageOfFilms(this.firstFilm, this.queryConstraintParameters);
         }
       } catch (error: unknown) {
-        inProgress = false;
+        this.inProgress = false;
         release();
       }
 
-     ({ lastFilm, firstFilm, onFirstPage, onLastPage } = await getParametersPagination(films, orderingField, orderingMode, newValueSearch));
+      ({
+        lastFilm: this.lastFilm, firstFilm: this.firstFilm, onFirstPage: this.onFirstPage, onLastPage: this.onLastPage,
+      } = await this.getPageParameters(
+        films, this.orderingField, this.orderingMode, this.newValueSearch,
+      ));
 
-      updatePaginationButtons(onFirstPage, onLastPage);
+      updatePaginationButtons(this.onFirstPage, this.onLastPage);
 
-      updateFieldHeaders(orderingField, orderingMode);
+      updateFieldHeaders(this.orderingField, this.orderingMode);
 
       renderFilms(films);
 
-      inProgress = false;
+      this.inProgress = false;
       release();
     }
-  };
-};
+  }
 
-/**
- * Returns the first and last films on the page and whether the given page is the first or last.
- * @param films Array of films per page.
- * @param orderingField The field by which the movies are sorted.
- * @param orderingMode Shows if ordering should be ascending or descending.
- * @param newValueSearch The actual search value entered by the user..
- */
-async function getParametersPagination(films: Film[], orderingField: OrderingFields,
-  orderingMode: OrderingModes, newValueSearch: string | null): Promise<ParametersPagination> {
-  let lastFilm: Film;
-  let firstFilm: Film;
-  let onFirstPage: boolean;
-  let onLastPage: boolean;
-  if (films.length !== 0) {
-    lastFilm = films[films.length - 1];
-    firstFilm = films[0];
-    onFirstPage = await isFirstPage({
-      film: firstFilm,
-      orderingField,
-      orderingMode,
-      valueSearch: newValueSearch,
-      newOrderingField: null,
-    });
-    onLastPage = await isLastPage({
-      film: lastFilm,
-      orderingField,
-      orderingMode,
-      valueSearch: newValueSearch,
-      newOrderingField: null,
-    });
-  } else {
-    lastFilm = films[0];
-    firstFilm = films[0];
+  /**
+   * Returns the first and last films on the page and whether the given page is the first or last.
+   * @param films Array of films per page.
+   * @param orderingField The field by which the movies are sorted.
+   * @param orderingMode Shows if ordering should be ascending or descending.
+   * @param newValueSearch The actual search value entered by the user..
+   */
+  public static async getPageParameters(films: readonly Film[], orderingField: OrderingFields,
+    orderingMode: OrderingModes, newValueSearch: string | null): Promise<PageParameters> {
+    let onFirstPage: boolean;
+    let onLastPage: boolean;
+    if (films.length !== 0) {
+      let { [films.length - 1]: lastFilm, 0: firstFilm } = films;
+      lastFilm = films[films.length - 1];
+      firstFilm = films[0];
+      onFirstPage = await isFirstPage({
+        film: firstFilm,
+        orderingField,
+        orderingMode,
+        valueSearch: newValueSearch,
+        newOrderingField: null,
+      });
+      onLastPage = await isLastPage({
+        film: lastFilm,
+        orderingField,
+        orderingMode,
+        valueSearch: newValueSearch,
+        newOrderingField: null,
+      });
+      return { lastFilm, firstFilm, onFirstPage, onLastPage };
+    }
     onFirstPage = true;
     onLastPage = true;
+
+    return { lastFilm: null, firstFilm: null, onFirstPage, onLastPage };
   }
-  return { lastFilm, firstFilm, onFirstPage, onLastPage };
 }
