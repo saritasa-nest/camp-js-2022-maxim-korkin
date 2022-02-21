@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { PaginationModes } from '../../enums/films/PaginationModes';
 

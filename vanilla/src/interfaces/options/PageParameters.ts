@@ -1,3 +1,5 @@
+/* eslint-disable jsdoc/require-jsdoc */
+
 import { Film } from '../films/domain/Film';
 
 /**

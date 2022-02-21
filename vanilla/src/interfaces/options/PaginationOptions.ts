@@ -1,3 +1,4 @@
+/* eslint-disable jsdoc/require-jsdoc */
 import { OrderingFields } from '../../enums/films/OrderingFields';
 import { OrderingModes } from '../../enums/films/OrderingModes';
 import { Film } from '../films/domain/Film';
