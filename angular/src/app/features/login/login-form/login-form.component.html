@@ -1,4 +1,4 @@
-<form class="login-form">
+<form class="login-form" (ngSubmit)="onSubmit()">
   <h1 class="login-form__header">Login</h1>
   <mat-form-field appearance="fill">
     <mat-label>Email</mat-label>
@@ -8,4 +8,11 @@
     <mat-label>Password</mat-label>
     <input type="text" matInput [formControl]="passwordControl" />
   </mat-form-field>
+  <button
+    mat-button
+    type="submit"
+    [disabled]="emailControl.invalid || passwordControl.invalid"
+  >
+    Submit
+  </button>
 </form>

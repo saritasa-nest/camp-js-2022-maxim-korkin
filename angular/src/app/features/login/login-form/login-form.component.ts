@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 /**
  * Component with login form.
@@ -12,6 +13,8 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class LoginFormComponent {
 
+  public constructor(private authService: AuthService) { }
+
   /**
    * FormControl instance for email input field.
    */
@@ -22,5 +25,10 @@ export class LoginFormComponent {
    */
   public passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
 
-  public constructor() { }
+  /**
+   * Method for logging when the form is submitted.
+   */
+  public onSubmit(): void {
+    this.authService.login(this.emailControl.value, this.passwordControl.value);
+  }
 }
