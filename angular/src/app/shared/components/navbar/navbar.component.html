@@ -2,14 +2,17 @@
   <mat-toolbar color="primary">
     <a routerLink="/" class="navbar__link"><div>SW Films</div></a>
     <span class="navbar__spacer"></span>
-    <div *ngIf="authService.isSignedIn$ | async; else loggedIn">
+    <div *ngIf="authService.isSignedIn$ | async; else loginRegisterButtons">
       <span (click)="signOut()"> Logout </span>
     </div>
   </mat-toolbar>
 </nav>
 
-<ng-template #loggedIn>
+<ng-template #loginRegisterButtons>
   <span>
     <a routerLink="/login" class="navbar__link"><div>Login</div></a>
+  </span>
+  <span>
+    <a routerLink="/register" class="navbar__link">Register</a>
   </span>
 </ng-template>

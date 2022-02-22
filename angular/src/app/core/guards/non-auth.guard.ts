@@ -8,7 +8,7 @@ import { AuthService } from '../services/auth.service';
  * Guard which check if the user is signed in or not.
  */
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class NonAuthGuard implements CanActivate {
 
   public constructor(private authService: AuthService) {}
 

@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonSharedModule } from './shared/common-shared.module';
 import { AuthService } from './core/services/auth.service';
-import { AuthGuard } from './core/guards/non-auth.guard';
+import { NonAuthGuard } from './core/guards/non-auth.guard';
 
 /** Root module. */
 @NgModule({
@@ -25,7 +25,7 @@ import { AuthGuard } from './core/guards/non-auth.guard';
     BrowserAnimationsModule,
     LoginModule,
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, NonAuthGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
