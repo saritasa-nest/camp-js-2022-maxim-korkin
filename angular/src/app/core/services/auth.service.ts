@@ -5,6 +5,8 @@ import { Auth } from '@angular/fire/auth';
 import { catchError, defer, map, Observable, throwError } from 'rxjs';
 import { authState } from 'rxfire/auth';
 
+import { FirebaseAuthErrors } from './FirebaseAuthErrors';
+
 /**
  * Service for firebase authentication.
  */
@@ -22,21 +24,15 @@ export class AuthService {
    */
   public isSignedIn$: Observable<boolean>;
 
-  private wrongEmailErrorCode = 'auth/user-not-found';
-
-  private wrongPasswordErrorCode = 'auth/wrong-password';
-
-  private tooManyLogInAttemptsErrorCode = 'auth/too-many-requests';
-
   /**
    * Method for handling firebase errors when trying to log in.
    * @param error - Occurred firebase error such as incorrect email of password.
    * @returns - A new error stream to use in catchError rxjs operator.
    */
   private handleSignInError(error: FirebaseError): Observable<Error> {
-    if (error.code === this.wrongPasswordErrorCode || error.code === this.wrongEmailErrorCode) {
+    if (error.code === FirebaseAuthErrors.WrongEmail || error.code === FirebaseAuthErrors.WrongPassword) {
       return throwError(() => new Error('Incorrect email of password'));
-    } else if (error.code === this.tooManyLogInAttemptsErrorCode) {
+    } else if (error.code === FirebaseAuthErrors.TooManyLogInAttempts) {
       return throwError(() => new Error(
         'Access to this account has been temporarily disabled due to many failed login attempts. Please try later.',
       ));
