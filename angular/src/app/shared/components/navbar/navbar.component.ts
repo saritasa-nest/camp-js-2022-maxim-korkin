@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -13,7 +13,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class NavbarComponent implements OnDestroy {
 
-  public constructor(public readonly authService: AuthService) { }
+  public constructor(private readonly authService: AuthService) {
+    this.isSignedIn$ = this.authService.isSignedIn$;
+  }
 
   /**
    * @inheritdoc
@@ -22,6 +24,11 @@ export class NavbarComponent implements OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  /**
+   * Stream showing if the user is signed in or not.
+   */
+  public readonly isSignedIn$: Observable<boolean>;
 
   /**
    * Destroy stream for handling subscriptions.

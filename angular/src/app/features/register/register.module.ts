@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
+import { CommonSharedModule } from 'src/app/shared/common-shared.module';
 
 import { RegisterFormComponent } from './register-form/register-form.component';
 
@@ -14,11 +12,9 @@ import { RegisterFormComponent } from './register-form/register-form.component';
   declarations: [RegisterFormComponent],
   imports: [
     CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     ReactiveFormsModule,
     FormsModule,
+    CommonSharedModule,
   ],
 })
 export class RegisterModule { }

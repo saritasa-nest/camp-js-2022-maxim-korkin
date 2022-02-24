@@ -20,10 +20,10 @@ import { NonAuthGuard } from './core/guards/non-auth.guard';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
     CommonSharedModule,
-    BrowserAnimationsModule,
     LoginModule,
     RegisterModule,
   ],

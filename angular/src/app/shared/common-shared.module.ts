@@ -1,8 +1,8 @@
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
+import { MaterialModule } from './material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 /**
@@ -13,8 +13,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   imports: [
     CommonModule,
     RouterModule,
-    MatToolbarModule,
+    MaterialModule,
   ],
-  exports: [NavbarComponent],
+  exports: [NavbarComponent, MaterialModule],
 })
+
 export class CommonSharedModule { }

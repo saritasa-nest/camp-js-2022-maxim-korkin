@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 
+import { CommonSharedModule } from './../../shared/common-shared.module';
 import { LoginFormComponent } from './login-form/login-form.component';
 
 /**
@@ -14,11 +12,9 @@ import { LoginFormComponent } from './login-form/login-form.component';
   declarations: [LoginFormComponent],
   imports: [
     CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     ReactiveFormsModule,
     FormsModule,
+    CommonSharedModule,
   ],
 })
 export class LoginModule { }
