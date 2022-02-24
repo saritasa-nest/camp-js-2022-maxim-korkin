@@ -24,8 +24,7 @@ import { isLastPage } from './isLastPage';
 import { renderFilms } from './renderFilms';
 
 /**
- * Closure for fetching and displaying pages with films.
- * @returns Function which fetches required list of films and displays it on the page.
+ * Displaying pages with films.
  */
 export class FilmsTable {
   /**
@@ -79,6 +78,7 @@ export class FilmsTable {
     valueSearch: null,
   };
 
+  /** Parameters for generating a query, taking into account filtering and sorting. */
   private static queryConstraintParameters: QueryConstraintParameters;
 
   /**
@@ -159,8 +159,12 @@ export class FilmsTable {
    * @param orderingMode Shows if ordering should be ascending or descending.
    * @param newValueSearch The actual search value entered by the user..
    */
-  public static async getPageParameters(films: readonly Film[], orderingField: OrderingFields,
-    orderingMode: OrderingModes, newValueSearch: string | null): Promise<PageParameters> {
+  private static async getPageParameters(
+    films: readonly Film[],
+    orderingField: OrderingFields,
+    orderingMode: OrderingModes,
+    newValueSearch: string | null,
+  ): Promise<PageParameters> {
     let onFirstPage: boolean;
     let onLastPage: boolean;
     if (films.length !== 0) {

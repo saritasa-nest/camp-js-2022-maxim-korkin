@@ -21,11 +21,11 @@ const SEARCH_SYMBOL = '~';
 
 /**
  * Returns the query limits, including filtering, if applicable.
- * @param options -  Parameters for generating a query constraint.
+ * @param options - Parameters for generating a query constraint.
  * @returns Array with query constraint.
  */
 function getQueryConstraint(options: QueryConstraintParameters):
- readonly QueryConstraint[] {
+  QueryConstraint[] {
   if (options.valueSearch) {
     return [
       where(OrderingFields.Title, '>=', options.valueSearch),
@@ -34,7 +34,6 @@ function getQueryConstraint(options: QueryConstraintParameters):
     ];
   }
   return [orderBy(options.orderingField, options.orderingMode)];
-
 }
 
 /**
