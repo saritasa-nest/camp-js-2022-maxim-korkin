@@ -1,1 +1,18 @@
-<p>register-form works!</p>
+<form class="register-form" (ngSubmit)="onSubmit()">
+  <h1 class="register-form__header">Register</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input type="email" matInput [formControl]="emailControl" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input type="password" matInput [formControl]="passwordControl" />
+  </mat-form-field>
+  <button
+    mat-button
+    type="submit"
+    [disabled]="emailControl.invalid || passwordControl.invalid"
+  >
+    Submit
+  </button>
+</form>

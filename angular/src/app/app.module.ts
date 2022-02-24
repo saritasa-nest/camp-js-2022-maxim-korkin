@@ -6,6 +6,8 @@ import { provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 
+import { RegisterModule } from './features/register/register/register.module';
+
 import { LoginModule } from './features/login/login.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +26,7 @@ import { NonAuthGuard } from './core/guards/non-auth.guard';
     CommonSharedModule,
     BrowserAnimationsModule,
     LoginModule,
+    RegisterModule,
   ],
   providers: [AuthService, NonAuthGuard],
   bootstrap: [AppComponent],
