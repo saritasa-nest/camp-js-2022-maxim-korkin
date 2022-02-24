@@ -8,8 +8,8 @@
     <mat-label>Password</mat-label>
     <input type="password" matInput [formControl]="passwordControl" />
   </mat-form-field>
-  <div>
-    <p>{{ logInError$ | async }}</p>
+  <div *ngIf="error">
+    <p>{{ error }}</p>
   </div>
   <button
     mat-button

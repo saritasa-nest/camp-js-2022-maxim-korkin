@@ -51,7 +51,6 @@ export class AuthService {
   public signUp(email: string, password: string): Observable<null | Error> {
     return defer(() => createUserWithEmailAndPassword(this.auth, email, password)).pipe(
       mapTo(null),
-
       catchError((error: FirebaseError) => this.handleSignUpError(error)),
     );
   }

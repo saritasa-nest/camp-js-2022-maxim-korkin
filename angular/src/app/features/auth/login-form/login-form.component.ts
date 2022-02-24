@@ -1,17 +1,16 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-
 import { AuthService } from 'src/app/core/services/auth.service';
 
+import { AuthInfo } from './../../../core/models/AuthInfo';
+
 /**
- * Component with login form.
+ * Login form component.
  */
 @Component({
   selector: 'sw-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent implements OnDestroy {
@@ -19,7 +18,7 @@ export class LoginFormComponent implements OnDestroy {
   public constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-  ) {}
+  ) { }
 
   /**
    * @inheritdoc
@@ -27,33 +26,22 @@ export class LoginFormComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.logInError$.complete();
   }
 
   /**
-   * Stream for login errors.
+   * Error stream.
    */
   public readonly logInError$ = new Subject<string | null>();
 
-  /**
-   * FormControl instance for email input field.
-   */
-  public readonly emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
+  private destroy$ = new Subject<void>();
 
   /**
-   * FormControl instance for password input field.
+   * Method for logging in when the form is submitted.
+   * @param authInfo - Auth information from the form.
    */
-  public readonly passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
-
-  /**
-   * Destroy stream for handling subscriptions.
-   */
-  private readonly destroy$ = new Subject<void>();
-
-  /**
-   * Method for logging when the form is submitted.
-   */
-  public onSubmit(): void {
-    this.authService.signIn(this.emailControl.value, this.passwordControl.value).pipe(
+  public onSubmit(authInfo: AuthInfo): void {
+    this.authService.signIn(authInfo.email, authInfo.password).pipe(
       takeUntil(this.destroy$),
     )
       .subscribe({

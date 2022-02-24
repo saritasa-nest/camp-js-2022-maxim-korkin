@@ -1,8 +1,8 @@
-import { AuthService } from 'src/app/core/services/auth.service';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthInfo } from 'src/app/core/models/AuthInfo';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 /**
  * Register form component.
@@ -10,7 +10,6 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'sw-register-form',
   templateUrl: './register-form.component.html',
-  styleUrls: ['./register-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterFormComponent implements OnDestroy {
@@ -18,7 +17,7 @@ export class RegisterFormComponent implements OnDestroy {
   public constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-  ) {}
+  ) { }
 
   /**
    * @inheritdoc
@@ -26,33 +25,22 @@ export class RegisterFormComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.registerError$.complete();
   }
 
   /**
-   * Stream for register errors.
+   * Error stream.
    */
   public readonly registerError$ = new Subject<string | null>();
 
-  /**
-   * FormControl instance for email input field.
-   */
-  public readonly emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
+  private destroy$ = new Subject<void>();
 
   /**
-   * FormControl instance for password input field.
+   * Method for logging in when the form is submitted.
+   * @param authInfo - Auth information from the form.
    */
-  public readonly passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
-
-  /**
-   * Destroy stream for handling subscriptions.
-   */
-  private readonly destroy$ = new Subject<void>();
-
-  /**
-   * Method for register when the form is submitted.
-   */
-  public onSubmit(): void {
-    this.authService.signUp(this.emailControl.value, this.passwordControl.value).pipe(
+  public onSubmit(authInfo: AuthInfo): void {
+    this.authService.signUp(authInfo.email, authInfo.password).pipe(
       takeUntil(this.destroy$),
     )
       .subscribe({
