@@ -1,5 +1,5 @@
 <form class="login-form" (ngSubmit)="onSubmit()">
-  <h1 class="login-form__header">Login</h1>
+  <h1 class="login-form__header">{{ formHeader }}</h1>
   <mat-form-field appearance="fill">
     <mat-label>Email</mat-label>
     <input type="email" matInput [formControl]="emailControl" />

@@ -5,24 +5,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+const materialModules = [
+  CommonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatButtonModule,
+  MatToolbarModule,
+];
+
 /**
  * Module for material components.
  */
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatToolbarModule,
-  ],
-  exports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatToolbarModule,
-  ],
+  imports: materialModules,
+  exports: materialModules,
 })
 export class MaterialModule { }

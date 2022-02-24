@@ -15,6 +15,11 @@ import { AuthInfo } from './../../../core/models/AuthInfo';
 export class AuthFormComponent {
 
   /**
+   * Header of the form.
+   */
+  @Input() public formHeader = '';
+
+  /**
    * Error message or null.
    */
   @Input() public error: string | null = null;
