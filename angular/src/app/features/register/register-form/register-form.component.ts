@@ -28,11 +28,6 @@ export class RegisterFormComponent implements OnDestroy {
   }
 
   /**
-   * Destroy stream for handling subscriptions.
-   */
-  private destroy$ = new Subject<void>();
-
-  /**
    * Stream for register errors.
    */
   public registerError$ = new Subject<string | null>();
@@ -46,6 +41,11 @@ export class RegisterFormComponent implements OnDestroy {
    * FormControl instance for password input field.
    */
   public passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
+
+  /**
+   * Destroy stream for handling subscriptions.
+   */
+  private destroy$ = new Subject<void>();
 
   /**
    * Method for register when the form is submitted.
