@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 /**
- * Guard which check if the user is signed in or not.
+ * Guard which allows links for unauthenticated users only.
  */
 @Injectable()
 export class NonAuthGuard implements CanActivate {
@@ -13,8 +13,7 @@ export class NonAuthGuard implements CanActivate {
   public constructor(private authService: AuthService) {}
 
   /**
-   * CanActivate guard which allows links for unauthenticated users only.
-   * @returns
+   * @inheritdoc
    */
   public canActivate(
   ): Observable<boolean> {
