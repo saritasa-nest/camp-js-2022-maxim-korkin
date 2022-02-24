@@ -6,7 +6,7 @@ import { provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { environment } from 'src/environments/environment';
 
-import { RegisterModule } from './features/register/register/register.module';
+import { RegisterModule } from './features/register/register.module';
 
 import { LoginModule } from './features/login/login.module';
 import { AppRoutingModule } from './app-routing.module';

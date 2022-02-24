@@ -10,7 +10,7 @@ import { AuthService } from '../services/auth.service';
 @Injectable()
 export class NonAuthGuard implements CanActivate {
 
-  public constructor(private authService: AuthService) {}
+  public constructor(private readonly authService: AuthService) {}
 
   /**
    * @inheritdoc
