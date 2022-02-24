@@ -14,8 +14,6 @@ import { AuthInfo } from './../../../core/models/AuthInfo';
 })
 export class AuthFormComponent {
 
-  public constructor() { }
-
   /**
    * Error message or null.
    */
