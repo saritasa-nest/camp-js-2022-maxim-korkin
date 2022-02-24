@@ -8,6 +8,9 @@
     <mat-label>Password</mat-label>
     <input type="password" matInput [formControl]="passwordControl" />
   </mat-form-field>
+  <div>
+    <p>{{ registerError$ | async }}</p>
+  </div>
   <button
     mat-button
     type="submit"

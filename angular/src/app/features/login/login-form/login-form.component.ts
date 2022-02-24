@@ -58,11 +58,13 @@ export class LoginFormComponent implements OnDestroy {
     )
       .subscribe({
         next: () => {
-        this.logInError$.next(null);
-        this.router.navigate(['/']);
-      },
+          this.logInError$.next(null);
+        },
         error: (error: Error) => {
-        this.logInError$.next(error.message);
+          this.logInError$.next(error.message);
+        },
+        complete: () => {
+          this.router.navigate(['/']);
         },
       });
   }

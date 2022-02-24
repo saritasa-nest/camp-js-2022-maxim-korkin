@@ -7,4 +7,8 @@ export enum FirebaseAuthErrors {
   WrongPassword = 'auth/wrong-password',
 
   TooManyLogInAttempts = 'auth/too-many-requests',
+
+  WeakPassword = 'auth/weak-password',
+
+  EmailAlreadyInUse = 'auth/email-already-in-use',
 }

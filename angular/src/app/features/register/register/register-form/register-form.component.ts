@@ -1,7 +1,8 @@
+import { AuthService } from 'src/app/core/services/auth.service';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 /**
  * Register form component.
@@ -15,6 +16,7 @@ import { Subject } from 'rxjs';
 export class RegisterFormComponent implements OnDestroy {
 
   public constructor(
+    private readonly authService: AuthService,
     private readonly router: Router,
   ) {}
 
@@ -31,6 +33,11 @@ export class RegisterFormComponent implements OnDestroy {
   private destroy$ = new Subject<void>();
 
   /**
+   * Stream for register errors.
+   */
+  public registerError$ = new Subject<string | null>();
+
+  /**
    * FormControl instance for email input field.
    */
   public emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
@@ -44,6 +51,19 @@ export class RegisterFormComponent implements OnDestroy {
    * Method for register when the form is submitted.
    */
   public onSubmit(): void {
-    // TODO(Korkin M.) : Add registration.
+    this.authService.signUp(this.emailControl.value, this.passwordControl.value).pipe(
+      takeUntil(this.destroy$),
+    )
+      .subscribe({
+        next: () => {
+          this.registerError$.next(null);
+        },
+        error: (error: Error) => {
+          this.registerError$.next(error.message);
+        },
+        complete: () => {
+          this.router.navigate(['/']);
+        },
+      });
   }
 }
