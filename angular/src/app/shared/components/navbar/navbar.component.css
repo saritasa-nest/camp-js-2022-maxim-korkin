@@ -14,3 +14,7 @@
   text-decoration: none;
   color: var(--default-link-color);
 }
+
+.navbar__item {
+  margin: 10px;
+}
