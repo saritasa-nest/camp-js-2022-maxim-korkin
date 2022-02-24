@@ -25,7 +25,6 @@ export class RegisterFormComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.registerError$.complete();
   }
 
   /**
@@ -33,7 +32,7 @@ export class RegisterFormComponent implements OnDestroy {
    */
   public readonly registerError$ = new Subject<string | null>();
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   /**
    * Method for logging in when the form is submitted.

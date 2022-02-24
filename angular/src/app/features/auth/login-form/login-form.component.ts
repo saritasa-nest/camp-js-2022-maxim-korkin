@@ -26,7 +26,6 @@ export class LoginFormComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.logInError$.complete();
   }
 
   /**
@@ -34,7 +33,7 @@ export class LoginFormComponent implements OnDestroy {
    */
   public readonly logInError$ = new Subject<string | null>();
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   /**
    * Method for logging in when the form is submitted.
