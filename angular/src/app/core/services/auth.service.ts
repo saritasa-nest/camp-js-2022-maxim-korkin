@@ -62,14 +62,18 @@ export class AuthService {
    * @returns - A new error stream to use in catchError rxjs operator.
    */
   private handleSignInError(error: FirebaseError): Observable<Error> {
-    if (error.code === FirebaseAuthErrors.WrongEmail || error.code === FirebaseAuthErrors.WrongPassword) {
-      return throwError(() => new Error('Incorrect email of password'));
-    } else if (error.code === FirebaseAuthErrors.TooManyLogInAttempts) {
-      return throwError(() => new Error(
-        'Access to this account has been temporarily disabled due to many failed login attempts. Please try later.',
-      ));
+    switch (error.code) {
+      case FirebaseAuthErrors.WrongEmail:
+        return throwError(() => new Error('Incorrect email of password'));
+      case FirebaseAuthErrors.WrongPassword:
+        return throwError(() => new Error('Incorrect email of password'));
+      case FirebaseAuthErrors.TooManyLogInAttempts:
+        return throwError(() => new Error(
+          'Access to this account has been temporarily disabled due to many failed login attempts. Please try later.',
+        ));
+      default:
+        return throwError(() => new Error('Unexpected error occurred. Please try later.'));
     }
-    return throwError(() => new Error('Unexpected error occurred. Please try later.'));
   }
 
   /**
@@ -78,11 +82,13 @@ export class AuthService {
    * @returns - A new error stream to use in catchError rxjs operator.
    */
   private handleSignUpError(error: FirebaseError): Observable<Error> {
-    if (error.code === FirebaseAuthErrors.EmailAlreadyInUse) {
-      return throwError(() => new Error('Email already in use.'));
-    } else if (error.code === FirebaseAuthErrors.WeakPassword) {
-      return throwError(() => new Error('Too weak password.'));
+    switch (error.code) {
+      case FirebaseAuthErrors.EmailAlreadyInUse:
+        return throwError(() => new Error('Email already in use.'));
+      case FirebaseAuthErrors.WeakPassword:
+        return throwError(() => new Error('Too weak password.'));
+      default:
+        return throwError(() => new Error('Unexpected error occurred. Please try later.'));
     }
-    return throwError(() => new Error('Unexpected error occurred. Please try later.'));
   }
 }
