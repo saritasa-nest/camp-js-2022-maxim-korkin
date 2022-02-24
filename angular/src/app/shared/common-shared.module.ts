@@ -10,7 +10,11 @@ import { NavbarComponent } from './components/navbar/navbar.component';
  */
 @NgModule({
   declarations: [NavbarComponent],
-  imports: [CommonModule, RouterModule, MatToolbarModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+  ],
   exports: [NavbarComponent],
 })
 export class CommonSharedModule { }

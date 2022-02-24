@@ -12,6 +12,13 @@ import { RegisterFormComponent } from './register-form/register-form.component';
  */
 @NgModule({
   declarations: [RegisterFormComponent],
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class RegisterModule { }

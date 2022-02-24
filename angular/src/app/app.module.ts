@@ -28,7 +28,10 @@ import { NonAuthGuard } from './core/guards/non-auth.guard';
     LoginModule,
     RegisterModule,
   ],
-  providers: [AuthService, NonAuthGuard],
+  providers: [
+    AuthService,
+    NonAuthGuard,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

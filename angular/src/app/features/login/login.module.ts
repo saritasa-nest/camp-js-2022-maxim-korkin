@@ -12,6 +12,13 @@ import { LoginFormComponent } from './login-form/login-form.component';
  */
 @NgModule({
   declarations: [LoginFormComponent],
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class LoginModule { }
