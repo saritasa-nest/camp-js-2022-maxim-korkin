@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { AuthFormComponent } from './components/auth-form/auth-form.component';
+import { AuthFormComponent } from '../features/auth/auth-form/auth-form.component';
+
 import { MaterialModule } from './material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 

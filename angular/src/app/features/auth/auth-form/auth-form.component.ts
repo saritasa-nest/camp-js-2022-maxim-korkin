@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { AuthInfo } from './../../../core/models/AuthInfo';
+import { AuthInfo } from '../../../core/models/AuthInfo';
 
 /**
  * Auth form component.
@@ -17,12 +17,14 @@ export class AuthFormComponent {
   /**
    * Header of the form.
    */
-  @Input() public formHeader = '';
+  @Input()
+  public formHeader = '';
 
   /**
    * Error message or null.
    */
-  @Input() public error: string | null = null;
+  @Input()
+  public error: string | null = null;
 
   /**
    * FormControl instance for email input field.
@@ -37,7 +39,8 @@ export class AuthFormComponent {
   /**
    * Submit event emitter.
    */
-  @Output() private readonly submitEvent = new EventEmitter<AuthInfo>();
+  @Output()
+  private readonly submitEvent = new EventEmitter<AuthInfo>();
 
   /**
    * OnSubmit function.

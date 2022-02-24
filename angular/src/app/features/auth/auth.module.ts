@@ -8,7 +8,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 
 /**
- * Auth form component.
+ * Auth module.
  */
 @NgModule({
   declarations: [LoginFormComponent, RegisterFormComponent],
