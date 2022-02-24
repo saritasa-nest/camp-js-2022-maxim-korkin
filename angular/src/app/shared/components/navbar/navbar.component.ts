@@ -26,7 +26,7 @@ export class NavbarComponent implements OnDestroy {
   /**
    * Destroy stream for handling subscriptions.
    */
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   /**
    * Method for signing out when the user click sign out button.

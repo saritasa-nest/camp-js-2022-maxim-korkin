@@ -31,22 +31,22 @@ export class RegisterFormComponent implements OnDestroy {
   /**
    * Stream for register errors.
    */
-  public registerError$ = new Subject<string | null>();
+  public readonly registerError$ = new Subject<string | null>();
 
   /**
    * FormControl instance for email input field.
    */
-  public emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
+  public readonly emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
 
   /**
    * FormControl instance for password input field.
    */
-  public passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
+  public readonly passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
 
   /**
    * Destroy stream for handling subscriptions.
    */
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   /**
    * Method for register when the form is submitted.
