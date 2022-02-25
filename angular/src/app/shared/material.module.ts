@@ -15,7 +15,6 @@ const MATERIAL_MODULES = [
  * Module for material components.
  */
 @NgModule({
-  declarations: [],
   imports: MATERIAL_MODULES,
   exports: MATERIAL_MODULES,
 })

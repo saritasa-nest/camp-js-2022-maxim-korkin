@@ -10,8 +10,6 @@ import { AuthModule } from './features/auth/auth.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonSharedModule } from './shared/common-shared.module';
-import { AuthService } from './core/services/auth.service';
-import { NonAuthGuard } from './core/guards/non-auth.guard';
 
 /** Root module. */
 @NgModule({
@@ -24,10 +22,6 @@ import { NonAuthGuard } from './core/guards/non-auth.guard';
     provideAuth(() => getAuth()),
     CommonSharedModule,
     AuthModule,
-  ],
-  providers: [
-    AuthService,
-    NonAuthGuard,
   ],
   bootstrap: [AppComponent],
 })

@@ -3,28 +3,26 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { AuthFormComponent } from '../features/auth/auth-form/auth-form.component';
-
 import { MaterialModule } from './material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
+
+const SHARED_IMPORTS = [
+  CommonModule,
+  RouterModule,
+  FormsModule,
+  ReactiveFormsModule,
+  MaterialModule,
+];
+
+const SHARED_DECLARATIONS = [NavbarComponent];
 
 /**
  * Module for shared components, animations, directives and pipes.
  */
 @NgModule({
-  declarations: [NavbarComponent, AuthFormComponent],
-  imports: [
-    CommonModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-  ],
-  exports: [
-    NavbarComponent,
-    AuthFormComponent,
-    MaterialModule,
-  ],
+  declarations: SHARED_DECLARATIONS,
+  imports: SHARED_IMPORTS,
+  exports: [...SHARED_IMPORTS, ...SHARED_DECLARATIONS],
 })
 
 export class CommonSharedModule { }

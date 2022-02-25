@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
 /**
  * Guard which allows navigation to the routes for unauthenticated users only.
  */
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class NonAuthGuard implements CanActivate {
 
   public constructor(private readonly authService: AuthService) {}
@@ -15,10 +15,9 @@ export class NonAuthGuard implements CanActivate {
   /**
    * @inheritdoc
    */
-  public canActivate(
-  ): Observable<boolean> {
+  public canActivate(): Observable<boolean> {
     return this.authService.isSignedIn$.pipe(
-      map((value => !value)),
+      map(value => !value),
     );
   }
 

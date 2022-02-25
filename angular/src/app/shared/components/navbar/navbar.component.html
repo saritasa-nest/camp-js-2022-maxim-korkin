@@ -1,9 +1,13 @@
 <nav>
-  <mat-toolbar color="primary">
-    <a routerLink="/" class="navbar__link"><div>SW Films</div></a>
-    <span class="navbar__spacer"></span>
+  <mat-toolbar color="primary" class="navbar">
+    <a routerLink="/" class="navbar__item">SW Films</a>
     <div *ngIf="isSignedIn$ | async; else loginRegisterLinks">
-      <button type="button" mat-stroked-button (click)="signOut()">
+      <button
+        type="button"
+        class="navbar__item"
+        mat-stroked-button
+        (click)="signOut()"
+      >
         Logout
       </button>
     </div>
@@ -11,17 +15,10 @@
 </nav>
 
 <ng-template #loginRegisterLinks>
-  <span>
-    <a mat-stroked-button routerLink="/login" class="navbar__link navbar__item"
-      ><div>Login</div></a
-    >
-  </span>
-  <span>
-    <a
-      mat-stroked-button
-      routerLink="/register"
-      class="navbar__link navbar__item"
+  <div>
+    <a mat-stroked-button routerLink="/login" class="navbar__item">Login</a>
+    <a mat-stroked-button routerLink="/register" class="navbar__item"
       >Register</a
     >
-  </span>
+  </div>
 </ng-template>

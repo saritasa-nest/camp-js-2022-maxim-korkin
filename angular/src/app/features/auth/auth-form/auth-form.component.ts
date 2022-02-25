@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
+import { emailValidator } from 'src/app/shared/directives/email-validator.directive';
 
 import { AuthInfo } from '../../../core/models/AuthInfo';
 
@@ -36,8 +37,17 @@ export class AuthFormComponent {
    * Authentication form group.
    */
   public authForm = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]],
-    password: ['', [Validators.required, Validators.pattern(/\S+/)]],
+    email: [
+      '',
+      [
+        Validators.required,
+        emailValidator(),
+      ],
+    ],
+    password: [
+      '',
+      [Validators.required, Validators.pattern(/\S+/)],
+    ],
   });
 
   public constructor(

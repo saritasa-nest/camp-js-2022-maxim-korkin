@@ -1,18 +1,10 @@
-:root {
-  --default-link-color: #ffffff;
-}
-
 :host {
   display: block;
 }
 
-.navbar__spacer {
-  flex: 1 1 auto;
-}
-
-.navbar__link {
-  text-decoration: none;
-  color: var(--default-link-color);
+.navbar {
+  display: flex;
+  justify-content: space-between;
 }
 
 .navbar__item {

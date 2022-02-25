@@ -2,8 +2,7 @@ import { Router } from '@angular/router';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
-
-import { AuthInfo } from './../../../core/models/AuthInfo';
+import { AuthInfo } from 'src/app/core/models/AuthInfo';
 
 /**
  * Login form component.
