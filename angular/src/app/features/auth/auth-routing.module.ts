@@ -19,7 +19,6 @@ const routes: Routes = [
  * Auth routing module.
  */
 @NgModule({
-  declarations: [],
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })

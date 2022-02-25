@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 /**
- * Guard which allows links for unauthenticated users only.
+ * Guard which allows navigation to the routes for unauthenticated users only.
  */
 @Injectable()
 export class NonAuthGuard implements CanActivate {

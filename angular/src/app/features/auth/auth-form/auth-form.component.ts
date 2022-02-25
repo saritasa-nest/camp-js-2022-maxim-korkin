@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 
 import { AuthInfo } from '../../../core/models/AuthInfo';
 
@@ -27,28 +27,40 @@ export class AuthFormComponent {
   public error: string | null = null;
 
   /**
-   * FormControl instance for email input field.
-   */
-  public readonly emailControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]);
-
-  /**
-   * FormControl instance for password input field.
-   */
-  public readonly passwordControl = new FormControl('', [Validators.required, Validators.pattern(/\S+/)]);
-
-  /**
    * Submit event emitter.
    */
   @Output()
   private readonly submitEvent = new EventEmitter<AuthInfo>();
 
   /**
+   * Authentication form group.
+   */
+  public authForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$/)]],
+    password: ['', [Validators.required, Validators.pattern(/\S+/)]],
+  });
+
+  public constructor(
+    private readonly formBuilder: FormBuilder,
+  ) {}
+
+  /**
    * OnSubmit function.
    */
   public onSubmit(): void {
     this.submitEvent.emit({
-      email: this.emailControl.value,
-      password: this.passwordControl.value,
+      email: this.emailInput,
+      password: this.passwordInput,
     });
+  }
+
+  private get emailInput(): string {
+    const emailField = this.authForm.get('email');
+    return (emailField !== null) ? emailField.value : '';
+  }
+
+  private get passwordInput(): string {
+    const passwordField = this.authForm.get('password');
+    return (passwordField !== null) ? passwordField.value : '';
   }
 }

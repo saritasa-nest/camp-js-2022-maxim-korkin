@@ -14,6 +14,13 @@ import { AuthService } from 'src/app/core/services/auth.service';
 })
 export class RegisterFormComponent implements OnDestroy {
 
+  /**
+   * Error stream.
+   */
+  public readonly registerError$ = new Subject<string | null>();
+
+  private readonly destroy$ = new Subject<void>();
+
   public constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
@@ -26,13 +33,6 @@ export class RegisterFormComponent implements OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /**
-   * Error stream.
-   */
-  public readonly registerError$ = new Subject<string | null>();
-
-  private readonly destroy$ = new Subject<void>();
 
   /**
    * Method for logging in when the form is submitted.

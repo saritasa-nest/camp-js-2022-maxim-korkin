@@ -13,16 +13,16 @@ import { FirebaseAuthErrors } from './FirebaseAuthErrors';
 @Injectable()
 export class AuthService {
 
+  /**
+   * Stream showing if the user is signed in or not.
+   */
+  public readonly isSignedIn$: Observable<boolean>;
+
   public constructor(private readonly auth: Auth) {
     this.isSignedIn$ = authState(auth).pipe(
       map(user => user !== null),
     );
   }
-
-  /**
-   * Stream showing if the user is signed in or not.
-   */
-  public isSignedIn$: Observable<boolean>;
 
   /**
    * Method for logging in with email and password.
