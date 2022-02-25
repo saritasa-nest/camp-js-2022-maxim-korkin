@@ -33,7 +33,7 @@ export const composeFilmFromForm = (form: HTMLFormElement, primaryKey: number): 
     openingCrawl: openingCrawl as string,
     episodeId: Number(episodeId),
     director: director as string,
-    producer: producers.join(', '),
+    producers: producers as string[],
     releaseDate: new Date(releaseDate as string),
     characterIds: characterIds.map(pk => Number(pk)),
     planetIds: planetIds.map(pk => Number(pk)),

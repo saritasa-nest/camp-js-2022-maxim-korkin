@@ -19,7 +19,7 @@ export interface Film {
   readonly planetIds: readonly number[];
 
   /** Producer of the film.*/
-  readonly producer: string;
+  readonly producers: string[];
 
   /** Release date of the film. */
   readonly releaseDate: Date;

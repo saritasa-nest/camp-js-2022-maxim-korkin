@@ -35,7 +35,7 @@ onAuthStateChanged(auth, async user => {
         renderFilmNotFound();
       }
     } else {
-      document.location = '/';
+      renderFilmNotFound();
     }
   }
 });

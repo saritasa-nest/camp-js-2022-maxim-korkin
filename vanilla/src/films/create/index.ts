@@ -8,16 +8,12 @@ import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm
 document.addEventListener('DOMContentLoaded', () => {
   const elems = document.querySelectorAll('.datepicker');
 
-  const options = {
-    format: 'dd.mm.yyyy',
-  };
-
-  Datepicker.init(elems, options);
+  Datepicker.init(elems);
 });
 
-const form = createFilmForm();
+const form = createFilmForm('Create film');
 
-const container = document.querySelector('.film-creation-container');
+const container = document.querySelector('.film-form-container');
 container?.append(form);
 
 await initFilmForm(form);

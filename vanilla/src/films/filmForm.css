@@ -1,23 +1,23 @@
-.header {
-  text-align: center;
-}
-
-.film-creation-container {
+.film-form-container {
   display: flex;
   flex-direction: column;
 }
 
-.film-creation__form {
+.film-form {
   width: 50%;
   justify-self: center;
   align-self: center;
 }
 
-.producers-container {
+.film-form__header {
+  text-align: center;
+}
+
+.film-form__producers-container {
   display: flex;
   flex-direction: column;
 }
 
-.producers-btns-container {
+.film-form__producers-buttons-container {
   align-self: center;
 }

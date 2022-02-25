@@ -5,23 +5,20 @@ import { getSearchParam } from '../../utils/getSearchParam';
 import { initFilmForm } from '../../features/filmForm/initFilmForm';
 import { createFilmForm } from '../../features/filmForm/createFilmForm';
 import { FilmsService } from '../../services/films/FilmsService';
-import { fillFormValues } from '../../features/filmForm/fillFormValues';
+import { fillFilmFormValues } from '../../features/filmForm/fillFilmFormValues';
+import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
 
 document.addEventListener('DOMContentLoaded', () => {
   const elems = document.querySelectorAll('.datepicker');
 
-  const options = {
-    format: 'dd.mm.yyyy',
-  };
-
-  Datepicker.init(elems, options);
+  Datepicker.init(elems);
 });
 const primaryKey = Number(getSearchParam('pk'));
 
 if (!isNaN(primaryKey) && primaryKey !== 0) {
-  const form = createFilmForm();
+  const form = createFilmForm('Edit film');
 
-  const container = document.querySelector('.film-creation-container');
+  const container = document.querySelector('.film-form-container');
   container?.append(form);
 
   await initFilmForm(form);
@@ -29,7 +26,7 @@ if (!isNaN(primaryKey) && primaryKey !== 0) {
   const film = await FilmsService.fetchFilmByPrimaryKey(primaryKey);
 
   if (film !== null) {
-    fillFormValues(form, film);
+    fillFilmFormValues(form, film);
 
     form.addEventListener('submit', async event => {
       event.preventDefault();
@@ -42,7 +39,9 @@ if (!isNaN(primaryKey) && primaryKey !== 0) {
         document.location = '/';
       }
     });
+  } else {
+    renderFilmNotFound();
   }
 } else {
-  document.location = '/';
+  renderFilmNotFound();
 }

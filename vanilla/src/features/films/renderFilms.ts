@@ -33,7 +33,7 @@ export const renderFilms = (films: Film[]): void => {
         <td>${film.episodeId}</td>
         <td>${film.title}</td>
         <td>${film.releaseDate}</td>
-        <td>${film.producer}</td>
+        <td>${film.producers}</td>
         <td>${film.director}</td>
       `;
 
