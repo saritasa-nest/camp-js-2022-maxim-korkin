@@ -8,10 +8,4 @@ export interface BaseEntity {
 
   /** Name. */
   readonly name: string;
-
-  /** Creation date of the entity in the DB. */
-  readonly created: Date;
-
-  /** Edition date of the entity in the DB. */
-  readonly edited: Date;
 }
