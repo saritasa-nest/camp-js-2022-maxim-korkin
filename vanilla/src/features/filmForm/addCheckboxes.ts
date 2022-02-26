@@ -1,4 +1,5 @@
 import { BaseEntity } from '../../interfaces/BaseEntity';
+import { assertNotNull } from '../../utils/assertNotNull';
 
 /**
  * Function for adding checkboxes with possible entities to the fieldset.
@@ -9,14 +10,14 @@ import { BaseEntity } from '../../interfaces/BaseEntity';
 export const addCheckboxes = <T extends BaseEntity>(selector: string, entities: T[], checkboxName: string): void => {
   const fieldSet = document.querySelector<HTMLFieldSetElement>(selector);
 
-  if (fieldSet !== null) {
-    entities.forEach(entity => {
-      fieldSet.innerHTML += `
-        <label>
-          <input type="checkbox" name="${checkboxName}" value="${entity.pk}">
-          <span>${entity.name}</span>
-        </label>
-      `;
-    });
-  }
+  assertNotNull(fieldSet);
+
+  entities.forEach(entity => {
+    fieldSet.innerHTML += `
+      <label>
+        <input type="checkbox" name="${checkboxName}" value="${entity.pk}">
+        <span>${entity.name}</span>
+      </label>
+    `;
+  });
 };

@@ -1,3 +1,5 @@
+import { assertNotNull } from '../../utils/assertNotNull';
+
 /**
  * Function for filling value to the input field.
  * @param selector - Selector if the input field.
@@ -5,7 +7,8 @@
  */
 export const fillSingleValue = (selector: string, value: string): void => {
   const inputField = document.querySelector<HTMLInputElement>(selector);
-  if (inputField !== null) {
-    inputField.value = value;
-  }
+
+  assertNotNull(inputField);
+
+  inputField.value = value;
 };

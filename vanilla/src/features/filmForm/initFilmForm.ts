@@ -3,6 +3,7 @@ import { Character } from '../../interfaces/characters/domain/Character';
 import { FilmFormSelectors } from '../../enums/filmForm/FilmFormSelectors';
 import { CharactersService } from '../../services/characters/CharactersService';
 import { PlanetsService } from '../../services/planets/PlanetsService';
+import { assertNotNull } from '../../utils/assertNotNull';
 
 import { removeProducerInput } from './removeProducerInput';
 import { addProducerInput } from './addProducerInput';
@@ -33,8 +34,10 @@ export const initFilmForm = async(form: HTMLFormElement): Promise<void> => {
   addCheckboxes<Planet>(FilmFormSelectors.PlanetsFieldset, planets, 'planet');
 
   const addProducerButton = form.querySelector(FilmFormSelectors.AddProducerButton);
-  addProducerButton?.addEventListener('click', addProducerInput);
+  assertNotNull(addProducerButton);
+  addProducerButton.addEventListener('click', addProducerInput);
 
   const removeProducerButton = form.querySelector(FilmFormSelectors.RemoveProducerButton);
-  removeProducerButton?.addEventListener('click', removeProducerInput);
+  assertNotNull(removeProducerButton);
+  removeProducerButton.addEventListener('click', removeProducerInput);
 };

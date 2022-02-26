@@ -1,4 +1,5 @@
 import { FilmFormSelectors } from '../../enums/filmForm/FilmFormSelectors';
+import { assertNotNull } from '../../utils/assertNotNull';
 
 import { toggleRemoveProducerButton } from './toggleRemoveProducerButton';
 
@@ -21,6 +22,8 @@ export const removeProducerInput = (): void => {
 
     const producersContainer = document.querySelector(FilmFormSelectors.ProducerInputsContainer);
 
-    producersContainer?.removeChild(lastProducerInput);
+    assertNotNull(producersContainer);
+
+    producersContainer.removeChild(lastProducerInput);
   }
 };

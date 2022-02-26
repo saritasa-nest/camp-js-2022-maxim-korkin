@@ -1,3 +1,5 @@
+import { assertNotNull } from '../../utils/assertNotNull';
+
 /**
  * Function for checking checkboxes.
  * @param selector - Selector of the fieldset which contains checkboxes.
@@ -6,11 +8,11 @@
 export const fillCheckboxFieldset = (selector: string, pks: readonly number[]): void => {
   const fieldset = document.querySelector<HTMLFieldSetElement>(selector);
 
-  if (fieldset !== null) {
-    Array.from(fieldset.getElementsByTagName('input')).forEach(inputField => {
-      if (pks.includes(Number(inputField.value))) {
-        inputField.checked = true;
-      }
-    });
-  }
+  assertNotNull(fieldset);
+
+  Array.from(fieldset.getElementsByTagName('input')).forEach(inputField => {
+    if (pks.includes(Number(inputField.value))) {
+      inputField.checked = true;
+    }
+  });
 };

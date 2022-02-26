@@ -1,7 +1,9 @@
-import { FilmFormSelectors } from './../../enums/filmForm/FilmFormSelectors';
+import { assertNotNull } from '../../utils/assertNotNull';
+import { FilmFormSelectors } from '../../enums/filmForm/FilmFormSelectors';
+
 import { toggleRemoveProducerButton } from './toggleRemoveProducerButton';
 
-const COUNT_OF_INPUTS_FOR_BUTTON_ENABLING = 1;
+const COUNT_OF_INPUTS_FOR_REMOVE_BUTTON_ENABLING = 1;
 
 /**
  * Function creates a new producer text input in the film form.
@@ -9,13 +11,13 @@ const COUNT_OF_INPUTS_FOR_BUTTON_ENABLING = 1;
 export const addProducerInput = (): void => {
   const producerInputsCount = document.querySelectorAll(FilmFormSelectors.ProducerInput).length;
 
-  if (producerInputsCount === COUNT_OF_INPUTS_FOR_BUTTON_ENABLING) {
+  if (producerInputsCount === COUNT_OF_INPUTS_FOR_REMOVE_BUTTON_ENABLING) {
     toggleRemoveProducerButton();
   }
 
   const producerInput = document.createElement('div');
 
-  producerInput.classList.add('input-field', FilmFormSelectors.ProducerInput);
+  producerInput.classList.add('input-field', 'producer-input');
 
   producerInput.innerHTML = `
     <input name="producer" id="producers-input-${producerInputsCount + 1}" type="text" required>
@@ -23,6 +25,6 @@ export const addProducerInput = (): void => {
   `;
 
   const producersContainer = document.querySelector(FilmFormSelectors.ProducerInputsContainer);
-
-  producersContainer?.append(producerInput);
+  assertNotNull(producersContainer);
+  producersContainer.append(producerInput);
 };
