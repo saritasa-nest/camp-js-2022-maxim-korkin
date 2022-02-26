@@ -33,9 +33,10 @@ export class FilmMapper {
   /**
    * Method gets Film object and then converts it into FilmDto object and returns it.
    * @param film - Film object which need to be converted into FilmDto object.
+   * @param primaryKey - Primary key of the film.
    * @returns Converted FilmDto object.
    */
-  public static toDto(film: Film): FilmDto {
+  public static toDto(film: Film, primaryKey: number): FilmDto {
     const newFilmDtoFields: FilmFieldsDto = {
       characters: film.characterIds,
       created: (new Date()).toISOString(),
@@ -55,7 +56,7 @@ export class FilmMapper {
     return {
       fields: newFilmDtoFields,
       model: 'resources.film',
-      pk: film.pk,
+      pk: primaryKey,
     };
   }
 

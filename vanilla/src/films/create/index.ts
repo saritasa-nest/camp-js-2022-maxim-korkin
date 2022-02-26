@@ -3,30 +3,31 @@ import { Datepicker } from 'materialize-css';
 import { initFilmForm } from '../../features/filmForm/initFilmForm';
 import { createFilmForm } from '../../features/filmForm/createFilmForm';
 import { FilmsService } from '../../services/films/FilmsService';
-import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const elems = document.querySelectorAll('.datepicker');
+/**
+ * Function which inits film creation page.
+ */
+async function initCreatePage(): Promise<void> {
+  document.addEventListener('DOMContentLoaded', () => {
+    const elems = document.querySelectorAll('.datepicker');
 
-  Datepicker.init(elems);
-});
+    Datepicker.init(elems);
+  });
 
-const form = createFilmForm('Create film');
+  const form = createFilmForm('Create film');
 
-const container = document.querySelector('.film-form-container');
-container?.append(form);
+  const container = document.querySelector('.film-form-container');
+  container?.append(form);
 
-await initFilmForm(form);
+  await initFilmForm(form);
 
-form.addEventListener('submit', async event => {
-  event.preventDefault();
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
 
-  const highestPrimaryKey = await FilmsService.getMaximumPrimaryKey();
+    await FilmsService.addFilmFromFormValues(form);
 
-  const newFilm = composeFilmFromForm(form, highestPrimaryKey + 1);
-
-  if (newFilm !== null) {
-    await FilmsService.addFilm(newFilm);
     document.location = '/';
-  }
-});
+  });
+}
+
+initCreatePage();

@@ -8,6 +8,8 @@ import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { FilmMapper } from '../../mappers/FilmMapper';
+import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
+import { assertNotNull } from '../../utils/assertNotNull';
 
 /**
  * Default limit of films on page.
@@ -170,11 +172,17 @@ export class FilmsService {
   }
 
   /**
-   * Method for adding a new film to the firestore DB.
-   * @param film - Film to add.
+   * Method for adding a new film with the values from the form to the firestore DB.
+   * @param form - Form to get values from.
    */
-  public static async addFilm(film: Film): Promise<void> {
-    const filmDto = FilmMapper.toDto(film);
+  public static async addFilmFromFormValues(form: HTMLFormElement): Promise<void> {
+    const newFilm = composeFilmFromForm(form);
+
+    assertNotNull(newFilm);
+
+    const highestPrimaryKey = await FilmsService.getMaximumPrimaryKey();
+
+    const filmDto = FilmMapper.toDto(newFilm, highestPrimaryKey + 1);
 
     await addDoc(FilmsService.filmsCollection, filmDto);
   }

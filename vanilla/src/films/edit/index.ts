@@ -1,21 +1,24 @@
 import { Datepicker } from 'materialize-css';
 
 import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
-import { getSearchParam } from '../../utils/getSearchParam';
 import { initFilmForm } from '../../features/filmForm/initFilmForm';
 import { createFilmForm } from '../../features/filmForm/createFilmForm';
 import { FilmsService } from '../../services/films/FilmsService';
 import { fillFilmFormValues } from '../../features/filmForm/fillFilmFormValues';
 import { renderFilmNotFound } from '../../features/filmDetails/renderFilmNotFound';
+import { checkPrimaryKeyFromSearchParamsAndInitPage } from '../../utils/checkPrimaryKeyFromSearchParamsAndInitPage';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const elems = document.querySelectorAll('.datepicker');
+/**
+ * Function which inits film edition page.
+ * @param primaryKey - Primary key of the film.
+ */
+async function initEditPage(primaryKey: number): Promise<void> {
+  document.addEventListener('DOMContentLoaded', () => {
+    const elems = document.querySelectorAll('.datepicker');
 
-  Datepicker.init(elems);
-});
-const primaryKey = Number(getSearchParam('pk'));
+    Datepicker.init(elems);
+  });
 
-if (!isNaN(primaryKey) && primaryKey !== 0) {
   const form = createFilmForm('Edit film');
 
   const container = document.querySelector('.film-form-container');
@@ -31,7 +34,7 @@ if (!isNaN(primaryKey) && primaryKey !== 0) {
     form.addEventListener('submit', async event => {
       event.preventDefault();
 
-      const newFilm = composeFilmFromForm(form, primaryKey);
+      const newFilm = composeFilmFromForm(form);
 
       if (newFilm !== null) {
         await FilmsService.updateFilm(newFilm);
@@ -42,6 +45,6 @@ if (!isNaN(primaryKey) && primaryKey !== 0) {
   } else {
     renderFilmNotFound();
   }
-} else {
-  renderFilmNotFound();
 }
+
+checkPrimaryKeyFromSearchParamsAndInitPage(initEditPage, renderFilmNotFound);
