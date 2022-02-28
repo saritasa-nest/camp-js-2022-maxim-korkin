@@ -10,6 +10,6 @@ export interface FilterSortOptions {
   /** Null if we dont need to change ordering field.*/
   readonly newOrderingField: OrderingFields | null;
 
-  /** * The actual search value entered by the user.*/
+  /** The actual search value entered by the user.*/
   readonly valueSearch: string | null;
 }
