@@ -1,20 +1,13 @@
 import { FilmsService } from '../../services/films/FilmsService';
-import { Film } from '../../interfaces/films/domain/Film';
-import { OrderingFields } from '../../enums/films/OrderingFields';
-import { OrderingModes } from '../../enums/films/OrderingModes';
+
+import { PaginationOptions } from '../../interfaces/options/PaginationOptions';
 
 /**
  * Function which checks if the current page is the last page possible.
- * @param lastFilmOnPage - Last film on the current page.
- * @param orderingField - Current ordering field.
- * @param orderingMode - Current ordering mode.
+ * @param options - Options to determine if page is last.
  */
-export const isLastPage = async(
-  lastFilmOnPage: Film,
-  orderingField: OrderingFields,
-  orderingMode: OrderingModes,
-): Promise<boolean> => {
-  const lastFilm = await FilmsService.fetchLastFilm(orderingField, orderingMode);
+export const isLastPage = async(options: PaginationOptions): Promise<boolean> => {
+  const lastFilm = await FilmsService.fetchLastFilm(options);
 
-  return lastFilm.pk === lastFilmOnPage.pk;
+  return lastFilm.pk === options.film.pk;
 };

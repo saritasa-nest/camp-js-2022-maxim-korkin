@@ -1,13 +1,13 @@
-import { deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where, QueryConstraint } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 import { OrderingFields } from '../../enums/films/OrderingFields';
-import { OrderingModes } from '../../enums/films/OrderingModes';
 import { Film } from '../../interfaces/films/domain/Film';
 import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { FilmMapper } from '../../mappers/FilmMapper';
+import { QueryConstraintParameters } from '../../interfaces/options/QueryConstraintParameters';
 
 /**
  * Default limit of films on page.
@@ -15,6 +15,29 @@ import { FilmMapper } from '../../mappers/FilmMapper';
 const DEFAULT_LIMIT_OF_FILMS = 2;
 
 /**
+ * Character to search for the first letters in the string.
+ */
+const SEARCH_SYMBOL = '~';
+
+/**
+ * Returns the query limits, including filtering, if applicable.
+ * @param options - Parameters for generating a query constraint.
+ * @returns Array with query constraint.
+ */
+function getQueryConstraint(options: QueryConstraintParameters):
+  QueryConstraint[] {
+  if (options.valueSearch) {
+    return [
+      where(OrderingFields.Title, '>=', options.valueSearch),
+      where(OrderingFields.Title, '<=', options.valueSearch + SEARCH_SYMBOL),
+      orderBy(OrderingFields.Title, options.orderingMode),
+    ];
+  }
+  return [orderBy(options.orderingField, options.orderingMode)];
+}
+
+/**
+ * Service class which helps to work with firestore DB.
  * Service class which helps to work with films in firestore DB.
  */
 export class FilmsService {
@@ -22,17 +45,20 @@ export class FilmsService {
 
   /**
    * Load certain amount of docs from the firestore ordering by a given field.
-   * @param orderingField - Field to order the results. Default value if 'pk'.
-   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param options - Parameters for generating a query constraint.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchFirstPageOfFilms(
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
+    options: QueryConstraintParameters,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const filmsQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(limitOfFilmsOnPage));
+    const queryConstraints: readonly QueryConstraint[] = [
+      limit(limitOfFilmsOnPage),
+      ...getQueryConstraint(options),
+    ];
+
+    const filmsQuery = query(FilmsService.filmsCollection, ...queryConstraints);
 
     const filmDocs = await getDocs(filmsQuery);
 
@@ -42,26 +68,29 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load next page.
    * @param lastVisibleFilm - Last film on the current page.
-   * @param orderingField - Field to order the results. Default value is 'pk'.
-   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param options - Parameters for generating a query constraint.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchNextPageOfFilms(
     lastVisibleFilm: Film,
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
+    options: QueryConstraintParameters,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const lastVisibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
+    const lastVisibleFilmQuery = options.valueSearch ?
+      query(FilmsService.filmsCollection, where(OrderingFields.Title, '==', lastVisibleFilm.title)) :
+      query(FilmsService.filmsCollection, where('pk', '==', lastVisibleFilm.pk));
 
     const lastVisibleFilmDoc = (await getDocs(lastVisibleFilmQuery)).docs[0];
 
+    const queryConstraints: readonly QueryConstraint[] = [
+      limit(limitOfFilmsOnPage),
+      ...getQueryConstraint(options),
+      startAfter(lastVisibleFilmDoc),
+    ];
     const filmsQuery = query(
       FilmsService.filmsCollection,
-      orderBy(orderingField, orderingMode),
-      limit(limitOfFilmsOnPage),
-      startAfter(lastVisibleFilmDoc),
+      ...queryConstraints,
     );
 
     const filmDocs = await getDocs(filmsQuery);
@@ -72,26 +101,29 @@ export class FilmsService {
   /**
    * Load certain amount of docs from the firestore ordering by a given field when the user wants to load previous page.
    * @param firstVisibleFilm - First film on the current page.
-   * @param orderingField - Field to order the results. Default value is 'pk'.
-   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param options - Parameters for generating a query constraint.
    * @param limitOfFilmsOnPage - Maximum count of films at a single page. Default value is 2.
    * @returns Array with films.
    */
   public static async fetchPrevPageOfFilms(
     firstVisibleFilm: Film,
-    orderingField: OrderingFields,
-    orderingMode: OrderingModes,
+    options: QueryConstraintParameters,
     limitOfFilmsOnPage = DEFAULT_LIMIT_OF_FILMS,
   ): Promise<Film[]> {
-    const firstVisibleFilmQuery = query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
-
+    const firstVisibleFilmQuery = options.valueSearch ?
+      query(FilmsService.filmsCollection, where(OrderingFields.Title, '==', firstVisibleFilm.title)) :
+      query(FilmsService.filmsCollection, where('pk', '==', firstVisibleFilm.pk));
     const firstVisibleFilmDoc = (await getDocs(firstVisibleFilmQuery)).docs[0];
+
+    const queryConstraints: readonly QueryConstraint[] = [
+      limitToLast(limitOfFilmsOnPage),
+      ...getQueryConstraint(options),
+      endBefore(firstVisibleFilmDoc),
+    ];
 
     const filmsQuery = query(
       FilmsService.filmsCollection,
-      orderBy(orderingField, orderingMode),
-      limitToLast(limitOfFilmsOnPage),
-      endBefore(firstVisibleFilmDoc),
+      ...queryConstraints,
     );
 
     const filmDocs = await getDocs(filmsQuery);
@@ -101,12 +133,21 @@ export class FilmsService {
 
   /**
    * Method for getting the last document from the collection ordered by the orderingField.
-   * @param orderingField - Field to order the results.
-   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param options - Parameters for generating a query constraint.
    * @returns Last film in the db.
    */
-  public static async fetchLastFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<Film> {
-    const lastFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limitToLast(1));
+  public static async fetchLastFilm(
+    options: QueryConstraintParameters,
+  ): Promise<Film> {
+    const queryConstraints: readonly QueryConstraint[] = [
+      ...getQueryConstraint(options),
+      limitToLast(1),
+    ];
+
+    const lastFilmQuery = query(
+      FilmsService.filmsCollection,
+      ...queryConstraints,
+    );
 
     const lastFilmSnapshot = await getDocs(lastFilmQuery);
 
@@ -115,12 +156,21 @@ export class FilmsService {
 
   /**
    * Method for getting the first document from the collection ordered by the orderingField.
-   * @param orderingField - Field to order the results.
-   * @param orderingMode - Indicates if order should be ascending or descending.
+   * @param options - Parameters for generating a query constraint.
    * @returns First film in the db.
    */
-  public static async fetchFirstFilm(orderingField: OrderingFields, orderingMode: OrderingModes): Promise<Film> {
-    const firstFilmQuery = query(FilmsService.filmsCollection, orderBy(orderingField, orderingMode), limit(1));
+  public static async fetchFirstFilm(
+    options: QueryConstraintParameters,
+  ): Promise<Film> {
+    const queryConstraints: readonly QueryConstraint[] = [
+      ...getQueryConstraint(options),
+      limit(1),
+    ];
+
+    const firstFilmQuery = query(
+      FilmsService.filmsCollection,
+      ...queryConstraints,
+    );
 
     const firstFilmSnapshot = await getDocs(firstFilmQuery);
 
