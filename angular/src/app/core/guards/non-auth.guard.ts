@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/AuthService/auth.service';
 
 /**
  * Guard which allows navigation to the routes for unauthenticated users only.

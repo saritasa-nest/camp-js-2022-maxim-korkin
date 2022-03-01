@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 
 import { AuthModule } from './features/auth/auth.module';
@@ -20,9 +21,11 @@ import { CommonSharedModule } from './shared/common-shared.module';
     BrowserAnimationsModule,
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
     provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
     CommonSharedModule,
     AuthModule,
   ],
+  providers: []
   bootstrap: [AppComponent],
 })
 export class AppModule { }

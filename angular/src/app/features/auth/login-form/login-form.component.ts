@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/core/services/AuthService/auth.service';
 import { AuthInfo } from 'src/app/core/models/AuthInfo';
 
 /**

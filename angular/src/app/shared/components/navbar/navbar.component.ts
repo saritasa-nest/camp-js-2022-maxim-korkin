@@ -1,6 +1,6 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/core/services/AuthService/auth.service';
 
 /**
  * Navbar component.

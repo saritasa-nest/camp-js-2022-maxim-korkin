@@ -1,4 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Film } from 'src/app/core/models/Film';
+import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 
 /**
  * Component for the films table.
@@ -9,7 +12,23 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./films-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilmsTableComponent {
+export class FilmsTableComponent implements OnInit {
 
-  public constructor() { }
+  /** Stream of films. */
+  public films$: Observable<Film[]>;
+
+  public constructor(
+    private readonly filmsService: FilmsService,
+  ) {
+    this.films$ = this.filmsService.fetchFilms();
+  }
+
+  /**
+   * @inheritdoc
+   */
+  public ngOnInit(): void {
+    this.films$.subscribe({
+      next: films => console.log(films),
+    });
+  }
 }
