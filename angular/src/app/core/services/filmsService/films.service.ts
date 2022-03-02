@@ -6,7 +6,7 @@ import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/Film';
 import { FilmDto } from '../mappers/dto/FilmDto/FilmDto';
-import { FilmMapper } from '../mappers/FilmMapper';
+import { FilmMapper } from '../mappers/FilmMapper.service';
 
 const FILMS_COLLECTION_NAME = 'films';
 
@@ -22,6 +22,7 @@ export class FilmsService {
 
   public constructor(
     private readonly firestore: Firestore,
+    private readonly filmMapper: FilmMapper,
   ) {
     this.filmsCollection = collection(this.firestore, FILMS_COLLECTION_NAME) as CollectionReference<FilmDto>;
   }
@@ -31,7 +32,7 @@ export class FilmsService {
    */
   public fetchFilms(): Observable<Film[]> {
     return collectionData<FilmDto>(this.filmsCollection).pipe(
-      map(films => films.map(film => FilmMapper.fromDto(film))),
+      map(films => films.map(film => this.filmMapper.fromDto(film))),
     );
   }
 }

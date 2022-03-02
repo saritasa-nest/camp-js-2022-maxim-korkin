@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 import { Film } from '../../models/Film';
 
 import { FilmDto } from './dto/FilmDto/FilmDto';
@@ -5,13 +7,16 @@ import { FilmDto } from './dto/FilmDto/FilmDto';
 /**
  * Class for mapping Film and FilmDto to each other.
  */
+@Injectable({
+  providedIn: 'root',
+})
 export class FilmMapper {
   /**
    * Method for mapping FIlmDto to Film.
    * @param dto - FilmDto object.
    * @returns - Film object.
    */
-  public static fromDto(dto: FilmDto): Film {
+  public fromDto(dto: FilmDto): Film {
     const { fields } = dto;
 
     return {
