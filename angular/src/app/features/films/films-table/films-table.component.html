@@ -1,1 +1,32 @@
-<p>films-table works!</p>
+<mat-table [dataSource]="films$">
+  <ng-container matColumnDef="Episode Id">
+    <mat-header-cell *matHeaderCellDef> Episode Id </mat-header-cell>
+    <mat-cell *matCellDef="let film"> {{film.episodeId}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="Title">
+    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+    <mat-cell *matCellDef="let film"> {{film.title}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="Release Date">
+    <mat-header-cell *matHeaderCellDef> Release date </mat-header-cell>
+    <mat-cell *matCellDef="let film"> {{film.releaseDate | date: 'dd.MM.yyyy'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="Producers">
+    <mat-header-cell *matHeaderCellDef> Producers </mat-header-cell>
+    <mat-cell *matCellDef="let film"> {{film.producers}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="Director">
+    <mat-header-cell *matHeaderCellDef> Director </mat-header-cell>
+    <mat-cell *matCellDef="let film"> {{film.director}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: tableHeaders"></mat-row>
+</mat-table>
+
+<button type="button" (click)="loadFilms(2)">prev</button>
+<button type="button" (click)="loadFilms(1)">next</button>
