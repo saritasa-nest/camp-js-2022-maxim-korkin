@@ -2,6 +2,7 @@ import { CollectionReference } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { collection, Firestore } from '@angular/fire/firestore';
+import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/Film';
 import { FilmDto } from '../mappers/dto/FilmDto/FilmDto';
@@ -25,7 +26,12 @@ export class FilmsService {
     this.filmsCollection = collection(this.firestore, FILMS_COLLECTION_NAME) as CollectionReference<FilmDto>;
   }
 
+  /**
+   * Method for fetching films.
+   */
   public fetchFilms(): Observable<Film[]> {
-    return this.filmsCollection
+    return collectionData<FilmDto>(this.filmsCollection).pipe(
+      map(films => films.map(film => FilmMapper.fromDto(film))),
+    );
   }
 }

@@ -25,7 +25,7 @@ import { CommonSharedModule } from './shared/common-shared.module';
     CommonSharedModule,
     AuthModule,
   ],
-  providers: []
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

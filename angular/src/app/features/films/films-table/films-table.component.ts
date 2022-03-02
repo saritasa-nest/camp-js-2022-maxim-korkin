@@ -27,8 +27,6 @@ export class FilmsTableComponent implements OnInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
-    this.films$.subscribe({
-      next: films => console.log(films),
-    });
+    this.films$.subscribe();
   }
 }

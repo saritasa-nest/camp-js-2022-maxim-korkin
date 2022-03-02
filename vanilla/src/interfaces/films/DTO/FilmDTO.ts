@@ -1,4 +1,4 @@
-import { FilmFieldsDto } from './FilmFieldsDto';
+import { FilmFieldsDto } from './FilmFieldsDTO';
 
 /**
  * Interface describing the film.
