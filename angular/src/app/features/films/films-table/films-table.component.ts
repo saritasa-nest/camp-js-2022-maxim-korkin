@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Film } from 'src/app/core/models/Film';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
-import { PaginationModes } from 'src/app/core/services/filmsService/PaginationModes';
+import { PaginationModes } from 'src/app/core/services/filmsService/enums/PaginationModes';
 
 /**
  * Component for the films table.
@@ -16,42 +16,32 @@ import { PaginationModes } from 'src/app/core/services/filmsService/PaginationMo
 export class FilmsTableComponent implements OnInit, OnDestroy {
 
   /** Stream of films. */
-  public films$: Observable<Film[]>;
+  public readonly films$: Observable<Film[]>;
 
   /** List of table headers. */
-  public tableHeaders = ['Episode Id', 'Title', 'Release Date', 'Producers', 'Director'];
-
-  private destroy$ = new Subject<void>();
+  public readonly tableHeaders = ['Episode Id', 'Title', 'Release Date', 'Producers', 'Director'];
 
   public constructor(
     private readonly filmsService: FilmsService,
   ) {
-    this.films$ = this.filmsService.fetchFilms(PaginationModes.INIT).pipe(
-      takeUntil(this.destroy$),
-    );
+    this.films$ = this.filmsService.films$;
   }
 
   public ngOnInit(): void {
-    this.films$.subscribe({
-      next: () => console.log('next'),
-      complete: () => console.log('complete'),
-    });
+    // this.films$.subscribe({
+    //   next: films => console.log(films),
+    //   complete: () => console.log('complete'),
+    // });
   }
 
   /**
    * @inheritdoc
    */
   public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.filmsService.resetFirstAndLastFilm();
   }
 
-  /**
-   * Next page of films.
-   */
-  public loadFilms(paginationMode: PaginationModes): void {
-    this.films$ = this.filmsService.fetchFilms(paginationMode).pipe(
-      takeUntil(this.destroy$),
-    );
+  public nextPage(): void {
+    this.filmsService.changePage(PaginationModes.NEXT);
   }
 }

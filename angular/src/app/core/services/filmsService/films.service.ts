@@ -1,6 +1,6 @@
-import { CollectionReference, orderBy, query, limit, Query, endAt, limitToLast, startAt } from 'firebase/firestore';
+import { CollectionReference, query } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
-import { Observable, map, tap, filter } from 'rxjs';
+import { Observable, map, BehaviorSubject, combineLatest, switchMap, tap } from 'rxjs';
 import { collection, Firestore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
@@ -8,11 +8,12 @@ import { Film } from '../../models/Film';
 import { FilmDto } from '../mappers/dto/FilmDto/FilmDto';
 import { FilmMapper } from '../mappers/FilmMapper.service';
 
-import { PaginationModes } from './PaginationModes';
+import { FilmsQueryConstraintsOptions } from './enums/FilmsQueryConstraintsOptions';
+import { getFilmsQueryConstraints } from './getFilmsQueryConstraints';
+import { SortingFields } from './enums/SortingFields';
+import { PaginationModes } from './enums/PaginationModes';
 
 const FILMS_COLLECTION_NAME = 'films';
-
-const COUNT_OF_FILMS_ON_THE_PAGE = 2;
 
 /**
  * Films service.
@@ -22,64 +23,76 @@ const COUNT_OF_FILMS_ON_THE_PAGE = 2;
 })
 export class FilmsService {
 
-  private readonly filmsCollection: CollectionReference<FilmDto>;
+  public readonly films$: Observable<Film[]>;
 
-  private lastVisibleFilm: Film | null = null;
+  public isLastPage$ = new BehaviorSubject(true);
+
+  public isFirstPage$ = new BehaviorSubject(true);
+
+  private readonly paginationMode$ = new BehaviorSubject<PaginationModes>(PaginationModes.NEXT);
+
+  private readonly sortingField$ = new BehaviorSubject<SortingFields>(SortingFields.EpisodeId);
 
   private firstVisibleFilm: Film | null = null;
 
-  private afterLastVisibleFilm: Film | null = null;
+  private lastVisibleFilm: Film | null = null;
 
-  private beforeFirstVisibleFilm: Film | null = null;
+  private readonly filmsCollection: CollectionReference<FilmDto>;
 
   public constructor(
     private readonly firestore: Firestore,
     private readonly filmMapper: FilmMapper,
   ) {
     this.filmsCollection = collection(this.firestore, FILMS_COLLECTION_NAME) as CollectionReference<FilmDto>;
+
+    this.films$ = combineLatest([this.paginationMode$, this.sortingField$]).pipe(
+      map(([paginationMode, sortingField]) => ({ paginationMode, sortingField, firstOrLastVisibleFilm: this.lastVisibleFilm })),
+      switchMap(options => this.fetchFilms(options)),
+    );
   }
 
   /**
    * Method for fetching films.
+   * @param constraints - Query constraints.
    */
-  public fetchFilms(paginationMode: PaginationModes): Observable<Film[]> {
-    let filmsQuery: Query<FilmDto>;
-    if (paginationMode === PaginationModes.INIT) {
-      filmsQuery = query(this.filmsCollection, orderBy('fields.episode_id'), limit(COUNT_OF_FILMS_ON_THE_PAGE + 1));
-      return collectionData<FilmDto>(filmsQuery).pipe(
-        map(films => films.map(film => this.filmMapper.fromDto(film))),
-        tap(films => {
-          if (films.length === 3) {
-            this.afterLastVisibleFilm = films[2];
-            this.lastVisibleFilm = films[1];
-            this.firstVisibleFilm = films[0];
-          }
-        }),
-        map(films => films.filter((film, index) => index !== 2)),
-      );
-    } else if (paginationMode === PaginationModes.NEXT) {
-      filmsQuery = query(this.filmsCollection,
-        orderBy('fields.episode_id'),
-        startAt(this.lastVisibleFilm?.episodeId),
-        limit(COUNT_OF_FILMS_ON_THE_PAGE + 2));
-    } else {
-      filmsQuery = query(this.filmsCollection,
-        orderBy('fields.episode_id'),
-        endAt(this.firstVisibleFilm?.episodeId),
-        limitToLast(COUNT_OF_FILMS_ON_THE_PAGE + 2));
-    }
-
+  public fetchFilms(constraints: FilmsQueryConstraintsOptions): Observable<Film[]> {
+    const filmsQuery = query(this.filmsCollection, ...getFilmsQueryConstraints(constraints));
     return collectionData<FilmDto>(filmsQuery).pipe(
       map(films => films.map(film => this.filmMapper.fromDto(film))),
       tap(films => {
-        if (films.length === 4) {
-          this.afterLastVisibleFilm = films[3];
-          this.lastVisibleFilm = films[2];
-          this.firstVisibleFilm = films[1];
-          this.beforeFirstVisibleFilm = films[0];
-        }
+        this.updatePaginationStatus(films.length, constraints.paginationMode);
+        this.updateFirstAndLastFilms(films);
       }),
-      map(films => films.filter((film, index) => index !== 0 && index !== 3)),
+      map(films => films.slice(0, -1)),
     );
+  }
+
+  /**
+   *
+   * @param paginationMode
+   */
+  public changePage(paginationMode: PaginationModes): void {
+    this.paginationMode$.next(paginationMode);
+  }
+
+  public resetFirstAndLastFilm(): void {
+    this.firstVisibleFilm = null;
+    this.lastVisibleFilm = null;
+  }
+
+  private updatePaginationStatus(countOfFilms: number, paginationMode: PaginationModes): void {
+    if (countOfFilms !== 3) {
+      if (paginationMode === PaginationModes.NEXT) {
+        this.isLastPage$.next(true);
+      } else {
+        this.isFirstPage$.next(true);
+      }
+    }
+  }
+
+  private updateFirstAndLastFilms(films: Film[]): void {
+    this.firstVisibleFilm = films[0];
+
+    this.lastVisibleFilm = films[1];
   }
 }
