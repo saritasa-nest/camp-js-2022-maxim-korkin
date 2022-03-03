@@ -8,18 +8,21 @@ import { Film } from '../../models/Film';
 import { FilmDto } from '../mappers/dto/FilmDto/FilmDto';
 import { FilmMapper } from '../mappers/FilmMapper.service';
 
+import { SortingDirections } from './enums/SortingDirections';
+
+import { SortingOptions } from './enums/SortingOptions';
 import { FirstAndLastVisibleFilms } from './enums/FirstAndLastVisibleFilms';
 import { FilmsQueryConstraintsOptions } from './enums/FilmsQueryConstraintsOptions';
 import { getFilmsQueryConstraints } from './getFilmsQueryConstraints';
-import { SortingFields } from './enums/SortingFields';
 import { PaginationModes } from './enums/PaginationModes';
+import { SortingFields } from './enums/SortingFields';
 
 const FILMS_COLLECTION_NAME = 'films';
 
 /**
  * Maximum count of films on a single page.
  */
-const COUNT_OF_FILMS_ON_PAGE = 2;
+const COUNT_OF_FILMS_ON_PAGE = 3;
 
 /**
  * Count of fetched films which shows that there is next or previous page.
@@ -45,7 +48,9 @@ export class FilmsService {
 
   private readonly paginationMode$ = new BehaviorSubject<PaginationModes>(PaginationModes.NEXT);
 
-  private readonly sortingField$ = new BehaviorSubject<SortingFields>(SortingFields.EpisodeId);
+  private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(
+    { sortingField: SortingFields.EpisodeId, direction: SortingDirections.ASCENDING },
+  );
 
   /** Null if this is the first page loading. */
   private firstAndLastVisibleFilms: FirstAndLastVisibleFilms | null = null;
@@ -58,10 +63,10 @@ export class FilmsService {
   ) {
     this.filmsCollection = collection(this.firestore, FILMS_COLLECTION_NAME) as CollectionReference<FilmDto>;
 
-    this.films$ = combineLatest([this.paginationMode$, this.sortingField$]).pipe(
-      map(([paginationMode, sortingField]) => ({
+    this.films$ = combineLatest([this.paginationMode$, this.sortingOptions$]).pipe(
+      map(([paginationMode, sortingOptions]) => ({
           paginationMode,
-          sortingField,
+          sortingOptions,
           firstAndLastVisibleFilms: this.firstAndLastVisibleFilms,
           countOfFilmsOnPage: COUNT_OF_FILMS_ON_PAGE,
       })),
@@ -102,6 +107,16 @@ export class FilmsService {
     this.firstAndLastVisibleFilms = null;
     this.isLastPage$.next(true);
     this.isFirstPage$.next(true);
+  }
+
+  /**
+   * Method for changing sorting options.
+   * @param options - New options.
+   */
+  public changeSorting(options: SortingOptions): void {
+    this.resetPagination();
+    this.paginationMode$.next(PaginationModes.NEXT);
+    this.sortingOptions$.next(options);
   }
 
   /**

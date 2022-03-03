@@ -1,6 +1,6 @@
+import { SortingOptions } from './SortingOptions';
 import { FirstAndLastVisibleFilms } from './FirstAndLastVisibleFilms';
 import { PaginationModes } from './PaginationModes';
-import { SortingFields } from './SortingFields';
 
 /**
  * Films query constraints options.
@@ -8,7 +8,7 @@ import { SortingFields } from './SortingFields';
 export interface FilmsQueryConstraintsOptions {
 
   /** Sorting field. */
-  readonly sortingField: SortingFields;
+  readonly sortingOptions: SortingOptions;
 
   /** Pagination mode. */
   readonly paginationMode: PaginationModes;

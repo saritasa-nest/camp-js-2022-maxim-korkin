@@ -1,16 +1,34 @@
-<mat-table [dataSource]="films$">
+<mat-table matSort [dataSource]="films$" (matSortChange)="sortChange($event)">
   <ng-container matColumnDef="Episode Id">
-    <mat-header-cell *matHeaderCellDef> Episode Id </mat-header-cell>
+    <mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by episode ID"
+    >
+      Episode Id
+    </mat-header-cell>
     <mat-cell *matCellDef="let film"> {{ film.episodeId }} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="Title">
-    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+    <mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by title"
+    >
+      Title
+    </mat-header-cell>
     <mat-cell *matCellDef="let film"> {{ film.title }} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="Release Date">
-    <mat-header-cell *matHeaderCellDef> Release date </mat-header-cell>
+    <mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by release date"
+    >
+      Release date
+    </mat-header-cell>
     <mat-cell *matCellDef="let film">
       {{ film.releaseDate | date: "dd.MM.yyyy" }}
     </mat-cell>
@@ -22,7 +40,13 @@
   </ng-container>
 
   <ng-container matColumnDef="Director">
-    <mat-header-cell *matHeaderCellDef> Director </mat-header-cell>
+    <mat-header-cell
+      *matHeaderCellDef
+      mat-sort-header
+      sortActionDescription="Sort by director name"
+    >
+      Director
+    </mat-header-cell>
     <mat-cell *matCellDef="let film"> {{ film.director }} </mat-cell>
   </ng-container>
 

@@ -4,6 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
@@ -11,6 +12,7 @@ const MATERIAL_MODULES = [
   MatButtonModule,
   MatToolbarModule,
   MatTableModule,
+  MatSortModule,
 ];
 
 /**

@@ -11,12 +11,16 @@ import { SortingFields } from './enums/SortingFields';
  * @param film - Film to get value from.
  * @param sortingField - Field we are sorting by.
  */
-function getSortingFieldValue(film: Film, sortingField: SortingFields): unknown {
+function getSortingFieldValue(film: Film, sortingField: SortingFields): string | number {
   switch (sortingField) {
     case SortingFields.EpisodeId:
       return film.episodeId;
     case SortingFields.Title:
       return film.title;
+    case SortingFields.ReleaseDate:
+      return film.releaseDate.toISOString().slice(0, 10);
+    case SortingFields.Director:
+      return film.director;
     default:
       return film.episodeId;
   }
@@ -27,25 +31,25 @@ function getSortingFieldValue(film: Film, sortingField: SortingFields): unknown 
  * @param param0 - Object with values for constraints.
  */
 export function getFilmsQueryConstraints(
-  { sortingField, paginationMode, firstAndLastVisibleFilms, countOfFilmsOnPage }: FilmsQueryConstraintsOptions,
+  { sortingOptions, paginationMode, firstAndLastVisibleFilms, countOfFilmsOnPage }: FilmsQueryConstraintsOptions,
 ): QueryConstraint[] {
   const queryConstraints: QueryConstraint[] = [];
 
-  queryConstraints.push(orderBy(sortingField));
+  queryConstraints.push(orderBy(sortingOptions.sortingField, sortingOptions.direction));
 
   /** If firstAndLastVisibleFilms is equals to null then this is the first page loading.
-   * and we do not need to add startAfter or endBefore constraint */
+   * and we do not need to add startAfter or endBefore constraints */
   if (firstAndLastVisibleFilms === null) {
-    /** Adding + 1 to know if there is next or previous page. */
+    /** + 1 to know if there is next or previous page. */
     queryConstraints.push(limit(countOfFilmsOnPage + 1));
     return queryConstraints;
   }
 
   if (paginationMode === PaginationModes.NEXT) {
-    queryConstraints.push(startAfter(getSortingFieldValue(firstAndLastVisibleFilms.lastVisibleFilm, sortingField)));
+    queryConstraints.push(startAfter(getSortingFieldValue(firstAndLastVisibleFilms.lastVisibleFilm, sortingOptions.sortingField)));
     queryConstraints.push(limit(countOfFilmsOnPage + 1));
   } else if (paginationMode === PaginationModes.PREVIOUS) {
-    queryConstraints.push(endBefore(getSortingFieldValue(firstAndLastVisibleFilms.firstVisibleFilm, sortingField)));
+    queryConstraints.push(endBefore(getSortingFieldValue(firstAndLastVisibleFilms.firstVisibleFilm, sortingOptions.sortingField)));
     queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
   }
 
