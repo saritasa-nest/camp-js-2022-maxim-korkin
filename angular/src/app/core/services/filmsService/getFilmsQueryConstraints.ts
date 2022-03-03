@@ -27,22 +27,26 @@ function getSortingFieldValue(film: Film, sortingField: SortingFields): unknown 
  * @param param0 - Object with values for constraints.
  */
 export function getFilmsQueryConstraints(
-  { sortingField, paginationMode, firstOrLastVisibleFilm }: FilmsQueryConstraintsOptions,
+  { sortingField, paginationMode, firstAndLastVisibleFilms, countOfFilmsOnPage }: FilmsQueryConstraintsOptions,
 ): QueryConstraint[] {
   const queryConstraints: QueryConstraint[] = [];
 
   queryConstraints.push(orderBy(sortingField));
 
+  /** If firstAndLastVisibleFilms is equals to null then this is the first page loading.
+   * and we do not need to add startAfter or endBefore constraint */
+  if (firstAndLastVisibleFilms === null) {
+    /** Adding + 1 to know if there is next or previous page. */
+    queryConstraints.push(limit(countOfFilmsOnPage + 1));
+    return queryConstraints;
+  }
+
   if (paginationMode === PaginationModes.NEXT) {
-    queryConstraints.push(limit(3));
-    if (firstOrLastVisibleFilm !== null) {
-      queryConstraints.push(startAfter(getSortingFieldValue(firstOrLastVisibleFilm, sortingField)));
-    }
+    queryConstraints.push(startAfter(getSortingFieldValue(firstAndLastVisibleFilms.lastVisibleFilm, sortingField)));
+    queryConstraints.push(limit(countOfFilmsOnPage + 1));
   } else if (paginationMode === PaginationModes.PREVIOUS) {
-    queryConstraints.push(limitToLast(3));
-    if (firstOrLastVisibleFilm !== null) {
-      queryConstraints.push(endBefore(getSortingFieldValue(firstOrLastVisibleFilm, sortingField)));
-    }
+    queryConstraints.push(endBefore(getSortingFieldValue(firstAndLastVisibleFilms.firstVisibleFilm, sortingField)));
+    queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
   }
 
   return queryConstraints;

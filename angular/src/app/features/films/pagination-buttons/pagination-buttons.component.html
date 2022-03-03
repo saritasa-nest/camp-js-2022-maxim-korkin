@@ -1,0 +1,20 @@
+<div>
+  <button
+    mat-stroked-button
+    class="pagination-button"
+    type="button"
+    (click)="prevPage()"
+    [disabled]="isFirstPage$ | async"
+  >
+    Prev
+  </button>
+  <button
+    mat-stroked-button
+    class="pagination-button"
+    type="button"
+    (click)="nextPage()"
+    [disabled]="isLastPage$ | async"
+  >
+    Next
+  </button>
+</div>
