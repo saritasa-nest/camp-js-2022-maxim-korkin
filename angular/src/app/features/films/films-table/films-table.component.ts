@@ -21,6 +21,9 @@ export class FilmsTableComponent implements OnDestroy {
   /** Stream of films. */
   public readonly films$ = this.filmsService.films$;
 
+  /** Shows if we are searching or not. Used for disabling sorting field changing. */
+  public readonly isSearching$ = this.filmsService.isSearching$;
+
   /** List of table headers. */
   public readonly tableHeaders = ['Episode Id', 'Title', 'Release Date', 'Producers', 'Director'];
 
@@ -92,6 +95,7 @@ export class FilmsTableComponent implements OnDestroy {
     return {
       sortingField,
       direction,
+      searchingValue: '',
     };
   }
 }

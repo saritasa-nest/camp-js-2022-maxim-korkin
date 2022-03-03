@@ -37,19 +37,22 @@ const COUNT_OF_FILMS_FOR_NEXT_PAGE = COUNT_OF_FILMS_ON_PAGE + 1;
 })
 export class FilmsService {
 
-  /** Stream of films. */
+  /** Films on the current page. */
   public readonly films$: Observable<Film[]>;
 
-  /** Stream showing if the current page is the last one. */
+  /** Shows if the current page is the last one. */
   public isLastPage$ = new BehaviorSubject(true);
 
-  /** Stream showing if the current page is the first one. */
+  /** Shows if the current page is the first one. */
   public isFirstPage$ = new BehaviorSubject(true);
+
+  /** Shows if we are searching or not. */
+  public isSearching$ = new BehaviorSubject(false);
 
   private readonly paginationMode$ = new BehaviorSubject<PaginationModes>(PaginationModes.NEXT);
 
   private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(
-    { sortingField: SortingFields.EpisodeId, direction: SortingDirections.ASCENDING },
+    { sortingField: SortingFields.EpisodeId, direction: SortingDirections.ASCENDING, searchingValue: '' },
   );
 
   /** Null if this is the first page loading. */
@@ -120,6 +123,24 @@ export class FilmsService {
   }
 
   /**
+   * Method for search by title.
+   * @param searchingValue - Value to search.
+   */
+  public searchByTitle(searchingValue: string): void {
+    this.resetPagination();
+    this.sortingOptions$.next({
+      sortingField: SortingFields.Title,
+      direction: 'asc',
+      searchingValue,
+    });
+    if (searchingValue !== '') {
+      this.isSearching$.next(true);
+    } else {
+      this.isSearching$.next(false);
+    }
+  }
+
+  /**
    * Method used as a side-effect in film fetching. Checks if this is first or last page.
    * @param countOfFilms - Count of fetched films.
    * @param paginationMode - Pagination mode.
@@ -146,7 +167,6 @@ export class FilmsService {
       firstVisibleFilm: films[0],
       lastVisibleFilm: films.slice(-1)[0],
     };
-
   }
 
   /**

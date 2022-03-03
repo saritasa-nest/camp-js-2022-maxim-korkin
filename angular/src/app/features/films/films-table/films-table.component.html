@@ -1,4 +1,11 @@
-<mat-table matSort [dataSource]="films$" (matSortChange)="sortChange($event)">
+<sw-searching-input></sw-searching-input>
+<mat-table
+  matSort
+  [dataSource]="films$"
+  (matSortChange)="sortChange($event)"
+  [matSortDisabled]="isSearching$ | async"
+  matSortDisableClear="true"
+>
   <ng-container matColumnDef="Episode Id">
     <mat-header-cell
       *matHeaderCellDef

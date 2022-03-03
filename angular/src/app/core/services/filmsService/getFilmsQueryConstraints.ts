@@ -1,4 +1,4 @@
-import { QueryConstraint, orderBy, limit, limitToLast, startAfter, endBefore } from 'firebase/firestore';
+import { QueryConstraint, orderBy, limit, limitToLast, startAfter, endBefore, where } from 'firebase/firestore';
 
 import { Film } from '../../models/Film';
 
@@ -28,7 +28,10 @@ function getSortingFieldValue(film: Film, sortingField: SortingFields): string |
 
 /**
  * Function for getting QueryConstraints array for films fetching.
- * @param param0 - Object with values for constraints.
+ * @param sortingOptions - Options used for sorting results.
+ * @param paginationMode - Either next or previous. Next is also used for fetching the very first page.
+ * @param firstAndLastVisibleFilms - Object with first and last films on the current page which are used to get next or previous page.
+ * @param countOfFilmsOnPage - Count of films on the single page.
  */
 export function getFilmsQueryConstraints(
   { sortingOptions, paginationMode, firstAndLastVisibleFilms, countOfFilmsOnPage }: FilmsQueryConstraintsOptions,
@@ -37,10 +40,16 @@ export function getFilmsQueryConstraints(
 
   queryConstraints.push(orderBy(sortingOptions.sortingField, sortingOptions.direction));
 
+  if (sortingOptions.searchingValue !== '') {
+    const veryBigSymbol = '\uf8ff';
+    queryConstraints.push(where(sortingOptions.sortingField, '>=', sortingOptions.searchingValue));
+    queryConstraints.push(where(sortingOptions.sortingField, '<=', `${sortingOptions.searchingValue}${veryBigSymbol}`));
+  }
+
   /** If firstAndLastVisibleFilms is equals to null then this is the first page loading.
    * and we do not need to add startAfter or endBefore constraints */
   if (firstAndLastVisibleFilms === null) {
-    /** + 1 to know if there is next or previous page. */
+    /** + 1 to know if there is next page. */
     queryConstraints.push(limit(countOfFilmsOnPage + 1));
     return queryConstraints;
   }
