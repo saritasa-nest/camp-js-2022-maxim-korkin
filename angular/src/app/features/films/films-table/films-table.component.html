@@ -1,4 +1,6 @@
-<sw-searching-input></sw-searching-input>
+<sw-searching-input
+  [setTitleSorting]="this.setTitleSorting.bind(this)"
+></sw-searching-input>
 <mat-table
   matSort
   [dataSource]="films$"

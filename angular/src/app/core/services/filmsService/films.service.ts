@@ -104,12 +104,13 @@ export class FilmsService {
   }
 
   /**
-   * Method for resetting values used for pagination.
+   * Method for resetting to default values.
    */
-  public resetPagination(): void {
+  public reset(): void {
     this.firstAndLastVisibleFilms = null;
     this.isLastPage$.next(true);
     this.isFirstPage$.next(true);
+    this.isSearching$.next(false);
   }
 
   /**
@@ -117,7 +118,7 @@ export class FilmsService {
    * @param options - New options.
    */
   public changeSorting(options: SortingOptions): void {
-    this.resetPagination();
+    this.reset();
     this.paginationMode$.next(PaginationModes.NEXT);
     this.sortingOptions$.next(options);
   }
@@ -127,7 +128,7 @@ export class FilmsService {
    * @param searchingValue - Value to search.
    */
   public searchByTitle(searchingValue: string): void {
-    this.resetPagination();
+    this.reset();
     this.sortingOptions$.next({
       sortingField: SortingFields.Title,
       direction: 'asc',

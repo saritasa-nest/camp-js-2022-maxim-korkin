@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
@@ -22,6 +22,14 @@ export class SearchingInputComponent implements OnInit, OnDestroy {
     distinctUntilChanged(),
   );
 
+  /**
+   * Method for changing current sorting for ascending title.
+   */
+  @Input()
+  public setTitleSorting = (): void => {
+    console.error('Something went wrong with table headers on searching');
+  };
+
   private destroy$ = new Subject<void>();
 
   public constructor(
@@ -33,7 +41,10 @@ export class SearchingInputComponent implements OnInit, OnDestroy {
    */
   public ngOnInit(): void {
     this.searchChange$.subscribe({
-      next: value => this.filmsService.searchByTitle(value),
+      next: value => {
+        this.setTitleSorting();
+        this.filmsService.searchByTitle(value);
+      },
     });
   }
 

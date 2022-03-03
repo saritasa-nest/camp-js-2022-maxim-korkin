@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { Sort } from '@angular/material/sort';
+import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
+import { MatSort, Sort } from '@angular/material/sort';
 import { SortingFields } from 'src/app/core/services/filmsService/enums/SortingFields';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 
@@ -37,6 +37,9 @@ export class FilmsTableComponent implements OnDestroy {
 
   private readonly directorHeader = 'director';
 
+  @ViewChild(MatSort)
+  private readonly filmsSort!: MatSort;
+
   public constructor(
     private readonly filmsService: FilmsService,
   ) {}
@@ -45,7 +48,7 @@ export class FilmsTableComponent implements OnDestroy {
    * @inheritdoc
    */
   public ngOnDestroy(): void {
-    this.filmsService.resetPagination();
+    this.filmsService.reset();
   }
 
   /**
@@ -54,8 +57,15 @@ export class FilmsTableComponent implements OnDestroy {
    */
   public sortChange(sortState: Sort): void {
     const sortingOptions = this.parseSortStateIntoSortingOptions(sortState);
-
     this.filmsService.changeSorting(sortingOptions);
+  }
+
+  /**
+   * Method changes current sorting for ascending title.
+   */
+  public setTitleSorting(): void {
+    this.filmsSort.active = this.titleHeader;
+    this.filmsSort.direction = 'asc';
   }
 
   private parseSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
