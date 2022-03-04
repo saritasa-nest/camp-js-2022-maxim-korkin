@@ -1,7 +1,6 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { FilmsService } from 'src/app/core/services/filmsService/films.service';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 /**
  * Searching input component.
@@ -14,27 +13,19 @@ import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 })
 export class SearchingInputComponent implements OnDestroy {
 
+  private destroy$ = new Subject<void>();
+
   /** Form control for searching input. */
   public readonly searchInput = new FormControl('');
 
-  private searchChange$ = this.searchInput.valueChanges.pipe(
+  /** Title searching value. */
+  public searchChange$ = this.searchInput.valueChanges.pipe(
     debounceTime(500),
     distinctUntilChanged(),
+    takeUntil(this.destroy$),
   );
 
-  /**
-   * Method for changing current sorting for ascending title.
-   */
-  @Input()
-  public setTitleSorting = (): void => {
-    console.error('Something went wrong with table headers on searching');
-  };
-
-  private destroy$ = new Subject<void>();
-
-  public constructor(
-    private readonly filmsService: FilmsService,
-  ) { }
+  public constructor() { }
 
   /**
    * @inheritdoc

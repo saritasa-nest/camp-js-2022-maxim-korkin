@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, withLatestFrom, auditTime, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, withLatestFrom, auditTime } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { SortingFields } from 'src/app/core/utils/enums/SortingFields';
@@ -6,6 +6,7 @@ import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { Film } from 'src/app/core/models/Film';
 import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
 
+import { SearchingInputComponent } from '../searching-input/searching-input.component';
 import { SortingOptions } from '../../../core/utils/interfaces/SortingOptions';
 import { PaginationButtonsComponent } from '../pagination-buttons/pagination-buttons.component';
 
@@ -18,6 +19,8 @@ const COUNT_OF_FILMS_ON_PAGE = 3;
  * Count of fetched films which shows that there is next or previous page.
  */
 const COUNT_OF_FILMS_FOR_NEXT_PAGE = COUNT_OF_FILMS_ON_PAGE + 1;
+
+const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: SortingFields.EpisodeId, direction: 'asc' };
 
 /**
  * Component for the films table.
@@ -39,9 +42,11 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   /** Shows if the current page is the first one. */
   public readonly isFirstPage$ = new BehaviorSubject<boolean>(true);
 
-  private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>({ sortingField: SortingFields.EpisodeId, direction: 'asc' });
+  private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(DEFAULT_SORTING_OPTIONS);
 
   private readonly paginationMode$ = new Subject<PaginationModes>();
+
+  private readonly searchingValue$ = new Subject<string>();
 
   private firstVisibleFilm: Film | null = null;
 
@@ -50,21 +55,25 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(PaginationButtonsComponent)
   private readonly paginationButtons!: PaginationButtonsComponent;
 
+  @ViewChild(SearchingInputComponent)
+  private readonly searchingInput!: SearchingInputComponent;
+
   /** Films on the current page. */
   public readonly films$ = combineLatest(
-    [this.sortingOptions$, this.paginationMode$],
+    [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
   ).pipe(
     auditTime(1),
-    map(([sortingOptions, paginationMode]) => (
+    map(([sortingOptions, paginationMode, searchingValue]) => (
       {
         sortingOptions,
         paginationMode,
         lastVisibleFilm: this.lastVisibleFilm,
         firstVisibleFilm: this.firstVisibleFilm,
         countOfFilmsOnPage: COUNT_OF_FILMS_ON_PAGE,
-        titleSearchingValue: '',
+        titleSearchingValue: searchingValue,
       }
     )),
+    tap(fetchOptions => this.isSearching$.next(fetchOptions.titleSearchingValue !== '')),
     switchMap(fetchOptions => this.filmsService.fetchFilms(fetchOptions)),
     withLatestFrom(this.paginationMode$),
     tap(([films, paginationMode]) => this.updatePaginationStatus(films.length, paginationMode)),
@@ -81,8 +90,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly producersHeader = 'Producers';
 
   private readonly directorHeader = 'Director';
-
-  private sortingOptionsSubscription!: Subscription;
 
   /** List of table headers. */
   public readonly tableHeaders = [
@@ -104,7 +111,17 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
-    this.sortingOptionsSubscription = this.sortingOptions$.subscribe({
+    this.sortingOptions$.subscribe({
+      next: () => {
+        this.firstVisibleFilm = null;
+        this.lastVisibleFilm = null;
+        this.paginationMode$.next(PaginationModes.NEXT);
+        this.isFirstPage$.next(true);
+        this.isLastPage$.next(true);
+      },
+    });
+
+    this.searchingValue$.subscribe({
       next: () => {
         this.firstVisibleFilm = null;
         this.lastVisibleFilm = null;
@@ -119,7 +136,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnDestroy(): void {
-    this.sortingOptionsSubscription.unsubscribe();
     this.isSearching$.complete();
     this.isLastPage$.complete();
     this.isFirstPage$.complete();
@@ -132,6 +148,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public ngAfterViewInit(): void {
     this.paginationButtons.paginationMode$.subscribe(this.paginationMode$);
+    this.searchingInput.searchChange$.subscribe(this.searchingValue$);
   }
 
   /**
