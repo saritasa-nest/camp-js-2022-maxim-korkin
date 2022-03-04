@@ -14,7 +14,4 @@ export class RegisterFormComponent {
 
   /** Auth type of this form. */
   public readonly authType = AuthTypes.SignUp;
-
-  public constructor(
-  ) { }
 }
