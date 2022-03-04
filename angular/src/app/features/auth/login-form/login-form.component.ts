@@ -13,5 +13,5 @@ import { AuthTypes } from '../AuthTypes';
 export class LoginFormComponent {
 
   /** Auth type of this form. */
-  public readonly authType = AuthTypes.SignUp;
+  public readonly authType = AuthTypes.SignIn;
 }
