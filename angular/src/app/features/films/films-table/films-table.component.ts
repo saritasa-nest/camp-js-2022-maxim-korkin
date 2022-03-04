@@ -46,7 +46,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly paginationMode$ = new Subject<PaginationModes>();
 
-  private readonly searchingValue$ = new Subject<string>();
+  private readonly searchingValue$ = new BehaviorSubject<string>('');
 
   private firstVisibleFilm: Film | null = null;
 
@@ -73,7 +73,17 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         titleSearchingValue: searchingValue,
       }
     )),
-    tap(fetchOptions => this.isSearching$.next(fetchOptions.titleSearchingValue !== '')),
+    tap(fetchOptions => {
+
+      if (fetchOptions.titleSearchingValue !== '') {
+        this.isSearching$.next(true);
+        this.setSortingHeaders(SortingFields.Title, 'asc');
+      } else {
+        const { sortingField, direction } = fetchOptions.sortingOptions;
+        this.isSearching$.next(false);
+        this.setSortingHeaders(sortingField, direction);
+      }
+    }),
     switchMap(fetchOptions => this.filmsService.fetchFilms(fetchOptions)),
     withLatestFrom(this.paginationMode$),
     tap(([films, paginationMode]) => this.updatePaginationStatus(films.length, paginationMode)),
@@ -101,7 +111,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   ];
 
   @ViewChild(MatSort)
-  private readonly filmsSort!: MatSort;
+  private readonly filmsSortHeaders!: MatSort;
 
   public constructor(
     private readonly filmsService: FilmsService,
@@ -141,6 +151,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isFirstPage$.complete();
     this.sortingOptions$.complete();
     this.paginationMode$.complete();
+    this.searchingValue$.complete();
   }
 
   /**
@@ -156,16 +167,18 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param sortState - New sort state.
    */
   public sortChange(sortState: Sort): void {
-    const newSortingOptions = this.parseSortStateIntoSortingOptions(sortState);
+    const newSortingOptions = this.mapSortStateIntoSortingOptions(sortState);
     this.sortingOptions$.next(newSortingOptions);
   }
 
   /**
-   * Method changes current sorting for ascending title.
+   * Method changes current sorting view. Used as a side effect at films fetching to change sorting view to title when searching.
+   * @param active - New active header.
+   * @param direction - New direction.
    */
-  public setTitleSorting(): void {
-    this.filmsSort.active = this.titleHeader;
-    this.filmsSort.direction = 'asc';
+  public setSortingHeaders(active: SortingFields, direction: 'asc' | 'desc'): void {
+    this.filmsSortHeaders.active = this.mapSortingFieldToHeader(active);
+    this.filmsSortHeaders.direction = direction;
   }
 
   /**
@@ -210,24 +223,8 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.lastVisibleFilm = films.slice(-1)[0];
   }
 
-  private parseSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
-    let sortingField: SortingFields;
-    switch (sortState.active) {
-      case this.episodeIdHeader:
-        sortingField = SortingFields.EpisodeId;
-        break;
-      case this.titleHeader:
-        sortingField = SortingFields.Title;
-        break;
-      case this.releaseDateHeader:
-        sortingField = SortingFields.ReleaseDate;
-        break;
-      case this.directorHeader:
-        sortingField = SortingFields.Director;
-        break;
-      default:
-        sortingField = SortingFields.EpisodeId;
-    }
+  private mapSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
+    let sortingField = this.mapHeaderToSortingField(sortState.active);
 
     let direction: 'asc' | 'desc';
     switch (sortState.direction) {
@@ -238,7 +235,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         direction = 'desc';
         break;
       default:
-        /** MatSort direction is equal to '' when we dont want to sort by specific field.
+        /** MatSort direction is equal to '' when we dont sort by specific field.
          * so use default values. */
         sortingField = SortingFields.EpisodeId;
         direction = 'asc';
@@ -248,5 +245,35 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       sortingField,
       direction,
     };
+  }
+
+  private mapHeaderToSortingField(headerName: string): SortingFields {
+    switch (headerName) {
+      case this.episodeIdHeader:
+        return SortingFields.EpisodeId;
+      case this.titleHeader:
+        return SortingFields.Title;
+      case this.releaseDateHeader:
+        return SortingFields.ReleaseDate;
+      case this.directorHeader:
+        return SortingFields.Director;
+      default:
+        return SortingFields.EpisodeId;
+    }
+  }
+
+  private mapSortingFieldToHeader(sortingField: SortingFields): string {
+    switch (sortingField) {
+      case SortingFields.Director:
+        return this.directorHeader;
+      case SortingFields.EpisodeId:
+        return this.episodeIdHeader;
+      case SortingFields.ReleaseDate:
+        return this.releaseDateHeader;
+      case SortingFields.Title:
+        return this.titleHeader;
+      default:
+        return this.episodeIdHeader;
+    }
   }
 }

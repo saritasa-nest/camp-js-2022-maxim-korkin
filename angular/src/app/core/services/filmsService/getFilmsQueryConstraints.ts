@@ -41,8 +41,8 @@ export function getFilmsQueryConstraints(
     queryConstraints.push(orderBy(SortingFields.Title, 'asc'));
 
     const veryBigSymbol = '\uf8ff';
-    queryConstraints.push(where(sortingOptions.sortingField, '>=', titleSearchingValue));
-    queryConstraints.push(where(sortingOptions.sortingField, '<=', `${titleSearchingValue}${veryBigSymbol}`));
+    queryConstraints.push(where(SortingFields.Title, '>=', titleSearchingValue));
+    queryConstraints.push(where(SortingFields.Title, '<=', `${titleSearchingValue}${veryBigSymbol}`));
 
     if (firstVisibleFilm === null || lastVisibleFilm === null) {
       /** + 1 to know if there is next page. */
@@ -51,10 +51,10 @@ export function getFilmsQueryConstraints(
     }
 
     if (paginationMode === PaginationModes.NEXT) {
-      queryConstraints.push(startAfter(getSortingFieldValue(lastVisibleFilm, sortingOptions.sortingField)));
+      queryConstraints.push(startAfter(getSortingFieldValue(lastVisibleFilm, SortingFields.Title)));
       queryConstraints.push(limit(countOfFilmsOnPage + 1));
     } else if (paginationMode === PaginationModes.PREVIOUS) {
-      queryConstraints.push(endBefore(getSortingFieldValue(firstVisibleFilm, sortingOptions.sortingField)));
+      queryConstraints.push(endBefore(getSortingFieldValue(firstVisibleFilm, SortingFields.Title)));
       queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
     }
 
