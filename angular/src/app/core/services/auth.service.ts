@@ -14,7 +14,7 @@ import { FirebaseAuthErrors } from './FirebaseAuthErrors';
 export class AuthService {
 
   /**
-   * Stream showing if the user is signed in or not.
+   * Shows if the user is signed in or not.
    */
   public readonly isSignedIn$: Observable<boolean>;
 
@@ -64,7 +64,6 @@ export class AuthService {
   private handleSignInError(error: FirebaseError): Observable<Error> {
     switch (error.code) {
       case FirebaseAuthErrors.WrongEmail:
-        return throwError(() => new Error('Incorrect email of password'));
       case FirebaseAuthErrors.WrongPassword:
         return throwError(() => new Error('Incorrect email of password'));
       case FirebaseAuthErrors.TooManyLogInAttempts:

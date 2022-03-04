@@ -36,7 +36,7 @@ export class AuthFormComponent {
   /**
    * Authentication form group.
    */
-  public authForm = this.formBuilder.group({
+  public readonly authForm = this.formBuilder.group({
     email: [
       '',
       [
