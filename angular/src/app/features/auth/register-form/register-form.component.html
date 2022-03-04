@@ -1,5 +1,1 @@
-<sw-auth-form
-  (submitEvent)="onSubmit($event)"
-  [error]="registerError$ | async"
-  formHeader="Register"
-></sw-auth-form>
+<sw-auth-form formHeader="Register" [authType]="authType"></sw-auth-form>

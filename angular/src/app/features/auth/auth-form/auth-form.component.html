@@ -8,8 +8,8 @@
     <mat-label>Password</mat-label>
     <input type="password" matInput formControlName="password" />
   </mat-form-field>
-  <div *ngIf="error">
-    <p>{{ error }}</p>
+  <div *ngIf="error$ | async">
+    <p>{{ error$ | async }}</p>
   </div>
   <button mat-button type="submit" [disabled]="!authForm.valid">Submit</button>
 </form>

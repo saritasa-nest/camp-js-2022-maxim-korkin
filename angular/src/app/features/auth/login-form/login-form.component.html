@@ -1,5 +1,1 @@
-<sw-auth-form
-  (submitEvent)="onSubmit($event)"
-  [error]="logInError$ | async"
-  formHeader="Login"
-></sw-auth-form>
+<sw-auth-form formHeader="Login" [authType]="authType"></sw-auth-form>

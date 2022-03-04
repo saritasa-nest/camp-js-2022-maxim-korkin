@@ -1,3 +1,4 @@
+import { AuthInfo } from 'src/app/core/models/AuthInfo';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
 import { Injectable } from '@angular/core';
@@ -26,11 +27,10 @@ export class AuthService {
 
   /**
    * Method for logging in with email and password.
-   * @param email - Email to login.
-   * @param password - Password to login.
+   * @param authInfo - Auth information to sign in.
    */
-  public signIn(email: string, password: string): Observable<Error> {
-    return defer(() => signInWithEmailAndPassword(this.auth, email, password)).pipe(
+  public signIn(authInfo: AuthInfo): Observable<Error> {
+    return defer(() => signInWithEmailAndPassword(this.auth, authInfo.email, authInfo.password)).pipe(
       ignoreElements(),
       catchError((error: FirebaseError) => this.handleSignInError(error)),
     );
@@ -45,11 +45,10 @@ export class AuthService {
 
   /**
    * Method for signing up.
-   * @param email - Email.
-   * @param password - Password.
+   * @param authInfo - Auth information to sign up.
    */
-  public signUp(email: string, password: string): Observable<null | Error> {
-    return defer(() => createUserWithEmailAndPassword(this.auth, email, password)).pipe(
+  public signUp(authInfo: AuthInfo): Observable<null | Error> {
+    return defer(() => createUserWithEmailAndPassword(this.auth, authInfo.email, authInfo.password)).pipe(
       ignoreElements(),
       catchError((error: FirebaseError) => this.handleSignUpError(error)),
     );

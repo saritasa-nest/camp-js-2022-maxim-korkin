@@ -1,7 +1,10 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { Component, ChangeDetectionStrategy, Input, OnDestroy } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
+import { AuthService } from 'src/app/core/services/auth.service';
 
-import { AuthInfo } from '../../../core/models/AuthInfo';
+import { AuthTypes } from '../AuthTypes';
 
 /**
  * Auth form component.
@@ -12,7 +15,7 @@ import { AuthInfo } from '../../../core/models/AuthInfo';
   styleUrls: ['./auth-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthFormComponent {
+export class AuthFormComponent implements OnDestroy {
 
   /**
    * Header of the form.
@@ -20,17 +23,14 @@ export class AuthFormComponent {
   @Input()
   public formHeader = '';
 
-  /**
-   * Error message or null.
-   */
+  /** Auth type of the form. */
   @Input()
-  public error: string | null = null;
+  public authType: AuthTypes | null = null;
 
   /**
-   * Submit event emitter.
+   * Error message.
    */
-  @Output()
-  private readonly submitEvent = new EventEmitter<AuthInfo>();
+  public error$ = new BehaviorSubject<string | null>(null);
 
   /**
    * Authentication form group.
@@ -49,18 +49,56 @@ export class AuthFormComponent {
     ],
   });
 
+  private readonly destroy$ = new Subject<void>();
+
+  private readonly subscriber = {
+    next: () => {
+      this.error$.next(null);
+    },
+    error: (error: Error) => {
+      this.error$.next(error.message);
+    },
+    complete: () => {
+      this.router.navigate(['/']);
+    },
+  };
+
   public constructor(
     private readonly formBuilder: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router,
   ) {}
+
+  /**
+   * @inheritdoc
+   */
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   /**
    * OnSubmit function.
    */
   public onSubmit(): void {
-    this.submitEvent.emit({
+    const authInfo = {
       email: this.emailInput,
       password: this.passwordInput,
-    });
+    };
+
+    if (this.authType === AuthTypes.SignIn) {
+      this.authService.signIn(authInfo).pipe(
+        takeUntil(this.destroy$),
+      )
+        .subscribe(this.subscriber);
+    } else if (this.authType === AuthTypes.SignUp) {
+      this.authService.signUp(authInfo).pipe(
+        takeUntil(this.destroy$),
+      )
+        .subscribe(this.subscriber);
+    } else if (this.authType === null) {
+      console.error('Type of auth form is unrecognized.');
+    }
   }
 
   private get emailInput(): string {

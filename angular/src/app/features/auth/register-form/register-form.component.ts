@@ -1,8 +1,6 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { AuthInfo } from 'src/app/core/models/AuthInfo';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
+import { AuthTypes } from '../AuthTypes';
 
 /**
  * Register form component.
@@ -12,46 +10,11 @@ import { AuthService } from 'src/app/core/services/auth.service';
   templateUrl: './register-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterFormComponent implements OnDestroy {
+export class RegisterFormComponent {
 
-  /**
-   * Error stream.
-   */
-  public readonly registerError$ = new Subject<string | null>();
-
-  private readonly destroy$ = new Subject<void>();
+  /** Auth type of this form. */
+  public readonly authType = AuthTypes.SignUp;
 
   public constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router,
   ) { }
-
-  /**
-   * @inheritdoc
-   */
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * Method for logging in when the form is submitted.
-   * @param authInfo - Auth information from the form.
-   */
-  public onSubmit(authInfo: AuthInfo): void {
-    this.authService.signUp(authInfo.email, authInfo.password).pipe(
-      takeUntil(this.destroy$),
-    )
-      .subscribe({
-        next: () => {
-          this.registerError$.next(null);
-        },
-        error: (error: Error) => {
-          this.registerError$.next(error.message);
-        },
-        complete: () => {
-          this.router.navigate(['/']);
-        },
-      });
-  }
 }
