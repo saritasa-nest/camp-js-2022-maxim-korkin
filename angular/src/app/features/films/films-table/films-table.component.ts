@@ -5,6 +5,7 @@ import { SortingFields } from 'src/app/core/utils/enums/SortingFields';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { Film } from 'src/app/core/models/Film';
 import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
+import { SortingDirections } from 'src/app/core/utils/enums/SortingDirections';
 
 import { SearchingInputComponent } from '../searching-input/searching-input.component';
 import { SortingOptions } from '../../../core/utils/interfaces/SortingOptions';
@@ -20,7 +21,7 @@ const COUNT_OF_FILMS_ON_PAGE = 3;
  */
 const COUNT_OF_FILMS_FOR_NEXT_PAGE = COUNT_OF_FILMS_ON_PAGE + 1;
 
-const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: SortingFields.EpisodeId, direction: 'asc' };
+const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: SortingFields.EpisodeId, direction: SortingDirections.ASCENDING };
 
 /**
  * Component for the films table.
@@ -77,7 +78,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (fetchOptions.titleSearchingValue !== '') {
         this.isSearching$.next(true);
-        this.setSortingHeaders(SortingFields.Title, 'asc');
+        this.setSortingHeaders(SortingFields.Title, SortingDirections.ASCENDING);
       } else {
         const { sortingField, direction } = fetchOptions.sortingOptions;
         this.isSearching$.next(false);
@@ -121,6 +122,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
+    /** Emitting and updating values to fetch first page when sorting field or direction is changed. */
     this.sortingOptions$.subscribe({
       next: () => {
         this.firstVisibleFilm = null;
@@ -131,6 +133,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       },
     });
 
+    /** Same as sorting options. */
     this.searchingValue$.subscribe({
       next: () => {
         this.firstVisibleFilm = null;
@@ -176,7 +179,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param active - New active header.
    * @param direction - New direction.
    */
-  public setSortingHeaders(active: SortingFields, direction: 'asc' | 'desc'): void {
+  public setSortingHeaders(active: SortingFields, direction: SortingDirections): void {
     this.filmsSortHeaders.active = this.mapSortingFieldToHeader(active);
     this.filmsSortHeaders.direction = direction;
   }
@@ -199,7 +202,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Method used in films fetching. Removes film which displays existence of next or previous page.
+   * Method used in films fetching. Removes film which indicates existence of next or previous page.
    * @param films - Array of films.
    * @param paginationMode - Pagination mode.
    */
@@ -216,7 +219,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Method used as a side-effect in film fetching. Updates first and last films on the current page.
    * @param films - Films array.
-   * Make sure that this array contains only films on the current page without film displaying existence of next or previous page.
+   * Make sure that this array contains only films on the current page without film indicating existence of next or previous page.
    */
   private updateFirstAndLastFilms(films: Film[]): void {
     this.firstVisibleFilm = films[0];
@@ -226,19 +229,18 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private mapSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
     let sortingField = this.mapHeaderToSortingField(sortState.active);
 
-    let direction: 'asc' | 'desc';
+    let direction: SortingDirections;
     switch (sortState.direction) {
       case 'asc':
-        direction = 'asc';
+        direction = SortingDirections.ASCENDING;
         break;
       case 'desc':
-        direction = 'desc';
+        direction = SortingDirections.DESCENDING;
         break;
       default:
-        /** MatSort direction is equal to '' when we dont sort by specific field.
-         * so use default values. */
+        /** MatSort direction is equal to '' when we dont sort by specific field so using default values. */
         sortingField = SortingFields.EpisodeId;
-        direction = 'asc';
+        direction = SortingDirections.ASCENDING;
     }
 
     return {

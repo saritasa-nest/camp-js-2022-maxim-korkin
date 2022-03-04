@@ -1,3 +1,4 @@
+import { SortingDirections } from '../enums/SortingDirections';
 import { SortingFields } from '../enums/SortingFields';
 
 /**
@@ -13,5 +14,5 @@ export interface SortingOptions {
   /**
    * Ascending or descending sorting order.
    */
-  readonly direction: 'asc' | 'desc';
+  readonly direction: SortingDirections;
 }

@@ -13,11 +13,11 @@ import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
 })
 export class PaginationButtonsComponent {
 
-  /** Stream showing if the current page is the last one. */
+  /** Shows if the current page is the last one. */
   @Input()
   public isLastPage = true;
 
-  /** Stream showing if the current page is the first one. */
+  /** Shows if the current page is the first one. */
   @Input()
   public isFirstPage = true;
 

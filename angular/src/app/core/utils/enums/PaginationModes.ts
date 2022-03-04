@@ -1,5 +1,5 @@
 /**
- * Enum for pagination modes.
+ * Possible pagination modes.
  */
 export enum PaginationModes {
   NEXT,
