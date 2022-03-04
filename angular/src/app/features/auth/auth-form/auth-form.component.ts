@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
-import { emailValidator } from 'src/app/shared/directives/email-validator.directive';
 
 import { AuthInfo } from '../../../core/models/AuthInfo';
 
@@ -41,7 +40,7 @@ export class AuthFormComponent {
       '',
       [
         Validators.required,
-        emailValidator(),
+        Validators.email,
       ],
     ],
     password: [
