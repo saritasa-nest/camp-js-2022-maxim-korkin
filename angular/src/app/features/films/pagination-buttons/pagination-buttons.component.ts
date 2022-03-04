@@ -1,6 +1,6 @@
-import { FilmsService } from 'src/app/core/services/filmsService/films.service';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { PaginationModes } from 'src/app/core/services/filmsService/enums/PaginationModes';
+import { BehaviorSubject } from 'rxjs';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
 
 /**
  * Pagination button component.
@@ -14,26 +14,29 @@ import { PaginationModes } from 'src/app/core/services/filmsService/enums/Pagina
 export class PaginationButtonsComponent {
 
   /** Stream showing if the current page is the last one. */
-  public readonly isLastPage$ = this.filmsService.isLastPage$;
+  @Input()
+  public isLastPage = true;
 
   /** Stream showing if the current page is the first one. */
-  public readonly isFirstPage$ = this.filmsService.isFirstPage$;
+  @Input()
+  public isFirstPage = true;
 
-  public constructor(
-    private readonly filmsService: FilmsService,
-  ) { }
+  /** Pagination mode. */
+  public paginationMode$ = new BehaviorSubject<PaginationModes>(PaginationModes.NEXT);
+
+  public constructor() { }
 
   /**
    * Method for displaying the next page of films.
    */
   public nextPage(): void {
-    this.filmsService.changePage(PaginationModes.NEXT);
+    this.paginationMode$.next(PaginationModes.NEXT);
   }
 
   /**
    * Method for displaying the previous page of films.
    */
   public prevPage(): void {
-    this.filmsService.changePage(PaginationModes.PREVIOUS);
+    this.paginationMode$.next(PaginationModes.PREVIOUS);
   }
 }

@@ -4,7 +4,7 @@
     class="pagination-button"
     type="button"
     (click)="prevPage()"
-    [disabled]="isFirstPage$ | async"
+    [disabled]="isFirstPage"
   >
     Prev
   </button>
@@ -13,7 +13,7 @@
     class="pagination-button"
     type="button"
     (click)="nextPage()"
-    [disabled]="isLastPage$ | async"
+    [disabled]="isLastPage"
   >
     Next
   </button>

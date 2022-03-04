@@ -63,4 +63,7 @@
   <mat-row *matRowDef="let row; columns: tableHeaders"></mat-row>
 </mat-table>
 
-<sw-pagination-buttons></sw-pagination-buttons>
+<sw-pagination-buttons
+  [isFirstPage]="!!(isFirstPage$ | async)"
+  [isLastPage]="!!(isLastPage$ | async)"
+></sw-pagination-buttons>

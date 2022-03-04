@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
@@ -12,7 +12,7 @@ import { FilmsService } from 'src/app/core/services/filmsService/films.service';
   styleUrls: ['./searching-input.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchingInputComponent implements OnInit, OnDestroy {
+export class SearchingInputComponent implements OnDestroy {
 
   /** Form control for searching input. */
   public readonly searchInput = new FormControl('');
@@ -35,18 +35,6 @@ export class SearchingInputComponent implements OnInit, OnDestroy {
   public constructor(
     private readonly filmsService: FilmsService,
   ) { }
-
-  /**
-   * @inheritdoc
-   */
-  public ngOnInit(): void {
-    this.searchChange$.subscribe({
-      next: value => {
-        this.setTitleSorting();
-        this.filmsService.searchByTitle(value);
-      },
-    });
-  }
 
   /**
    * @inheritdoc

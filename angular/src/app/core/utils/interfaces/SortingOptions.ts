@@ -1,4 +1,4 @@
-import { SortingFields } from './SortingFields';
+import { SortingFields } from '../enums/SortingFields';
 
 /**
  * Sorting options used for making firebase query constraints for films fetching.
@@ -14,9 +14,4 @@ export interface SortingOptions {
    * Ascending or descending sorting order.
    */
   readonly direction: 'asc' | 'desc';
-
-  /**
-   * Title searching value. Empty string if we dont need to search.
-   */
-  readonly searchingValue: string;
 }
