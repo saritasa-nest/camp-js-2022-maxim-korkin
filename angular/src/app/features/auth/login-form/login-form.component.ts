@@ -15,7 +15,7 @@ import { AuthFormComponent } from '../auth-form/auth-form.component';
 export class LoginFormComponent extends AuthFormComponent {
 
   /** Form header. */
-  public formHeader = 'Login';
+  public readonly formHeader = 'Login';
 
   /**
    * OnSubmit method for signing in.

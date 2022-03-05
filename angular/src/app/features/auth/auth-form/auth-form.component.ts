@@ -13,7 +13,7 @@ export abstract class AuthFormComponent implements OnDestroy {
   /**
    * Header of the form.
    */
-  public abstract formHeader: string;
+  public readonly abstract formHeader: string;
 
   /**
    * Error message.
