@@ -18,7 +18,7 @@ export abstract class AuthFormComponent implements OnDestroy {
   /**
    * Error message.
    */
-  public error$ = new BehaviorSubject<string | null>(null);
+  public readonly error$ = new BehaviorSubject<string | null>(null);
 
   /**
    * Authentication form group.
