@@ -1,13 +1,12 @@
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { OnDestroy, Injectable, Directive } from '@angular/core';
+import { OnDestroy, Directive } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 /**
  * Abstract class which need to be extended in auth forms.
  */
-@Injectable()
 @Directive()
 export abstract class AuthFormComponent implements OnDestroy {
 
