@@ -1,17 +1,33 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntil } from 'rxjs';
 
-import { AuthTypes } from '../AuthTypes';
+import { AuthFormComponent } from '../auth-form/auth-form.component';
 
 /**
  * Login form component.
  */
 @Component({
   selector: 'sw-login-form',
-  templateUrl: './login-form.component.html',
+  templateUrl: '../auth-form/auth-form.component.html',
+  styleUrls: ['../auth-form/auth-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginFormComponent {
+export class LoginFormComponent extends AuthFormComponent {
 
-  /** Auth type of this form. */
-  public readonly authType = AuthTypes.SignIn;
+  /** Form header. */
+  public formHeader = 'Login';
+
+  /**
+   * OnSubmit method for signing in.
+   */
+  public onSubmit(): void {
+    const authInfo = {
+      email: this.emailInput,
+      password: this.passwordInput,
+    };
+    this.authService.signIn(authInfo).pipe(
+      takeUntil(this.destroy$),
+    )
+      .subscribe(this.subscriber);
+  }
 }

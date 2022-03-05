@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 
 import { AuthRoutingModule } from './auth-routing.module';
 
-import { AuthFormComponent } from './auth-form/auth-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 
@@ -12,7 +11,7 @@ import { RegisterFormComponent } from './register-form/register-form.component';
  * Auth module.
  */
 @NgModule({
-  declarations: [AuthFormComponent, LoginFormComponent, RegisterFormComponent],
+  declarations: [LoginFormComponent, RegisterFormComponent],
   imports: [CommonModule, CommonSharedModule, AuthRoutingModule],
 })
 export class AuthModule { }
