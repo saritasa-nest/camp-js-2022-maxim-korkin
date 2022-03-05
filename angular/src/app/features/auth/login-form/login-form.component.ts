@@ -8,8 +8,8 @@ import { AuthFormComponent } from '../auth-form/auth-form.component';
  */
 @Component({
   selector: 'sw-login-form',
-  templateUrl: '../auth-form/auth-form.component.html',
-  styleUrls: ['../auth-form/auth-form.component.css'],
+  templateUrl: 'login-form.component.html',
+  styleUrls: ['login-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent extends AuthFormComponent {

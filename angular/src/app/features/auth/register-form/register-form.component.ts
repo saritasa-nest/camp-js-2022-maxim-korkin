@@ -8,8 +8,8 @@ import { AuthFormComponent } from '../auth-form/auth-form.component';
  */
 @Component({
   selector: 'sw-register-form',
-  templateUrl: '../auth-form/auth-form.component.html',
-  styleUrls: ['../auth-form/auth-form.component.css'],
+  templateUrl: 'register-form.component.html',
+  styleUrls: ['register-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterFormComponent extends AuthFormComponent {
