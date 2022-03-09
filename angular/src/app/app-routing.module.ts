@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { FilmsTableComponent } from './features/films/films-table/films-table.component';
 import { NonAuthGuard } from './core/guards/non-auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: FilmsTableComponent,
+    redirectTo: '/films',
+    pathMatch: 'full',
+  },
+  {
+    path: 'films',
+    loadChildren: () => import('./features/films/films-routing.module').then(m => m.FilmsRoutingModule),
   },
   {
     path: '',
@@ -16,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'films',
   },
 ];
 

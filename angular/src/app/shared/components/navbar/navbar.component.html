@@ -1,6 +1,6 @@
 <nav>
   <mat-toolbar color="primary" class="navbar">
-    <a routerLink="/" class="navbar__item">SW Films</a>
+    <a routerLink="/films" class="navbar__item">SW Films</a>
     <div *ngIf="isSignedIn$ | async; else loginRegisterLinks">
       <button
         type="button"
