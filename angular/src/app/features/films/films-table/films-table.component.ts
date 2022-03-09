@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, withLatestFrom, auditTime } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, auditTime, takeUntil, withLatestFrom } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { SortingFields } from 'src/app/core/utils/enums/SortingFields';
@@ -59,11 +59,13 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(SearchingInputComponent)
   private readonly searchingInput!: SearchingInputComponent;
 
+  private readonly destroy$ = new Subject<void>();
+
   /** Films on the current page. */
   public readonly films$ = combineLatest(
     [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
   ).pipe(
-    auditTime(1),
+    auditTime(300),
     map(([sortingOptions, paginationMode, searchingValue]) => (
       {
         sortingOptions,
@@ -90,6 +92,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     tap(([films, paginationMode]) => this.updatePaginationStatus(films.length, paginationMode)),
     map(([films, paginationMode]) => this.parseFilmsList(films, paginationMode)),
     tap(films => this.updateFirstAndLastFilms(films)),
+    takeUntil(this.destroy$),
   );
 
   private readonly episodeIdHeader = 'Episode Id';
@@ -111,6 +114,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.directorHeader,
   ];
 
+  /** Container for MatSortables to manage the sort state. */
   @ViewChild(MatSort)
   private readonly filmsSortHeaders!: MatSort;
 
@@ -123,7 +127,9 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   public ngOnInit(): void {
     /** Emitting and updating values to fetch first page when sorting field or direction is changed. */
-    this.sortingOptions$.subscribe({
+    this.sortingOptions$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe({
       next: () => {
         this.firstVisibleFilm = null;
         this.lastVisibleFilm = null;
@@ -134,7 +140,9 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     /** Same as sorting options. */
-    this.searchingValue$.subscribe({
+    this.searchingValue$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe({
       next: () => {
         this.firstVisibleFilm = null;
         this.lastVisibleFilm = null;
@@ -152,17 +160,20 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isSearching$.complete();
     this.isLastPage$.complete();
     this.isFirstPage$.complete();
-    this.sortingOptions$.complete();
-    this.paginationMode$.complete();
-    this.searchingValue$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
    * @inheritdoc
    */
   public ngAfterViewInit(): void {
-    this.paginationButtons.paginationMode$.subscribe(this.paginationMode$);
-    this.searchingInput.searchChange$.subscribe(this.searchingValue$);
+    this.paginationButtons.paginationMode$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe(this.paginationMode$);
+    this.searchingInput.searchChange$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe(this.searchingValue$);
   }
 
   /**

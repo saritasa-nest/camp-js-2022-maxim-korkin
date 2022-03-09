@@ -5,6 +5,8 @@
   (matSortChange)="sortChange($event)"
   [matSortDisabled]="isSearching$ | async"
   matSortDisableClear="true"
+  matSortActive="Episode Id"
+  matSortDirection="asc"
 >
   <ng-container matColumnDef="Episode Id">
     <mat-header-cell
