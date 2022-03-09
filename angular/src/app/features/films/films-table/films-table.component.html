@@ -58,9 +58,12 @@
     </mat-header-cell>
     <mat-cell *matCellDef="let film"> {{ film.director }} </mat-cell>
   </ng-container>
-
   <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: tableHeaders"></mat-row>
+  <mat-row
+    *matRowDef="let film; columns: tableHeaders"
+    [routerLink]="'/films/film/' + film.pk"
+    class="films-table__row"
+  ></mat-row>
 </mat-table>
 
 <sw-pagination-buttons

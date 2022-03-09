@@ -1,3 +1,10 @@
 :host {
   display: block;
 }
+
+
+.films-table__row:hover {
+  box-shadow:inset 0px 0px 0px 1px #3f3f3f;
+  -webkit-box-shadow:inset 0px 0px 0px 1px #3f3f3f;
+  -moz-box-shadow:inset 0px 0px 0px 1px #3f3f3f;
+}
