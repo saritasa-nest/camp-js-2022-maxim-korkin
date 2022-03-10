@@ -28,6 +28,6 @@ export class RegisterFormComponent extends AuthFormComponent {
     this.authService.signUp(authInfo).pipe(
       takeUntil(this.destroy$),
     )
-      .subscribe(this.subscriber);
+      .subscribe(this.observer);
   }
 }

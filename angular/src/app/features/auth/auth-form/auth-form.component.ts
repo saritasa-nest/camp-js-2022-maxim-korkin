@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observer, Subject } from 'rxjs';
 import { OnDestroy, Directive } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -40,8 +40,8 @@ export abstract class AuthFormComponent implements OnDestroy {
   /** Used as parameter in takeUntil operators in sign in or sign up streams. */
   protected readonly destroy$ = new Subject<void>();
 
-  /** Subscriber to use when subscribing to sign in or sign up streams. */
-  protected readonly subscriber = {
+  /** Observer to use when subscribing to sign in or sign up streams. */
+  protected readonly observer: Observer<Error | null> = {
     next: () => {
       this.error$.next(null);
     },

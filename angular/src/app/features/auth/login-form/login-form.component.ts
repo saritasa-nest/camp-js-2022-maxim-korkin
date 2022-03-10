@@ -28,6 +28,6 @@ export class LoginFormComponent extends AuthFormComponent {
     this.authService.signIn(authInfo).pipe(
       takeUntil(this.destroy$),
     )
-      .subscribe(this.subscriber);
+      .subscribe(this.observer);
   }
 }
