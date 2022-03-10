@@ -6,9 +6,10 @@ import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { Film } from 'src/app/core/models/Film';
 import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
 import { SortingDirections } from 'src/app/core/utils/enums/SortingDirections';
+import { Router } from '@angular/router';
+import { SortingOptions } from 'src/app/core/utils/interfaces/SortingOptions';
 
 import { SearchingInputComponent } from '../searching-input/searching-input.component';
-import { SortingOptions } from '../../../core/utils/interfaces/SortingOptions';
 import { PaginationButtonsComponent } from '../pagination-buttons/pagination-buttons.component';
 
 /**
@@ -120,6 +121,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public constructor(
     private readonly filmsService: FilmsService,
+    private readonly router: Router,
   ) {}
 
   /**
@@ -193,6 +195,14 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   public setSortingHeaders(active: SortingFields, direction: SortingDirections): void {
     this.filmsSortHeaders.active = this.mapSortingFieldToHeader(active);
     this.filmsSortHeaders.direction = direction;
+  }
+
+  /**
+   * A function to call when a user clicks a row.
+   * @param film - Film to provide to details page.
+   */
+  public navigateToFilmDetailsPage(film: Film): void {
+    this.router.navigateByUrl(`films/film/${film.pk}`, { state: film });
   }
 
   /**

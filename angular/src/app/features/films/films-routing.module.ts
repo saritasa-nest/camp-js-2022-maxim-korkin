@@ -1,9 +1,11 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
+import { FilmResolver } from 'src/app/core/services/Resolvers/film-resolver.resolver';
 
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { FilmsTableComponent } from './films-table/films-table.component';
+import { FilmNotFoundComponent } from './film-not-found/film-not-found.component';
 
 const routes: Routes = [
   {
@@ -14,6 +16,13 @@ const routes: Routes = [
     path: 'film/:id',
     component: FilmDetailsComponent,
     canActivate: [AuthGuard],
+    resolve: {
+      film: FilmResolver,
+    },
+  },
+  {
+    path: 'film-not-found',
+    component: FilmNotFoundComponent,
   },
 ];
 

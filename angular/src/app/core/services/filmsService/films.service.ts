@@ -1,6 +1,6 @@
-import { CollectionReference, query } from 'firebase/firestore';
+import { CollectionReference, query, where } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
-import { Observable, map } from 'rxjs';
+import { Observable, map, first } from 'rxjs';
 import { collection, Firestore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
@@ -30,13 +30,25 @@ export class FilmsService {
   }
 
   /**
-   * Method for fetching films.
+   * Method for fetching films with the constraints builded from the fetch options provided.
    * @param fetchOptions - Options required for building query.
    */
   public fetchFilms(fetchOptions: FilmsFetchOptions): Observable<Film[]> {
     const filmsQuery = query(this.filmsCollection, ...getFilmsQueryConstraints(fetchOptions));
     return collectionData<FilmDto>(filmsQuery).pipe(
       map(films => films.map(film => this.filmMapper.fromDto(film))),
+    );
+  }
+
+  /**
+   * Fetches a film by primary key.
+   * @param pk - Primary key to fetch the film.
+   */
+  public fetchFilmByPrimaryKey(pk: number): Observable<Film> {
+    const filmQuery = query(this.filmsCollection, where('pk', '==', pk));
+    return collectionData<FilmDto>(filmQuery).pipe(
+      map(films => this.filmMapper.fromDto(films[0])),
+      first(),
     );
   }
 }

@@ -1,4 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntil, Subject, map, Observable } from 'rxjs';
+import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Film } from 'src/app/core/models/Film';
 
 /**
  * Component for the film details.
@@ -9,8 +12,26 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./film-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilmDetailsComponent {
+export class FilmDetailsComponent implements OnDestroy {
 
-  public constructor() { }
+  private readonly destroy$ = new Subject<void>();
+
+  /** Film. */
+  public film$: Observable<Film> = this.route.data.pipe(
+    takeUntil(this.destroy$),
+    map(data => data['film']),
+  );
+
+  public constructor(
+    private readonly route: ActivatedRoute,
+  ) { }
+
+  /**
+   * @inheritdoc
+   */
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }

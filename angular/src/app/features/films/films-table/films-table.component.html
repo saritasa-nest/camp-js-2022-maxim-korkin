@@ -61,7 +61,7 @@
   <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
   <mat-row
     *matRowDef="let film; columns: tableHeaders"
-    [routerLink]="'/films/film/' + film.pk"
+    (click)="navigateToFilmDetailsPage(film)"
     class="films-table__row"
   ></mat-row>
 </mat-table>
