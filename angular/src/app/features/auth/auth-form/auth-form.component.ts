@@ -1,47 +1,34 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Observer, Subject } from 'rxjs';
+import { OnDestroy, Directive } from '@angular/core';
 import { Validators, FormBuilder } from '@angular/forms';
-import { emailValidator } from 'src/app/shared/directives/email-validator.directive';
-
-import { AuthInfo } from '../../../core/models/AuthInfo';
+import { AuthService } from 'src/app/core/services/AuthService/auth.service';
 
 /**
- * Auth form component.
+ * Abstract class which need to be extended in auth forms.
  */
-@Component({
-  selector: 'sw-auth-form',
-  templateUrl: './auth-form.component.html',
-  styleUrls: ['./auth-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class AuthFormComponent {
+@Directive()
+export abstract class AuthFormComponent implements OnDestroy {
 
   /**
    * Header of the form.
    */
-  @Input()
-  public formHeader = '';
+  public readonly abstract formHeader: string;
 
   /**
-   * Error message or null.
+   * Error message.
    */
-  @Input()
-  public error: string | null = null;
-
-  /**
-   * Submit event emitter.
-   */
-  @Output()
-  private readonly submitEvent = new EventEmitter<AuthInfo>();
+  public readonly error$ = new BehaviorSubject<string | null>(null);
 
   /**
    * Authentication form group.
    */
-  public authForm = this.formBuilder.group({
+  public readonly authForm = this.formBuilder.group({
     email: [
       '',
       [
         Validators.required,
-        emailValidator(),
+        Validators.email,
       ],
     ],
     password: [
@@ -50,26 +37,49 @@ export class AuthFormComponent {
     ],
   });
 
+  /** Used as parameter in takeUntil operators in sign in or sign up streams. */
+  protected readonly destroy$ = new Subject<void>();
+
+  /** Observer to use when subscribing to sign in or sign up streams. */
+  protected readonly observer: Observer<Error | null> = {
+    next: () => {
+      this.error$.next(null);
+    },
+    error: (error: Error) => {
+      this.error$.next(error.message);
+    },
+    complete: () => {
+      this.router.navigate(['/']);
+    },
+  };
+
   public constructor(
-    private readonly formBuilder: FormBuilder,
+    protected readonly formBuilder: FormBuilder,
+    protected readonly authService: AuthService,
+    protected readonly router: Router,
   ) {}
 
   /**
-   * OnSubmit function.
+   * @inheritdoc
    */
-  public onSubmit(): void {
-    this.submitEvent.emit({
-      email: this.emailInput,
-      password: this.passwordInput,
-    });
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private get emailInput(): string {
+  /**
+   * OnSubmit method.
+   */
+  public abstract onSubmit(): void ;
+
+  /** Email field input. */
+  protected get emailInput(): string {
     const emailField = this.authForm.get('email');
     return (emailField !== null) ? emailField.value : '';
   }
 
-  private get passwordInput(): string {
+  /** Password field input. */
+  protected get passwordInput(): string {
     const passwordField = this.authForm.get('password');
     return (passwordField !== null) ? passwordField.value : '';
   }

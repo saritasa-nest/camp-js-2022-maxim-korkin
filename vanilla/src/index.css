@@ -23,6 +23,20 @@
   content: url("./imgs/down_arrow_12px.png")
 }
 
+.search {
+  position: relative;
+  width: 250px;
+}
+
+.search-btn {
+  position: absolute;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: url("./imgs/icon-search-32px.png") transparent center no-repeat;
+  cursor: pointer;
+}
 .pagination-btns-container {
   margin: 10px;
 }

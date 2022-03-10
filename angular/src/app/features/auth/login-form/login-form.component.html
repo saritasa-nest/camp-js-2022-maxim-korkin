@@ -1,5 +1,13 @@
-<sw-auth-form
-  (submitEvent)="onSubmit($event)"
-  [error]="logInError$ | async"
-  formHeader="Login"
-></sw-auth-form>
+<form class="login-form" (ngSubmit)="onSubmit()" [formGroup]="authForm">
+  <h1 class="login-form__header">{{ formHeader }}</h1>
+  <mat-form-field appearance="fill">
+    <mat-label>Email</mat-label>
+    <input type="email" matInput formControlName="email" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input type="password" matInput formControlName="password" />
+  </mat-form-field>
+  <p *ngIf="error$ | async">{{ error$ | async }}</p>
+  <button mat-button type="submit" [disabled]="!authForm.valid">Submit</button>
+</form>

@@ -1,20 +1,12 @@
 import { FilmsService } from '../../services/films/FilmsService';
-import { Film } from '../../interfaces/films/domain/Film';
-import { OrderingFields } from '../../enums/films/OrderingFields';
-import { OrderingModes } from '../../enums/films/OrderingModes';
+
+import { PaginationOptions } from '../../interfaces/options/PaginationOptions';
 
 /**
  * Function which checks if the current page is the first page possible.
- * @param firstFilmOnPage - First film on the current page.
- * @param orderingField - Current ordering field.
- * @param orderingMode - Current ordering mode.
+ * @param options - Options to determine if page is first.
  */
-export const isFirstPage = async(
-  firstFilmOnPage: Film,
-  orderingField: OrderingFields,
-  orderingMode: OrderingModes,
-): Promise<boolean> => {
-  const firstFilm = await FilmsService.fetchFirstFilm(orderingField, orderingMode);
-
-  return firstFilm.pk === firstFilmOnPage.pk;
+export const isFirstPage = async(options: PaginationOptions): Promise<boolean> => {
+ const firstFilm = await FilmsService.fetchFirstFilm(options);
+  return firstFilm.pk === options.film.pk;
 };

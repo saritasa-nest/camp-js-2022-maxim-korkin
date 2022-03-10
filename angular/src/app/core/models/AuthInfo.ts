@@ -1,5 +1,5 @@
 /**
- * Interface with the fields required for authentication.
+ * Specifies fields which are used for signing in or up.
  */
 export interface AuthInfo {
 

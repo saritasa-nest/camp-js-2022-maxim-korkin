@@ -1,57 +1,33 @@
-import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { AuthInfo } from 'src/app/core/models/AuthInfo';
-import { AuthService } from 'src/app/core/services/AuthService/auth.service';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { takeUntil } from 'rxjs';
+
+import { AuthFormComponent } from '../auth-form/auth-form.component';
 
 /**
  * Register form component.
  */
 @Component({
   selector: 'sw-register-form',
-  templateUrl: './register-form.component.html',
+  templateUrl: 'register-form.component.html',
+  styleUrls: ['register-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterFormComponent implements OnDestroy {
+export class RegisterFormComponent extends AuthFormComponent {
+
+  /** Form header. */
+  public readonly formHeader = 'Register';
 
   /**
-   * Error stream.
+   * OnSubmit method for signing up.
    */
-  public readonly registerError$ = new Subject<string | null>();
-
-  private readonly destroy$ = new Subject<void>();
-
-  public constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router,
-  ) { }
-
-  /**
-   * @inheritdoc
-   */
-  public ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * Method for logging in when the form is submitted.
-   * @param authInfo - Auth information from the form.
-   */
-  public onSubmit(authInfo: AuthInfo): void {
-    this.authService.signUp(authInfo.email, authInfo.password).pipe(
+  public onSubmit(): void {
+    const authInfo = {
+      email: this.emailInput,
+      password: this.passwordInput,
+    };
+    this.authService.signUp(authInfo).pipe(
       takeUntil(this.destroy$),
     )
-      .subscribe({
-        next: () => {
-          this.registerError$.next(null);
-        },
-        error: (error: Error) => {
-          this.registerError$.next(error.message);
-        },
-        complete: () => {
-          this.router.navigate(['/']);
-        },
-      });
+      .subscribe(this.observer);
   }
 }
