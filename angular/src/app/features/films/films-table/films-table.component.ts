@@ -228,12 +228,17 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param paginationMode - Pagination mode.
    */
   private parseFilmsList(films: Film[], paginationMode: PaginationModes): Film[] {
+    /** Case when we dont have film we dont need to display. */
     if (films.length !== COUNT_OF_FILMS_FOR_NEXT_PAGE) {
       return films;
     }
+
+    /** Removes last film if we loaded next page. */
     if (paginationMode === PaginationModes.NEXT) {
       return films.slice(0, -1);
     }
+
+    /** Removes first film if we loaded previous page. */
     return films.slice(1);
   }
 
