@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { FilmsTableComponent } from './films-table/films-table.component';
@@ -12,6 +13,7 @@ const routes: Routes = [
   {
     path: 'film/:id',
     component: FilmDetailsComponent,
+    canActivate: [AuthGuard],
   },
 ];
 

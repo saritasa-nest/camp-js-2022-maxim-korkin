@@ -1,5 +1,5 @@
 /**
- * Interface describing the film.
+ * Film model.
  */
 export interface Film {
 
@@ -18,7 +18,7 @@ export interface Film {
   /** An array containing IDs of the planets in the film. */
   readonly planetIds: readonly number[];
 
-  /** Producer of the film.*/
+  /** Producers of the film.*/
   readonly producers: readonly string[];
 
   /** Release date of the film. */

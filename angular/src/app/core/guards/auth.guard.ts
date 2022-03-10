@@ -5,10 +5,10 @@ import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/AuthService/auth.service';
 
 /**
- * Guard which allows navigation to the routes for unauthenticated users only.
+ * Guard which allows navigation to the routes for authenticated users only.
  */
 @Injectable({ providedIn: 'root' })
-export class NonAuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate {
 
   public constructor(
     private readonly authService: AuthService,
@@ -20,7 +20,7 @@ export class NonAuthGuard implements CanActivate {
    */
   public canActivate(): Observable<boolean | UrlTree> {
     return this.authService.isSignedIn$.pipe(
-      map(isSignedIn => (isSignedIn === false) ? true : this.router.parseUrl('/films')),
+      map(isSignedIn => (isSignedIn === true) ? true : this.router.parseUrl('/films')),
     );
   }
 }
