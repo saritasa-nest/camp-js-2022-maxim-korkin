@@ -133,11 +133,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       takeUntil(this.destroy$),
     ).subscribe({
       next: () => {
-        this.firstVisibleFilm = null;
-        this.lastVisibleFilm = null;
-        this.paginationMode$.next(PaginationModes.NEXT);
-        this.isFirstPage$.next(true);
-        this.isLastPage$.next(true);
+        this.resetValuesForFirstPageFetching();
       },
     });
 
@@ -146,11 +142,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       takeUntil(this.destroy$),
     ).subscribe({
       next: () => {
-        this.firstVisibleFilm = null;
-        this.lastVisibleFilm = null;
-        this.paginationMode$.next(PaginationModes.NEXT);
-        this.isFirstPage$.next(true);
-        this.isLastPage$.next(true);
+        this.resetValuesForFirstPageFetching();
       },
     });
   }
@@ -250,6 +242,17 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private updateFirstAndLastFilms(films: Film[]): void {
     this.firstVisibleFilm = films[0];
     this.lastVisibleFilm = films.slice(-1)[0];
+  }
+
+  /**
+   * Resets value when need to fetch the first page.
+   */
+  private resetValuesForFirstPageFetching(): void {
+    this.firstVisibleFilm = null;
+    this.lastVisibleFilm = null;
+    this.paginationMode$.next(PaginationModes.NEXT);
+    this.isFirstPage$.next(true);
+    this.isLastPage$.next(true);
   }
 
   private mapSortStateIntoSortingOptions(sortState: Sort): SortingOptions {

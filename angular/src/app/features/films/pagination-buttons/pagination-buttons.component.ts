@@ -24,8 +24,6 @@ export class PaginationButtonsComponent {
   /** Pagination mode. */
   public paginationMode$ = new BehaviorSubject<PaginationModes>(PaginationModes.NEXT);
 
-  public constructor() { }
-
   /**
    * Method for displaying the next page of films.
    */

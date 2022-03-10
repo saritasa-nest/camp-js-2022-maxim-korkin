@@ -25,8 +25,6 @@ export class SearchingInputComponent implements OnDestroy {
     takeUntil(this.destroy$),
   );
 
-  public constructor() { }
-
   /**
    * @inheritdoc
    */
