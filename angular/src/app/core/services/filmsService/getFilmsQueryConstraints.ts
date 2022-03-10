@@ -37,7 +37,7 @@ export function getFilmsQueryConstraints(
 ): QueryConstraint[] {
   const queryConstraints: QueryConstraint[] = [];
 
-  /** Need to use different query if the user wants to search. */
+  /** Need to sort exactly by title if the user wants to search by it. */
   if (titleSearchingValue !== '') {
     queryConstraints.push(orderBy(SortingFields.Title, 'asc'));
 
@@ -48,7 +48,7 @@ export function getFilmsQueryConstraints(
     queryConstraints.push(orderBy(sortingOptions.sortingField, sortingOptions.direction));
   }
 
-  /** If firstAndLastVisibleFilms is equals to null then this is the first page loading.
+  /** If first and last visible films are equals to null then this is the first page loading.
    * So we do not need to add startAfter or endBefore constraints */
   if (firstVisibleFilm === null || lastVisibleFilm === null) {
     /** + 1 to know if there is next page. */

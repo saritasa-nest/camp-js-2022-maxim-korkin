@@ -23,11 +23,13 @@ export class FilmResolver implements Resolve<Film> {
    * @inheritdoc
    */
   public resolve(route: ActivatedRouteSnapshot): Observable<Film> {
+    /** Trying to get a film from the navigation state. */
     const state = this.router.getCurrentNavigation()?.extras.state;
     if (typeof state !== 'undefined') {
       return of(state as Film);
     }
 
+    /** Otherwise trying to fetch a film and in case of failure navigation to the film not found page. */
     const filmPk = Number(route.paramMap.get('id'));
     return this.filmsService.fetchFilmByPrimaryKey(filmPk).pipe(
       catchError(() => {

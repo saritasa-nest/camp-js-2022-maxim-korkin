@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
 
 /**
- * Pagination button component.
+ * Pagination buttons component.
  */
 @Component({
   selector: 'sw-pagination-buttons',
