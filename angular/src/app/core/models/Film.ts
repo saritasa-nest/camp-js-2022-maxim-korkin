@@ -23,4 +23,7 @@ export interface Film {
 
   /** Primary key of the film. */
   readonly pk: number;
+
+  /** Primary keys of the characters. */
+  readonly characterPks: readonly number[];
 }

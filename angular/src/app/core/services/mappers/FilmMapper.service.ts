@@ -26,6 +26,7 @@ export class FilmMapper {
       producers: fields.producer.split(', '),
       releaseDate: new Date(fields.release_date),
       title: fields.title,
+      characterPks: fields.characters,
       pk: dto.pk,
     };
   }

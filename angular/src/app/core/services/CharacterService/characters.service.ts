@@ -32,7 +32,7 @@ export class CharactersService {
    * Fetches characters by primary keys.
    * @param pks - Primary keys to fetch characters.
    */
-  public fetchCharactersByPrimaryKeys(pks: number[]): Observable<Character[]> {
+  public fetchCharactersByPrimaryKeys(pks: readonly number[]): Observable<Character[]> {
     const splittedPks = splitArray(pks);
 
     const characters: Observable<Character[]>[] = [];
