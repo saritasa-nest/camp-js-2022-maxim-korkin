@@ -27,10 +27,7 @@ function getSortingFieldValue(film: Film, sortingField: SortingFields): string |
 
 /**
  * Function for getting QueryConstraints array for films fetching.
- * @param sortingOptions - Options used for sorting results.
- * @param paginationMode - Either next or previous. Next is also used for fetching the very first page.
- * @param firstAndLastVisibleFilms - Object with first and last films on the current page which are used to get next or previous page.
- * @param countOfFilmsOnPage - Count of films on the single page.
+ * @param filmsFetchOptions - Options required for building query constraints.
  */
 export function getFilmsQueryConstraints(
   { sortingOptions, paginationMode, firstVisibleFilm, lastVisibleFilm, countOfFilmsOnPage, titleSearchingValue }: FilmsFetchOptions,

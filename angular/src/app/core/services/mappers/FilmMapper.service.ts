@@ -20,17 +20,12 @@ export class FilmMapper {
     const { fields } = dto;
 
     return {
-      characterIds: fields.characters,
       director: fields.director,
       episodeId: fields.episode_id,
       openingCrawl: fields.opening_crawl,
-      planetIds: fields.planets,
       producers: fields.producer.split(', '),
       releaseDate: new Date(fields.release_date),
-      specieIds: fields.species,
-      starshipIds: fields.starships,
       title: fields.title,
-      vehicleIds: fields.vehicles,
       pk: dto.pk,
     };
   }
