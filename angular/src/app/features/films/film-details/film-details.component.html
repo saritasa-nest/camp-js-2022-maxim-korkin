@@ -7,7 +7,45 @@
 </div>
 
 <h2>Characters</h2>
-<p *ngFor="let character of this.characters$ | async">{{ character.name }}</p>
+<mat-accordion multi="true">
+  <mat-expansion-panel
+    hideToggle
+    *ngFor="let character of this.characters$ | async"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ character.name }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <p>Birth year: {{ character.birthYear }}</p>
+      <p>Gender: {{ character.gender }}</p>
+      <p>Eye color: {{ character.eyeColor }}</p>
+      <p>Hair color: {{ character.hairColor }}</p>
+      <p>Height: {{ character.height }}</p>
+      <p>Mass: {{ character.mass }}</p>
+      <p>Skin color: {{ character.skinColor }}</p>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>
 
 <h2>Planets</h2>
-<p *ngFor="let planet of this.planets$ | async">{{ planet.name }}</p>
+<mat-accordion multi="true">
+  <mat-expansion-panel hideToggle *ngFor="let planet of this.planets$ | async">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ planet.name }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      <p>Diameter: {{ planet.diameter }}</p>
+      <p>Climate: {{ planet.climate }}</p>
+      <p>Gravity: {{ planet.gravity }}</p>
+      <p>Orbital period: {{ planet.orbitalPeriod }}</p>
+      <p>Population: {{ planet.population }}</p>
+      <p>Rotation period: {{ planet.rotationPeriod }}</p>
+      <p>Surface water: {{ planet.surfaceWater }}</p>
+      <p>Terrain: {{ planet.terrain }}</p>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>

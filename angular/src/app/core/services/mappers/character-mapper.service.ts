@@ -24,7 +24,6 @@ export class CharacterMapper {
       gender: fields.gender,
       hairColor: fields.hair_color,
       height: Number(fields.height),
-      homeworldPk: fields.homeworld,
       mass: Number(fields.mass),
       name: fields.name,
       skinColor: fields.skin_color,

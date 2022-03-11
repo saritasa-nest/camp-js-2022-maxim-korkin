@@ -18,9 +18,6 @@ export interface Character {
   /** Height of the character. */
   readonly height: number;
 
-  /** Primary key of the homeworld of the character. */
-  readonly homeworldPk: number;
-
   /** Mass of the character. */
   readonly mass: number;
 

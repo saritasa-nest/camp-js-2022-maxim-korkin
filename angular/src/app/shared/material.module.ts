@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
@@ -13,6 +14,7 @@ const MATERIAL_MODULES = [
   MatToolbarModule,
   MatTableModule,
   MatSortModule,
+  MatExpansionModule,
 ];
 
 /**
