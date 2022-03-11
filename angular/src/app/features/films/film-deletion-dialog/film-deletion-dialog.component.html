@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>Delete the film?</h2>
+<mat-dialog-content>This will delete the film. This action cannot be undone.</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+  <button mat-button [mat-dialog-close]="true">Delete</button>
+</mat-dialog-actions>

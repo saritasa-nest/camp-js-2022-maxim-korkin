@@ -6,6 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const MATERIAL_MODULES = [
   MatFormFieldModule,
@@ -15,6 +16,7 @@ const MATERIAL_MODULES = [
   MatTableModule,
   MatSortModule,
   MatExpansionModule,
+  MatDialogModule,
 ];
 
 /**

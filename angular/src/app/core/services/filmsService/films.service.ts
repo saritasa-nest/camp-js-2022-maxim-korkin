@@ -51,4 +51,8 @@ export class FilmsService {
       first(),
     );
   }
+
+  // public removeFilmByPrimaryKey(pk: number): Observable<void> {
+  //   this.filmsCollection.
+  // }
 }

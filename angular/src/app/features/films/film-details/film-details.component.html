@@ -6,6 +6,8 @@
   <h3>Release date: {{ film.releaseDate | date: "dd.MM.yyyy" }}</h3>
 </div>
 
+<button type="button" mat-raised-button (click)="handleDelete()">Delete</button>
+
 <h2>Characters</h2>
 <mat-accordion multi="true">
   <mat-expansion-panel

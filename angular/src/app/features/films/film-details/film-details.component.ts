@@ -1,3 +1,4 @@
+import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { takeUntil, Subject, map, Observable } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +7,9 @@ import { Character } from 'src/app/core/models/Character';
 import { CharactersService } from 'src/app/core/services/CharactersService/characters.service';
 import { PlanetsService } from 'src/app/core/services/PlanetsService/planets.service';
 import { Planet } from 'src/app/core/models/Planet';
+import { MatDialog } from '@angular/material/dialog';
+
+import { FilmDeletionDialogComponent } from './../film-deletion-dialog/film-deletion-dialog.component';
 
 /**
  * Component for the film details.
@@ -18,25 +22,29 @@ import { Planet } from 'src/app/core/models/Planet';
 })
 export class FilmDetailsComponent implements OnInit, OnDestroy {
 
-  private readonly destroy$ = new Subject<void>();
-
-  /** Film. */
-  public film$: Observable<Film> = this.route.data.pipe(
-    takeUntil(this.destroy$),
-    map(data => data['film']),
-  );
-
   /** Characters. */
   public characters$!: Observable<Character[]>;
 
   /** Planets. */
   public planets$!: Observable<Planet[]>;
 
+  /** Film. */
+  public film$: Observable<Film>;
+
+  private readonly destroy$ = new Subject<void>();
+
   public constructor(
     private readonly route: ActivatedRoute,
+    private readonly filmsService: FilmsService,
     private readonly charactersService: CharactersService,
     private readonly planetsService: PlanetsService,
-  ) { }
+    private readonly dialogService: MatDialog,
+  ) {
+    this.film$ = this.route.data.pipe(
+      takeUntil(this.destroy$),
+      map(data => data['film']),
+    );
+  }
 
   /**
    * @inheritdoc
@@ -58,6 +66,18 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Handles delete button click.
+   */
+  public handleDelete(): void {
+    const deletionDialogRef = this.dialogService.open(FilmDeletionDialogComponent);
+
+    deletionDialogRef.afterClosed().subscribe(result => {
+      /** Checking if the user confirmed deletion */
+      console.log(result);
+    });
   }
 
 }
