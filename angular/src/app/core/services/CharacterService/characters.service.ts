@@ -9,7 +9,7 @@ import { splitArray } from '../../utils/splitArray';
 import { CharacterMapper } from '../mappers/character-mapper.service';
 import { CharacterDto } from '../mappers/dto/CharacterDto/CharacterDto';
 
-const CHARACTERS_COLLECTION_NAME = 'characters';
+const CHARACTERS_COLLECTION_NAME = 'people';
 
 /**
  * Characters service.
