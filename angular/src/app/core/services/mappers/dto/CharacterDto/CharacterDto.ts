@@ -1,7 +1,7 @@
 import { CharacterFieldsDto } from './CharacterFieldsDto';
 
 /**
- * Interface describing the DTO of character.
+ * Dto of character.
  */
 export interface CharacterDto {
 

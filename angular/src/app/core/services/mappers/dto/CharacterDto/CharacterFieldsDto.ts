@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /**
- * Interface describing the fields of DTO character.
+ * Fields of Dto character.
  */
 export interface CharacterFieldsDto {
 
