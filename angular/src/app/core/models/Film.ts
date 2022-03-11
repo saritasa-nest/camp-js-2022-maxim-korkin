@@ -26,4 +26,7 @@ export interface Film {
 
   /** Primary keys of the characters. */
   readonly characterPks: readonly number[];
+
+  /** Primary keys of the planets. */
+  readonly planetPks: readonly number[];
 }

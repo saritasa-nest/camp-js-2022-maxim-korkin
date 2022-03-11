@@ -27,6 +27,7 @@ export class FilmMapper {
       releaseDate: new Date(fields.release_date),
       title: fields.title,
       characterPks: fields.characters,
+      planetPks: fields.planets,
       pk: dto.pk,
     };
   }

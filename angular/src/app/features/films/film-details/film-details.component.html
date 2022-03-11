@@ -8,3 +8,6 @@
 
 <h2>Characters</h2>
 <p *ngFor="let character of this.characters$ | async">{{ character.name }}</p>
+
+<h2>Planets</h2>
+<p *ngFor="let planet of this.planets$ | async">{{ planet.name }}</p>

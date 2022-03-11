@@ -3,7 +3,9 @@ import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/
 import { ActivatedRoute } from '@angular/router';
 import { Film } from 'src/app/core/models/Film';
 import { Character } from 'src/app/core/models/Character';
-import { CharactersService } from 'src/app/core/services/CharacterService/characters.service';
+import { CharactersService } from 'src/app/core/services/CharactersService/characters.service';
+import { PlanetsService } from 'src/app/core/services/PlanetsService/planets.service';
+import { Planet } from 'src/app/core/models/Planet';
 
 /**
  * Component for the film details.
@@ -27,9 +29,13 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
   /** Characters. */
   public characters$!: Observable<Character[]>;
 
+  /** Planets. */
+  public planets$!: Observable<Planet[]>;
+
   public constructor(
     private readonly route: ActivatedRoute,
     private readonly charactersService: CharactersService,
+    private readonly planetsService: PlanetsService,
   ) { }
 
   /**
@@ -38,6 +44,9 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.film$.subscribe(film => {
       this.characters$ = this.charactersService.fetchCharactersByPrimaryKeys(film.characterPks).pipe(
+        takeUntil(this.destroy$),
+      );
+      this.planets$ = this.planetsService.fetchPlanetsByPrimaryKeys(film.planetPks).pipe(
         takeUntil(this.destroy$),
       );
     });
