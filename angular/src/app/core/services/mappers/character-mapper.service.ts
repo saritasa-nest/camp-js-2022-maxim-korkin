@@ -10,7 +10,8 @@ import { CharacterDto } from './dto/CharacterDto/CharacterDto';
 @Injectable({
   providedIn: 'root',
 })
-export class CharacterMapperService {
+export class CharacterMapper {
+
   /**
    * Converts CharacterDto to model.
    * @param dto - Dto object to convert.

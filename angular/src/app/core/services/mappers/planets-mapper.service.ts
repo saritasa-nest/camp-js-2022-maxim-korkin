@@ -10,7 +10,7 @@ import { PlanetDto } from './dto/PlanetDto/PlanetDto';
 @Injectable({
   providedIn: 'root',
 })
-export class PlanetsMapperService {
+export class PlanetsMapper {
 
   /**
    * Converts PlanetDto to model.
