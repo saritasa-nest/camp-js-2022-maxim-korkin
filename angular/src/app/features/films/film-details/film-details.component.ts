@@ -17,7 +17,7 @@ export class FilmDetailsComponent implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   /** Film. */
-  public film$: Observable<Film> = this.route.data.pipe(
+  public readonly film$: Observable<Film> = this.route.data.pipe(
     takeUntil(this.destroy$),
     map(data => data['film']),
   );
