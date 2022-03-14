@@ -2,7 +2,7 @@
   mat-stroked-button
   class="pagination-button"
   type="button"
-  (click)="prevPage()"
+  (click)="fetchPrevPage()"
   [disabled]="isFirstPage"
 >
   Prev
@@ -11,7 +11,7 @@
   mat-stroked-button
   class="pagination-button"
   type="button"
-  (click)="nextPage()"
+  (click)="fetchNextPage()"
   [disabled]="isLastPage"
 >
   Next

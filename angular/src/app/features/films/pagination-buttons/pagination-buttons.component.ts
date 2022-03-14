@@ -25,16 +25,16 @@ export class PaginationButtonsComponent {
   public paginationMode$ = new BehaviorSubject<PaginationDirection>(PaginationDirection.Next);
 
   /**
-   * Method for displaying the next page of films.
+   * Method for fetching the next page of films.
    */
-  public nextPage(): void {
+  public fetchNextPage(): void {
     this.paginationMode$.next(PaginationDirection.Next);
   }
 
   /**
-   * Method for displaying the previous page of films.
+   * Method for fetching the previous page of films.
    */
-  public prevPage(): void {
+  public fetchPrevPage(): void {
     this.paginationMode$.next(PaginationDirection.Previous);
   }
 }
