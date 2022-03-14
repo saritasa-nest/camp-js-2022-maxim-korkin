@@ -20,7 +20,7 @@ export class NonAuthGuard implements CanActivate {
    */
   public canActivate(): Observable<boolean | UrlTree> {
     return this.authService.isSignedIn$.pipe(
-      map(isSignedIn => (isSignedIn === false) ? true : this.router.parseUrl('/films')),
+      map(isSignedIn => isSignedIn ? this.router.parseUrl('/films') : true),
     );
   }
 }
