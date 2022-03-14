@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom, Observable } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { FilmSortingField } from 'src/app/features/films/enums/FilmSortingField';
@@ -63,38 +63,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
 
   /** Films on the current page. */
-  public readonly films$ = combineLatest(
-    [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
-  ).pipe(
-    debounceTime(300),
-    map(([sortingOptions, paginationMode, searchingValue]) => (
-      {
-        sortingOptions,
-        paginationMode,
-        lastVisibleFilm: this.lastVisibleFilm,
-        firstVisibleFilm: this.firstVisibleFilm,
-        countOfFilmsOnPage: COUNT_OF_FILMS_ON_PAGE,
-        titleSearchingValue: searchingValue,
-      }
-    )),
-    tap(fetchOptions => {
-
-      if (fetchOptions.titleSearchingValue !== '') {
-        this.isSearching$.next(true);
-        this.setSortingHeaders(FilmSortingField.Title, SortingDirection.Ascending);
-      } else {
-        const { sortingField, direction } = fetchOptions.sortingOptions;
-        this.isSearching$.next(false);
-        this.setSortingHeaders(sortingField, direction);
-      }
-    }),
-    switchMap(fetchOptions => this.filmsService.fetchFilms(fetchOptions)),
-    withLatestFrom(this.paginationMode$),
-    tap(([films, paginationMode]) => this.updatePaginationStatus(films.length, paginationMode)),
-    map(([films, paginationMode]) => this.parseFilmsList(films, paginationMode)),
-    tap(films => this.updateFirstAndLastFilms(films)),
-    takeUntil(this.destroy$),
-  );
+  public readonly films$ = this.initFilmsStream();
 
   private readonly episodeIdHeader = 'Episode Id';
 
@@ -303,5 +272,40 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       default:
         return this.episodeIdHeader;
     }
+  }
+
+  private initFilmsStream(): Observable<readonly Film[]> {
+    return combineLatest(
+      [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
+    ).pipe(
+      debounceTime(300),
+      map(([sortingOptions, paginationMode, searchingValue]) => (
+        {
+          sortingOptions,
+          paginationMode,
+          lastVisibleFilm: this.lastVisibleFilm,
+          firstVisibleFilm: this.firstVisibleFilm,
+          countOfFilmsOnPage: COUNT_OF_FILMS_ON_PAGE,
+          titleSearchingValue: searchingValue,
+        }
+      )),
+      tap(fetchOptions => {
+
+        if (fetchOptions.titleSearchingValue !== '') {
+          this.isSearching$.next(true);
+          this.setSortingHeaders(FilmSortingField.Title, SortingDirection.Ascending);
+        } else {
+          const { sortingField, direction } = fetchOptions.sortingOptions;
+          this.isSearching$.next(false);
+          this.setSortingHeaders(sortingField, direction);
+        }
+      }),
+      switchMap(fetchOptions => this.filmsService.fetchFilms(fetchOptions)),
+      withLatestFrom(this.paginationMode$),
+      tap(([films, paginationMode]) => this.updatePaginationStatus(films.length, paginationMode)),
+      map(([films, paginationMode]) => this.parseFilmsList(films, paginationMode)),
+      tap(films => this.updateFirstAndLastFilms(films)),
+      takeUntil(this.destroy$),
+    );
   }
 }
