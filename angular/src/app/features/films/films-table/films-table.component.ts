@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, auditTime, takeUntil, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { FilmSortingField } from 'src/app/features/films/enums/FilmSortingField';
@@ -66,7 +66,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly films$ = combineLatest(
     [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
   ).pipe(
-    auditTime(300),
+    debounceTime(300),
     map(([sortingOptions, paginationMode, searchingValue]) => (
       {
         sortingOptions,
@@ -151,9 +151,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnDestroy(): void {
-    this.isSearching$.complete();
-    this.isLastPage$.complete();
-    this.isFirstPage$.complete();
     this.destroy$.next();
     this.destroy$.complete();
   }
