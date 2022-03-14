@@ -1,7 +1,7 @@
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
-import { takeUntil, Subject, map, Observable } from 'rxjs';
+import { takeUntil, Subject, map, Observable, switchMap } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Film } from 'src/app/core/models/Film';
 import { Character } from 'src/app/core/models/Character';
 import { CharactersService } from 'src/app/core/services/CharactersService/characters.service';
@@ -42,6 +42,7 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
     private readonly charactersService: CharactersService,
     private readonly planetsService: PlanetsService,
     private readonly dialogService: MatDialog,
+    private readonly router: Router,
   ) {
     this.film$ = this.route.data.pipe(
       takeUntil(this.destroy$),
@@ -77,9 +78,16 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
   public handleDelete(): void {
     const deletionDialogRef = this.dialogService.open(FilmDeletionDialogComponent);
 
-    deletionDialogRef.afterClosed().subscribe(result => {
+    deletionDialogRef.afterClosed().subscribe(isConfirmed => {
       /** Checking if the user confirmed deletion. */
-      console.error(result);
+      if (isConfirmed) {
+        this.film$.pipe(
+          switchMap(film => this.filmsService.removeFilmByPrimaryKey(film.pk)),
+          takeUntil(this.destroy$),
+        ).subscribe({
+          next: () => this.router.navigate(['films']),
+        });
+      }
     });
   }
 

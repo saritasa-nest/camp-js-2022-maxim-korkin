@@ -1,7 +1,7 @@
-import { CollectionReference, query, where } from 'firebase/firestore';
+import { CollectionReference, getDocs, query, where } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
-import { Observable, map, first } from 'rxjs';
-import { collection, Firestore } from '@angular/fire/firestore';
+import { Observable, map, first, defer, switchMap } from 'rxjs';
+import { collection, deleteDoc, Firestore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/Film';
@@ -52,7 +52,15 @@ export class FilmsService {
     );
   }
 
-  // public removeFilmByPrimaryKey(pk: number): Observable<void> {
-  //   this.filmsCollection.
-  // }
+  /**
+   * Removes film by primary key.
+   * @param pk - Primary key of the film to remove.
+   */
+  public removeFilmByPrimaryKey(pk: number): Observable<void> {
+    const filmQuery = query(this.filmsCollection, where('pk', '==', pk));
+    return defer(() => getDocs(filmQuery)).pipe(
+      map(snapshot => snapshot.docs[0].ref),
+      switchMap(ref => defer(() => deleteDoc(ref))),
+    );
+  }
 }
