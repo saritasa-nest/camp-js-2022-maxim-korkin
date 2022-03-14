@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom, Observable } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom, Observable, merge } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { FilmSortingField } from 'src/app/features/films/enums/FilmSortingField';
@@ -97,23 +97,19 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
-    /** Emitting and updating values to fetch first page when sorting field or direction is changed. */
-    this.sortingOptions$.pipe(
+    /** Emitting and updating values to fetch first page when sorting field or direction is changed or when field.
+     * Or when user updates searching value. */
+    merge(
+      this.sortingOptions$,
+      this.searchingValue$,
+    ).pipe(
       takeUntil(this.destroy$),
-    ).subscribe({
-      next: () => {
-        this.resetValuesForFirstPageFetching();
-      },
-    });
-
-    /** Same as sorting options. */
-    this.searchingValue$.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe({
-      next: () => {
-        this.resetValuesForFirstPageFetching();
-      },
-    });
+    )
+      .subscribe({
+        next: () => {
+          this.resetValuesForFirstPageFetching();
+        },
+      });
   }
 
   /**
