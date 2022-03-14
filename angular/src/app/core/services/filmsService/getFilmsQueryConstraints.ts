@@ -1,24 +1,25 @@
+import { SortingDirection } from 'src/app/core/utils/enums/SortingDirection';
 import { QueryConstraint, orderBy, limit, limitToLast, startAfter, endBefore, where } from 'firebase/firestore';
 
 import { Film } from '../../models/Film';
-import { FilmsFetchOptions } from '../../utils/interfaces/FilmsFetchOptions';
-import { PaginationModes } from '../../utils/enums/PaginationModes';
-import { SortingFields } from '../../utils/enums/SortingFields';
+import { FilmsFetchOptions } from '../../../features/films/interfaces/FilmsFetchOptions';
+import { PaginationDirection } from '../../utils/enums/PaginationDirection';
+import { FilmSortingField } from '../../../features/films/enums/FilmSortingField';
 
 /**
  * Function for getting sorting value from the film to use it as a constraint.
  * @param film - Film to get value from.
  * @param sortingField - Field we are sorting by.
  */
-function getSortingFieldValue(film: Film, sortingField: SortingFields): string | number {
+function getSortingFieldValue(film: Film, sortingField: FilmSortingField): string | number {
   switch (sortingField) {
-    case SortingFields.EpisodeId:
+    case FilmSortingField.EpisodeId:
       return film.episodeId;
-    case SortingFields.Title:
+    case FilmSortingField.Title:
       return film.title;
-    case SortingFields.ReleaseDate:
+    case FilmSortingField.ReleaseDate:
       return film.releaseDate.toISOString().slice(0, 10);
-    case SortingFields.Director:
+    case FilmSortingField.Director:
       return film.director;
     default:
       return film.episodeId;
@@ -36,11 +37,11 @@ export function getFilmsQueryConstraints(
 
   /** Need to sort exactly by title if the user wants to search by it. */
   if (titleSearchingValue !== '') {
-    queryConstraints.push(orderBy(SortingFields.Title, 'asc'));
+    queryConstraints.push(orderBy(FilmSortingField.Title, SortingDirection.Ascending));
 
     const veryBigSymbol = '\uf8ff';
-    queryConstraints.push(where(SortingFields.Title, '>=', titleSearchingValue));
-    queryConstraints.push(where(SortingFields.Title, '<=', `${titleSearchingValue}${veryBigSymbol}`));
+    queryConstraints.push(where(FilmSortingField.Title, '>=', titleSearchingValue));
+    queryConstraints.push(where(FilmSortingField.Title, '<=', `${titleSearchingValue}${veryBigSymbol}`));
   } else {
     queryConstraints.push(orderBy(sortingOptions.sortingField, sortingOptions.direction));
   }
@@ -53,10 +54,10 @@ export function getFilmsQueryConstraints(
     return queryConstraints;
   }
 
-  if (paginationMode === PaginationModes.NEXT) {
+  if (paginationMode === PaginationDirection.Next) {
     queryConstraints.push(startAfter(getSortingFieldValue(lastVisibleFilm, sortingOptions.sortingField)));
     queryConstraints.push(limit(countOfFilmsOnPage + 1));
-  } else if (paginationMode === PaginationModes.PREVIOUS) {
+  } else if (paginationMode === PaginationDirection.Previous) {
     queryConstraints.push(endBefore(getSortingFieldValue(firstVisibleFilm, sortingOptions.sortingField)));
     queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
   }

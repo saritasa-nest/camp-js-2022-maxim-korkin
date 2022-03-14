@@ -1,7 +1,7 @@
 /**
  * Possible sorting fields for the films table.
  */
-export enum SortingFields {
+export enum FilmSortingField {
   Title = 'fields.title',
   EpisodeId = 'fields.episode_id',
   ReleaseDate = 'fields.release_date',

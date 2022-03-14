@@ -1,13 +1,13 @@
 import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, auditTime, takeUntil, withLatestFrom } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
-import { SortingFields } from 'src/app/core/utils/enums/SortingFields';
+import { FilmSortingField } from 'src/app/features/films/enums/FilmSortingField';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { Film } from 'src/app/core/models/Film';
-import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
-import { SortingDirections } from 'src/app/core/utils/enums/SortingDirections';
+import { PaginationDirection } from 'src/app/core/utils/enums/PaginationDirection';
+import { SortingDirection } from 'src/app/core/utils/enums/SortingDirection';
 import { Router } from '@angular/router';
-import { SortingOptions } from 'src/app/core/utils/interfaces/SortingOptions';
+import { SortingOptions } from 'src/app/features/films/interfaces/FilmsSortingOptions';
 
 import { SearchingInputComponent } from '../searching-input/searching-input.component';
 import { PaginationButtonsComponent } from '../pagination-buttons/pagination-buttons.component';
@@ -22,7 +22,7 @@ const COUNT_OF_FILMS_ON_PAGE = 3;
  */
 const COUNT_OF_FILMS_FOR_NEXT_PAGE = COUNT_OF_FILMS_ON_PAGE + 1;
 
-const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: SortingFields.EpisodeId, direction: SortingDirections.ASCENDING };
+const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: FilmSortingField.EpisodeId, direction: SortingDirection.Ascending };
 
 /**
  * Component for the films table.
@@ -46,7 +46,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(DEFAULT_SORTING_OPTIONS);
 
-  private readonly paginationMode$ = new Subject<PaginationModes>();
+  private readonly paginationMode$ = new Subject<PaginationDirection>();
 
   private readonly searchingValue$ = new BehaviorSubject<string>('');
 
@@ -81,7 +81,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
       if (fetchOptions.titleSearchingValue !== '') {
         this.isSearching$.next(true);
-        this.setSortingHeaders(SortingFields.Title, SortingDirections.ASCENDING);
+        this.setSortingHeaders(FilmSortingField.Title, SortingDirection.Ascending);
       } else {
         const { sortingField, direction } = fetchOptions.sortingOptions;
         this.isSearching$.next(false);
@@ -184,7 +184,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param active - New active header.
    * @param direction - New direction.
    */
-  public setSortingHeaders(active: SortingFields, direction: SortingDirections): void {
+  public setSortingHeaders(active: FilmSortingField, direction: SortingDirection): void {
     this.filmsSortHeaders.active = this.mapSortingFieldToHeader(active);
     this.filmsSortHeaders.direction = direction;
   }
@@ -202,10 +202,10 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param countOfFilms - Count of fetched films.
    * @param paginationMode - Pagination mode.
    */
-  private updatePaginationStatus(countOfFilms: number, paginationMode: PaginationModes): void {
+  private updatePaginationStatus(countOfFilms: number, paginationMode: PaginationDirection): void {
     if (this.firstVisibleFilm === null) {
       this.isLastPage$.next(countOfFilms !== COUNT_OF_FILMS_FOR_NEXT_PAGE);
-    } else if (paginationMode === PaginationModes.NEXT) {
+    } else if (paginationMode === PaginationDirection.Next) {
       this.isLastPage$.next(countOfFilms !== COUNT_OF_FILMS_FOR_NEXT_PAGE);
       this.isFirstPage$.next(false);
     } else {
@@ -219,14 +219,14 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param films - Array of films.
    * @param paginationMode - Pagination mode.
    */
-  private parseFilmsList(films: Film[], paginationMode: PaginationModes): Film[] {
+  private parseFilmsList(films: Film[], paginationMode: PaginationDirection): Film[] {
     /** Case when we dont have film we dont need to display. */
     if (films.length !== COUNT_OF_FILMS_FOR_NEXT_PAGE) {
       return films;
     }
 
     /** Removes last film if we loaded next page. */
-    if (paginationMode === PaginationModes.NEXT) {
+    if (paginationMode === PaginationDirection.Next) {
       return films.slice(0, -1);
     }
 
@@ -250,7 +250,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private resetValuesForFirstPageFetching(): void {
     this.firstVisibleFilm = null;
     this.lastVisibleFilm = null;
-    this.paginationMode$.next(PaginationModes.NEXT);
+    this.paginationMode$.next(PaginationDirection.Next);
     this.isFirstPage$.next(true);
     this.isLastPage$.next(true);
   }
@@ -258,18 +258,18 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private mapSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
     let sortingField = this.mapHeaderToSortingField(sortState.active);
 
-    let direction: SortingDirections;
+    let direction: SortingDirection;
     switch (sortState.direction) {
       case 'asc':
-        direction = SortingDirections.ASCENDING;
+        direction = SortingDirection.Ascending;
         break;
       case 'desc':
-        direction = SortingDirections.DESCENDING;
+        direction = SortingDirection.Descending;
         break;
       default:
         /** MatSort direction is equal to '' when we dont sort by specific field so using default values. */
-        sortingField = SortingFields.EpisodeId;
-        direction = SortingDirections.ASCENDING;
+        sortingField = FilmSortingField.EpisodeId;
+        direction = SortingDirection.Ascending;
     }
 
     return {
@@ -278,30 +278,30 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
-  private mapHeaderToSortingField(headerName: string): SortingFields {
+  private mapHeaderToSortingField(headerName: string): FilmSortingField {
     switch (headerName) {
       case this.episodeIdHeader:
-        return SortingFields.EpisodeId;
+        return FilmSortingField.EpisodeId;
       case this.titleHeader:
-        return SortingFields.Title;
+        return FilmSortingField.Title;
       case this.releaseDateHeader:
-        return SortingFields.ReleaseDate;
+        return FilmSortingField.ReleaseDate;
       case this.directorHeader:
-        return SortingFields.Director;
+        return FilmSortingField.Director;
       default:
-        return SortingFields.EpisodeId;
+        return FilmSortingField.EpisodeId;
     }
   }
 
-  private mapSortingFieldToHeader(sortingField: SortingFields): string {
+  private mapSortingFieldToHeader(sortingField: FilmSortingField): string {
     switch (sortingField) {
-      case SortingFields.Director:
+      case FilmSortingField.Director:
         return this.directorHeader;
-      case SortingFields.EpisodeId:
+      case FilmSortingField.EpisodeId:
         return this.episodeIdHeader;
-      case SortingFields.ReleaseDate:
+      case FilmSortingField.ReleaseDate:
         return this.releaseDateHeader;
-      case SortingFields.Title:
+      case FilmSortingField.Title:
         return this.titleHeader;
       default:
         return this.episodeIdHeader;
