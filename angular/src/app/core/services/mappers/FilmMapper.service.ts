@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Film } from '../../models/Film';
 
-import { FilmDto } from './dto/FilmDto/FilmDto';
+import { FilmDto } from './dto/FilmDto/FilmDto.dto';
 
 /**
  * Class for mapping Film and FilmDto to each other.

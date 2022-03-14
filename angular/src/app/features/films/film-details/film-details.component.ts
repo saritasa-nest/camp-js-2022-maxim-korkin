@@ -28,10 +28,13 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
   /** Planets. */
   public planets$!: Observable<Planet[]>;
 
-  /** Film. */
-  public film$: Observable<Film>;
-
   private readonly destroy$ = new Subject<void>();
+
+  /** Film. */
+  public readonly film$: Observable<Film> = this.route.data.pipe(
+    takeUntil(this.destroy$),
+    map(data => data['film']),
+  );
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -75,8 +78,8 @@ export class FilmDetailsComponent implements OnInit, OnDestroy {
     const deletionDialogRef = this.dialogService.open(FilmDeletionDialogComponent);
 
     deletionDialogRef.afterClosed().subscribe(result => {
-      /** Checking if the user confirmed deletion */
-      console.log(result);
+      /** Checking if the user confirmed deletion. */
+      console.error(result);
     });
   }
 

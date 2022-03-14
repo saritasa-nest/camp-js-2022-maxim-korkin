@@ -1,8 +1,8 @@
 import { Film } from 'src/app/core/models/Film';
 
-import { PaginationModes } from '../enums/PaginationModes';
+import { PaginationDirection } from '../../../core/utils/enums/PaginationDirection';
 
-import { SortingOptions } from './SortingOptions';
+import { SortingOptions } from './FilmsSortingOptions';
 
 /**
  * Options used for fetching films by the FilmsService.
@@ -13,7 +13,7 @@ export interface FilmsFetchOptions {
   readonly sortingOptions: SortingOptions;
 
   /** Describes if we should fetch next page or previous one. */
-  readonly paginationMode: PaginationModes;
+  readonly paginationMode: PaginationDirection;
 
   /** First visible film on the current page. */
   readonly firstVisibleFilm: Film | null;

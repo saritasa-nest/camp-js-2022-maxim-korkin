@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { PaginationModes } from 'src/app/core/utils/enums/PaginationModes';
+import { PaginationDirection } from 'src/app/core/utils/enums/PaginationDirection';
 
 /**
  * Pagination buttons component.
@@ -22,19 +22,19 @@ export class PaginationButtonsComponent {
   public isFirstPage = true;
 
   /** Pagination mode. */
-  public paginationMode$ = new BehaviorSubject<PaginationModes>(PaginationModes.NEXT);
+  public paginationMode$ = new BehaviorSubject<PaginationDirection>(PaginationDirection.Next);
 
   /**
    * Method for displaying the next page of films.
    */
   public nextPage(): void {
-    this.paginationMode$.next(PaginationModes.NEXT);
+    this.paginationMode$.next(PaginationDirection.Next);
   }
 
   /**
    * Method for displaying the previous page of films.
    */
   public prevPage(): void {
-    this.paginationMode$.next(PaginationModes.PREVIOUS);
+    this.paginationMode$.next(PaginationDirection.Previous);
   }
 }

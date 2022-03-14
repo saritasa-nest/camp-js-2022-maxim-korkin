@@ -1,9 +1,9 @@
 <div *ngIf="this.film$ | async as film">
   <h2>{{ film.title }}</h2>
   <p>{{ film.openingCrawl }}</p>
-  <h3>Director: {{ film.director }}</h3>
-  <h3>Producers: {{ film.producers }}</h3>
-  <h3>Release date: {{ film.releaseDate | date: "dd.MM.yyyy" }}</h3>
+  <p>Director: {{ film.director }}</p>
+  <p>Producers: {{ film.producers }}</p>
+  <p>Release date: {{ film.releaseDate | date: "dd.MM.yyyy" }}</p>
 </div>
 
 <button type="button" mat-raised-button (click)="handleDelete()">Delete</button>
