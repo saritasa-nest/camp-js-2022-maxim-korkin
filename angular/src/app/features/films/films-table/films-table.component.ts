@@ -42,7 +42,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly isLastPage$ = new BehaviorSubject(true);
 
   /** Shows if the current page is the first one. */
-  public readonly isFirstPage$ = new BehaviorSubject<boolean>(true);
+  public readonly isFirstPage$ = new BehaviorSubject(true);
 
   private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(DEFAULT_SORTING_OPTIONS);
 
