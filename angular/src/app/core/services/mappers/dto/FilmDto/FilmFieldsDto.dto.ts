@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 /**
  * DTO interface describing the fields of film.
  */

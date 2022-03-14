@@ -14,7 +14,7 @@ import { FilmsService } from '../filmsService/films.service';
 export class FilmResolver implements Resolve<Film> {
 
   public constructor(
-    private router: Router,
+    private readonly router: Router,
     private readonly filmsService: FilmsService,
   ) {
   }

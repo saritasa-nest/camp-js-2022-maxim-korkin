@@ -5,7 +5,7 @@ import { collection, Firestore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/Film';
-import { FilmDto } from '../mappers/dto/FilmDto/FilmDto';
+import { FilmDto } from '../mappers/dto/FilmDto/FilmDto.dto';
 import { FilmMapper } from '../mappers/FilmMapper.service';
 import { FilmsFetchOptions } from '../../utils/interfaces/FilmsFetchOptions';
 
