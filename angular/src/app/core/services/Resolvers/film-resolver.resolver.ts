@@ -43,6 +43,7 @@ export class FilmResolver implements Resolve<Film> {
 
   /**
    * Method which redirects to film-not-found page in case of errors occurred during film fetching.
+   * @returns Empty stream which need to return from the resolve method in case of errors.
    */
   private handleError(): Observable<never> {
     this.router.navigate(['films/film-not-found']);
