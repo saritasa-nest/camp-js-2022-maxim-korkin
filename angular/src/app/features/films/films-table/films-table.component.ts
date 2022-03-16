@@ -4,6 +4,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { FilmSortingField } from 'src/app/features/films/enums/FilmSortingField';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { Film } from 'src/app/core/models/Film';
+import { AuthService } from 'src/app/core/services/AuthService/auth.service';
 import { PaginationDirection } from 'src/app/core/utils/enums/PaginationDirection';
 import { SortingDirection } from 'src/app/core/utils/enums/SortingDirection';
 import { Router } from '@angular/router';
@@ -43,6 +44,9 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** Shows if the current page is the first one. */
   public readonly isFirstPage$ = new BehaviorSubject(true);
+
+  /** Shows if the user is signed in or not. */
+  public readonly isSignedIn$ = this.authService.isSignedIn$;
 
   private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(DEFAULT_SORTING_OPTIONS);
 
@@ -91,6 +95,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   public constructor(
     private readonly filmsService: FilmsService,
     private readonly router: Router,
+    private readonly authService: AuthService,
   ) {}
 
   /**

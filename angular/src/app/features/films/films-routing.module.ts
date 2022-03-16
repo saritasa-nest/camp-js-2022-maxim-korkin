@@ -6,11 +6,17 @@ import { FilmResolver } from 'src/app/core/services/Resolvers/film-resolver.reso
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { FilmsTableComponent } from './films-table/films-table.component';
 import { FilmNotFoundComponent } from './film-not-found/film-not-found.component';
+import { NewFilmFormComponent } from './new-film-form/new-film-form.component';
 
 const routes: Routes = [
   {
     path: '',
     component: FilmsTableComponent,
+  },
+  {
+    path: 'new-film',
+    component: NewFilmFormComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'film/:id',

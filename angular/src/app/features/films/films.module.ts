@@ -8,6 +8,7 @@ import { SearchingInputComponent } from './searching-input/searching-input.compo
 import { FilmDetailsComponent } from './film-details/film-details.component';
 import { FilmNotFoundComponent } from './film-not-found/film-not-found.component';
 import { FilmDeletionDialogComponent } from './film-deletion-dialog/film-deletion-dialog.component';
+import { NewFilmFormComponent } from './new-film-form/new-film-form.component';
 
 /**
  * Module for films feature.
@@ -20,6 +21,7 @@ import { FilmDeletionDialogComponent } from './film-deletion-dialog/film-deletio
     FilmDetailsComponent,
     FilmNotFoundComponent,
     FilmDeletionDialogComponent,
+    NewFilmFormComponent,
   ],
   imports: [
     CommonModule,

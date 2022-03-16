@@ -70,3 +70,6 @@
   [isFirstPage]="!!(isFirstPage$ | async)"
   [isLastPage]="!!(isLastPage$ | async)"
 ></sw-pagination-buttons>
+<a *ngIf="isSignedIn$ | async" routerLink="/films/new-film" mat-stroked-button
+  >Create</a
+>
