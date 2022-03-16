@@ -1,25 +1,18 @@
+import { BaseEntity } from './../../BaseEntity';
+
 /**
  * Interface describing the planet.
  */
-export interface Planet {
+export interface Planet extends BaseEntity {
 
   /** Climate of the planet. */
   readonly climate: string;
 
-  /** Creation date of the planet in the DB. */
-  readonly created: Date;
-
   /** Diameter of the planet. */
   readonly diameter: string;
 
-  /** Edition date of the planet in the DB. */
-  readonly edited: Date;
-
   /** Gravity of the planet. */
   readonly gravity: string;
-
-  /** Name of the planet. */
-  readonly name: string;
 
   /** Orbital period of the planet. */
   readonly orbitalPeriod: string;
@@ -35,7 +28,4 @@ export interface Planet {
 
   /** Terrain of the planet. */
   readonly terrain: string;
-
-  /** Primary key of the planet. */
-  readonly pk: number;
 }

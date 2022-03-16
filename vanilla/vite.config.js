@@ -13,7 +13,9 @@ export default defineConfig({
     rollupOptions: {
       input: [
         resolve(root, 'index.html'),
-        resolve(root, 'films', 'film', 'index.html')
+        resolve(root, 'films', 'film', 'index.html'),
+        resolve(root, 'films', 'create', 'index.html'),
+        resolve(root, 'films', 'edit', 'index.html'),
       ]
     }
   }

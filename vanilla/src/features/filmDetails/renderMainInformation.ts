@@ -11,7 +11,7 @@ export const renderMainInformation = (film: Film): void => {
     <h2>${film.title}</h2>
     <p>${film.openingCrawl}</p>
     <p>Director: ${film.director}</p>
-    <p>Producers: ${film.producer}</p>
+    <p>Producers: ${film.producers}</p>
     <p>Release date: ${film.releaseDate.toLocaleDateString()}</p>
   `;
 

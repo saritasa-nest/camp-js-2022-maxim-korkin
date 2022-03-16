@@ -1,3 +1,5 @@
+import { getDocs, query } from 'firebase/firestore';
+
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { splitArray } from '../../utils/splitArray';
 import { fetchUpToTenEntities } from '../fetchUpToTenEntities';
@@ -5,6 +7,7 @@ import { PlanetMapper } from '../../mappers/PlanetMapper';
 import { Planet } from '../../interfaces/planets/domain/Planet';
 import { PlanetDto } from '../../interfaces/planets/DTO/PlanetDto';
 import { getCollectionRef } from '../../firebase/getCollection';
+import { FirebaseService } from '../firebase/FirebaseService';
 
 /**
  * Service class which helps to work with planets in firestore DB.
@@ -36,5 +39,17 @@ export class PlanetsService {
     await Promise.all(promisesList);
 
     return planets;
+  }
+
+  /**
+   * Fetches all planets from the firestore.
+   * @returns Array with the planets data.
+   */
+  public static async fetchAllPlanets(): Promise<Planet[]> {
+    const charactersQuery = query(this.planetsCollection);
+
+    const snapshot = await getDocs(charactersQuery);
+
+    return FirebaseService.mapQuerySnapshotToArray<PlanetDto, Planet>(snapshot, PlanetMapper.fromDto);
   }
 }

@@ -1,4 +1,4 @@
-import { deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter, where, QueryConstraint } from 'firebase/firestore';
+import { addDoc, deleteDoc, endBefore, getDocs, limit, limitToLast, orderBy, query, QueryConstraint, startAfter, updateDoc, where } from 'firebase/firestore';
 
 import { getCollectionRef } from '../../firebase/getCollection';
 import { OrderingFields } from '../../enums/films/OrderingFields';
@@ -7,6 +7,8 @@ import { FirebaseService } from '../firebase/FirebaseService';
 import { FilmDto } from '../../interfaces/films/DTO/FilmDTO';
 import { FirestoreCollections } from '../../enums/FirestoreCollections/FirestoreCollections';
 import { FilmMapper } from '../../mappers/FilmMapper';
+import { composeFilmFromForm } from '../../features/filmForm/composeFilmFromForm';
+import { assertNotNull } from '../../utils/assertNotNull';
 import { QueryConstraintParameters } from '../../interfaces/options/QueryConstraintParameters';
 
 /**
@@ -205,5 +207,49 @@ export class FilmsService {
     const documentReference = querySnapshot.docs[0].ref;
 
     await deleteDoc(documentReference);
+  }
+
+  /**
+   * Method for getting the highest primary key of the films.
+   * @returns Highest existing primary key.
+   */
+  public static async getMaximumPrimaryKey(): Promise<number> {
+    const filmQuery = query(FilmsService.filmsCollection, orderBy('pk', 'desc'), limit(1));
+
+    const querySnapshot = await getDocs(filmQuery);
+
+    return (querySnapshot.docs.length !== 0) ? querySnapshot.docs[0].data().pk : 1;
+  }
+
+  /**
+   * Method for adding a new film with the values from the form to the firestore DB.
+   * @param form - Form to get values from.
+   */
+  public static async addFilmFromFormValues(form: HTMLFormElement): Promise<void> {
+    const newFilm = composeFilmFromForm(form);
+
+    assertNotNull(newFilm);
+
+    const highestPrimaryKey = await FilmsService.getMaximumPrimaryKey();
+
+    const filmDto = FilmMapper.toDto(newFilm, highestPrimaryKey + 1);
+
+    await addDoc(FilmsService.filmsCollection, filmDto);
+  }
+
+  /**
+   * Method for updating film in the firestore DB.
+   * @param film - Film with the new values.
+   */
+  public static async updateFilm(film: Film): Promise<void> {
+    const filmQuery = query(FilmsService.filmsCollection, where('pk', '==', film.pk));
+
+    const querySnapshot = await getDocs(filmQuery);
+
+    const documentReference = querySnapshot.docs[0].ref;
+
+    const newFilmFields = FilmMapper.toEditableFieldsDto(film);
+
+    await updateDoc(documentReference, { ...newFilmFields });
   }
 }
