@@ -4,8 +4,8 @@ import { QueryConstraint, orderBy, limit, limitToLast, startAfter, endBefore, wh
 import { PaginationDirection } from '../../utils/enums/pagination-direction';
 import { Film } from '../../models/film';
 
-import { FilmsFetchOptions } from './films-fetch-options';
-import { FilmSortingField } from './film-sorting-field';
+import { FilmsFetchOptions } from './interfaces/films-fetch-options';
+import { FilmSortingField } from './enums/film-sorting-field';
 
 /**
  * Function for getting sorting value from the film to use it as a constraint.
@@ -60,7 +60,7 @@ export function getFilmsQueryConstraints(
     queryConstraints.push(limit(countOfFilmsOnPage + 1));
   } else if (paginationMode === PaginationDirection.Previous) {
     queryConstraints.push(endBefore(getSortingFieldValue(firstVisibleFilm, sortingOptions.sortingField)));
-    queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
+    queryConstraints.push(limitToLast(countOfFilmsOnPage + 1));
   }
 
   return queryConstraints;

@@ -1,6 +1,6 @@
 import { Film } from 'src/app/core/models/film';
 
-import { PaginationDirection } from '../../utils/enums/pagination-direction';
+import { PaginationDirection } from '../../../utils/enums/pagination-direction';
 
 import { SortingOptions } from './films-sorting-options';
 

@@ -8,7 +8,7 @@ import { Film } from '../../models/film';
 import { FilmDto } from '../mappers/dto/FilmDto/FilmDto.dto';
 import { FilmMapper } from '../mappers/FilmMapper.service';
 
-import { FilmsFetchOptions } from './films-fetch-options';
+import { FilmsFetchOptions } from './interfaces/films-fetch-options';
 import { getFilmsQueryConstraints } from './getFilmsQueryConstraints';
 
 const FILMS_COLLECTION_NAME = 'films';

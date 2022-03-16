@@ -1,6 +1,6 @@
-import { SortingDirection } from '../../utils/enums/sorting-direction';
+import { SortingDirection } from '../../../utils/enums/sorting-direction';
 
-import { FilmSortingField } from './film-sorting-field';
+import { FilmSortingField } from '../enums/film-sorting-field';
 
 /**
  * Sorting options used for making firebase query constraints for films fetching.
