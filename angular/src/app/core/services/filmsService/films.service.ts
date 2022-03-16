@@ -5,7 +5,7 @@ import { collection, endBefore, Firestore, limit, limitToLast, orderBy, startAft
 import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/film';
-import { FilmDto } from '../mappers/dto/FilmDto/FilmDto.dto';
+import { FilmDto } from '../mappers/dto/film-dto/film-dto';
 import { FilmMapper } from '../mappers/FilmMapper.service';
 import { SortingDirection } from '../../utils/enums/sorting-direction';
 import { PaginationDirection } from '../../utils/enums/pagination-direction';
@@ -75,7 +75,9 @@ export class FilmsService {
       sortingField = FilmSortingField.Title;
       direction = SortingDirection.Ascending;
 
-      /** Adding searching constraint. */
+      /* Adding searching constraint.
+         The \uf8ff character used in the query is a very high code point in the Unicode range.
+         Because it is after most regular characters in Unicode, the query matches all values that start with searching value. */
       const veryHighCodePoint = '\uf8ff';
       queryConstraints.push(where(sortingField, '>=', titleSearchingValue));
       queryConstraints.push(where(sortingField, '<=', `${titleSearchingValue}${veryHighCodePoint}`));
@@ -87,8 +89,8 @@ export class FilmsService {
     /** Sorting constraint. */
     queryConstraints.push(orderBy(sortingField, direction));
 
-    /** If first and last visible films are equals to null then this is the first page loading.
-     * So we do not need to add startAfter or endBefore constraints */
+    /* If first and last visible films are equals to null then this is the first page loading
+       so we do not need to add startAfter or endBefore constraints. */
     if (firstVisibleFilm === null || lastVisibleFilm === null) {
       /** + 1 to know if there is next page. */
       queryConstraints.push(limit(countOfFilmsOnPage + 1));

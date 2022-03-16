@@ -34,4 +34,13 @@ export class FilmDetailsComponent implements OnDestroy {
     this.destroy$.complete();
   }
 
+  /**
+   * TrackBy function for producers list.
+   * @param index - Index.
+   * @param producer - Producer.
+   */
+  public trackProducer(index: number, producer: string): string {
+    return producer;
+  }
+
 }

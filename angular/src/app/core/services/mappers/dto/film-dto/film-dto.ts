@@ -1,7 +1,22 @@
 /**
+ * Interface describing the film.
+ */
+export interface FilmDto {
+
+  /** Fields which describe the film. */
+  readonly fields: FilmFieldsDto;
+
+  /** Model in DB. */
+  readonly model: string;
+
+  /** Primary key of the film. */
+  readonly pk: number;
+}
+
+/**
  * DTO interface describing the fields of film.
  */
-export interface FilmFieldsDto {
+interface FilmFieldsDto {
 
   /** An array containing IDs of characters in the film. */
   readonly characters: readonly number[];

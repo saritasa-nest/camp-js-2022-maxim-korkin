@@ -97,8 +97,8 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
-    /** Emitting and updating values to fetch first page when sorting field or direction is changed or when field.
-     * Or when user updates searching value. */
+    /* Emitting and updating values to fetch first page when sorting field or direction is changed or when field
+     or when user updates searching value. */
     merge(
       this.sortingOptions$,
       this.searchingValue$,

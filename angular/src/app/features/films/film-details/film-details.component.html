@@ -2,6 +2,12 @@
   <h2>{{ film.title }}</h2>
   <p>{{ film.openingCrawl }}</p>
   <p>Director: {{ film.director }}</p>
-  <p>Producers: {{ film.producers }}</p>
+  <p>Producers:</p>
+  <p></p>
+  <ul>
+    <li *ngFor="let producer of film.producers; trackBy: trackProducer">
+      {{ producer }}
+    </li>
+  </ul>
   <p>Release date: {{ film.releaseDate | date: "dd.MM.yyyy" }}</p>
 </div>
