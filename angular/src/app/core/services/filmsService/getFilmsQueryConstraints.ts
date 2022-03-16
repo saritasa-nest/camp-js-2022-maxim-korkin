@@ -1,5 +1,5 @@
-import { SortingDirection } from 'src/app/core/utils/enums/sorting-direction';
 import { QueryConstraint, orderBy, limit, limitToLast, startAfter, endBefore, where } from 'firebase/firestore';
+import { SortingDirection } from 'src/app/core/utils/enums/sorting-direction';
 
 import { PaginationDirection } from '../../utils/enums/pagination-direction';
 import { Film } from '../../models/film';
@@ -36,16 +36,29 @@ export function getFilmsQueryConstraints(
 ): QueryConstraint[] {
   const queryConstraints: QueryConstraint[] = [];
 
-  /** Need to sort exactly by title if the user wants to search by it. */
-  if (titleSearchingValue !== '') {
-    queryConstraints.push(orderBy(FilmSortingField.Title, SortingDirection.Ascending));
+  /**
+   * Sorting field and direction depends on whether the user is searching or not.
+   */
+  let sortingField: FilmSortingField;
+  let direction: SortingDirection;
 
+  /** Checking if the user is searching by title. */
+  if (titleSearchingValue !== '') {
+    /** Need to sort exactly by title if the user is searching by it. */
+    sortingField = FilmSortingField.Title;
+    direction = SortingDirection.Ascending;
+
+    /** Adding searching constraint. */
     const veryHighCodePoint = '\uf8ff';
-    queryConstraints.push(where(FilmSortingField.Title, '>=', titleSearchingValue));
-    queryConstraints.push(where(FilmSortingField.Title, '<=', `${titleSearchingValue}${veryHighCodePoint}`));
+    queryConstraints.push(where(sortingField, '>=', titleSearchingValue));
+    queryConstraints.push(where(sortingField, '<=', `${titleSearchingValue}${veryHighCodePoint}`));
   } else {
-    queryConstraints.push(orderBy(sortingOptions.sortingField, sortingOptions.direction));
+    /** Otherwise using sorting field and direction from the sorting options. */
+    ({ sortingField, direction } = sortingOptions);
   }
+
+  /** Sorting constraint. */
+  queryConstraints.push(orderBy(sortingField, direction));
 
   /** If first and last visible films are equals to null then this is the first page loading.
    * So we do not need to add startAfter or endBefore constraints */
@@ -56,11 +69,11 @@ export function getFilmsQueryConstraints(
   }
 
   if (paginationMode === PaginationDirection.Next) {
-    queryConstraints.push(startAfter(getSortingFieldValue(lastVisibleFilm, sortingOptions.sortingField)));
+    queryConstraints.push(startAfter(getSortingFieldValue(lastVisibleFilm, sortingField)));
     queryConstraints.push(limit(countOfFilmsOnPage + 1));
   } else if (paginationMode === PaginationDirection.Previous) {
-    queryConstraints.push(endBefore(getSortingFieldValue(firstVisibleFilm, sortingOptions.sortingField)));
-    queryConstraints.push(limitToLast(countOfFilmsOnPage + 1));
+    queryConstraints.push(endBefore(getSortingFieldValue(firstVisibleFilm, sortingField)));
+    queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
   }
 
   return queryConstraints;
