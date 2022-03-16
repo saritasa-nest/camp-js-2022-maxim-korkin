@@ -8,3 +8,8 @@
   -webkit-box-shadow: var(--film-row-hover-shadow);
   -moz-box-shadow: var(--film-row-hover-shadow);
 }
+
+.films-table__actions {
+  display: flex;
+  justify-content: space-between;
+}

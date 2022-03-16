@@ -66,10 +66,12 @@
   ></mat-row>
 </mat-table>
 
-<sw-pagination-buttons
-  [isFirstPage]="!!(isFirstPage$ | async)"
-  [isLastPage]="!!(isLastPage$ | async)"
-></sw-pagination-buttons>
-<a *ngIf="isSignedIn$ | async" routerLink="/films/new-film" mat-stroked-button
-  >Create</a
->
+<div class="films-table__actions">
+  <sw-pagination-buttons
+    [isFirstPage]="!!(isFirstPage$ | async)"
+    [isLastPage]="!!(isLastPage$ | async)"
+  ></sw-pagination-buttons>
+  <a *ngIf="isSignedIn$ | async" routerLink="/films/new-film" mat-stroked-button
+    >Create</a
+  >
+</div>
