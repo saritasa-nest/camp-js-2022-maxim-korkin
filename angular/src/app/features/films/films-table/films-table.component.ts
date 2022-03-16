@@ -251,7 +251,8 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       case this.directorHeader:
         return FilmSortingField.Director;
       default:
-        return FilmSortingField.EpisodeId;
+        /** All table header should be declared above. If not then the error will be thrown so please add missing header case. */
+        throw new Error('Failed to recognize table header.');
     }
   }
 
@@ -266,7 +267,8 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
       case FilmSortingField.Title:
         return this.titleHeader;
       default:
-        return this.episodeIdHeader;
+        /** All film sorting fields should be declared above. If not then the error will be thrown so please add missing field case. */
+        throw new Error('Failed to recognize FilmSortingField.');
     }
   }
 
