@@ -24,9 +24,9 @@ export class FilmResolver implements Resolve<Film> {
    */
   public resolve(route: ActivatedRouteSnapshot): Observable<Film> {
     /** Trying to get a film from the navigation state. */
-    const state = this.router.getCurrentNavigation()?.extras.state;
+    const state: Film | undefined = this.router.getCurrentNavigation()?.extras.state as Film;
     if (typeof state !== 'undefined') {
-      return of(state as Film);
+      return of(state);
     }
 
     /** Otherwise trying to fetch a film and in case of failure navigation to the film not found page. */
