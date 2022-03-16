@@ -16,8 +16,7 @@ export class FilmResolver implements Resolve<Film> {
   public constructor(
     private readonly router: Router,
     private readonly filmsService: FilmsService,
-  ) {
-  }
+  ) { }
 
   /**
    * @inheritdoc
@@ -25,17 +24,28 @@ export class FilmResolver implements Resolve<Film> {
   public resolve(route: ActivatedRouteSnapshot): Observable<Film> {
     /** Trying to get a film from the navigation state. */
     const state: Film | undefined = this.router.getCurrentNavigation()?.extras.state as Film;
-    if (typeof state !== 'undefined') {
+    if (state != null) {
       return of(state);
     }
 
     /** Otherwise trying to fetch a film and in case of failure navigation to the film not found page. */
     const filmPk = Number(route.paramMap.get('id'));
+
+    /** Checking if the primary key from the route is a number. */
+    if (isNaN(filmPk)) {
+      return this.handleError();
+    }
+
     return this.filmsService.fetchFilmByPrimaryKey(filmPk).pipe(
-      catchError(() => {
-        this.router.navigate(['films/film-not-found']);
-        return EMPTY;
-      }),
+      catchError(() => this.handleError()),
     );
+  }
+
+  /**
+   * Method which redirects to film-not-found page in case of errors occurred during film fetching.
+   */
+  private handleError(): Observable<never> {
+    this.router.navigate(['films/film-not-found']);
+    return EMPTY;
   }
 }
