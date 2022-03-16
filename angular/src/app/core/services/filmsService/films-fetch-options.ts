@@ -1,8 +1,8 @@
-import { Film } from 'src/app/core/models/Film';
+import { Film } from 'src/app/core/models/film';
 
-import { PaginationDirection } from '../../../core/utils/enums/PaginationDirection';
+import { PaginationDirection } from '../../utils/enums/pagination-direction';
 
-import { SortingOptions } from './FilmsSortingOptions';
+import { SortingOptions } from './films-sorting-options';
 
 /**
  * Options used for fetching films by the FilmsService.

@@ -1,10 +1,11 @@
-import { SortingDirection } from 'src/app/core/utils/enums/SortingDirection';
+import { SortingDirection } from 'src/app/core/utils/enums/sorting-direction';
 import { QueryConstraint, orderBy, limit, limitToLast, startAfter, endBefore, where } from 'firebase/firestore';
 
-import { Film } from '../../models/Film';
-import { FilmsFetchOptions } from '../../../features/films/interfaces/FilmsFetchOptions';
-import { PaginationDirection } from '../../utils/enums/PaginationDirection';
-import { FilmSortingField } from '../../../features/films/enums/FilmSortingField';
+import { PaginationDirection } from '../../utils/enums/pagination-direction';
+import { Film } from '../../models/film';
+
+import { FilmsFetchOptions } from './films-fetch-options';
+import { FilmSortingField } from './film-sorting-field';
 
 /**
  * Function for getting sorting value from the film to use it as a constraint.

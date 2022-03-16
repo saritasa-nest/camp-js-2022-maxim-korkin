@@ -1,7 +1,7 @@
 import { takeUntil, Subject, map, Observable } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Film } from 'src/app/core/models/Film';
+import { Film } from 'src/app/core/models/film';
 
 /**
  * Component for the film details.

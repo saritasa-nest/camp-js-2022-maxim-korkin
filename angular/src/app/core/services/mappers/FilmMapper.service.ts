@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Film } from '../../models/Film';
+import { Film } from '../../models/film';
 
 import { FilmDto } from './dto/FilmDto/FilmDto.dto';
 

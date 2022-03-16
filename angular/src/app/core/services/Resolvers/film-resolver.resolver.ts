@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, catchError, EMPTY } from 'rxjs';
 
-import { Film } from '../../models/Film';
+import { Film } from '../../models/film';
 import { FilmsService } from '../filmsService/films.service';
 
 /**

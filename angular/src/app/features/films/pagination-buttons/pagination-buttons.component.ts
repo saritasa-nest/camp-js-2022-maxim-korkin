@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { PaginationDirection } from 'src/app/core/utils/enums/PaginationDirection';
+import { PaginationDirection } from 'src/app/core/utils/enums/pagination-direction';
 
 /**
  * Pagination buttons component.

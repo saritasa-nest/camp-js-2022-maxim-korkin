@@ -1,4 +1,4 @@
-import { AuthInfo } from 'src/app/core/models/AuthInfo';
+import { AuthInfo } from 'src/app/core/models/auth-info';
 import { FirebaseError } from 'firebase/app';
 import { signInWithEmailAndPassword, signOut, createUserWithEmailAndPassword } from 'firebase/auth';
 import { Injectable } from '@angular/core';
@@ -6,7 +6,7 @@ import { Auth } from '@angular/fire/auth';
 import { catchError, defer, ignoreElements, map, Observable, throwError } from 'rxjs';
 import { authState } from 'rxfire/auth';
 
-import { FirebaseAuthErrors } from './FirebaseAuthErrors';
+import { FirebaseAuthError } from './firebase-auth-error';
 
 /**
  * Service for firebase authentication.
@@ -62,10 +62,10 @@ export class AuthService {
    */
   private handleSignInError(error: FirebaseError): Observable<Error> {
     switch (error.code) {
-      case FirebaseAuthErrors.WrongEmail:
-      case FirebaseAuthErrors.WrongPassword:
+      case FirebaseAuthError.WrongEmail:
+      case FirebaseAuthError.WrongPassword:
         return throwError(() => new Error('Incorrect email of password'));
-      case FirebaseAuthErrors.TooManyLogInAttempts:
+      case FirebaseAuthError.TooManyLogInAttempts:
         return throwError(() => new Error(
           'Access to this account has been temporarily disabled due to many failed login attempts. Please try later.',
         ));
@@ -82,9 +82,9 @@ export class AuthService {
    */
   private handleSignUpError(error: FirebaseError): Observable<Error> {
     switch (error.code) {
-      case FirebaseAuthErrors.EmailAlreadyInUse:
+      case FirebaseAuthError.EmailAlreadyInUse:
         return throwError(() => new Error('Email already in use.'));
-      case FirebaseAuthErrors.WeakPassword:
+      case FirebaseAuthError.WeakPassword:
         return throwError(() => new Error('Too weak password.'));
       default:
         return throwError(() => new Error('Unexpected error occurred. Please try later.'));

@@ -1,7 +1,7 @@
 /**
  * Enum with FirebaseErrors which can occur during authentication.
  */
-export enum FirebaseAuthErrors {
+export enum FirebaseAuthError {
   WrongEmail = 'auth/user-not-found',
 
   WrongPassword = 'auth/wrong-password',

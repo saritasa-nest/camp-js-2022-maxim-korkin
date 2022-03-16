@@ -4,11 +4,11 @@ import { Observable, map, first } from 'rxjs';
 import { collection, Firestore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
-import { Film } from '../../models/Film';
+import { Film } from '../../models/film';
 import { FilmDto } from '../mappers/dto/FilmDto/FilmDto.dto';
 import { FilmMapper } from '../mappers/FilmMapper.service';
-import { FilmsFetchOptions } from '../../../features/films/interfaces/FilmsFetchOptions';
 
+import { FilmsFetchOptions } from './films-fetch-options';
 import { getFilmsQueryConstraints } from './getFilmsQueryConstraints';
 
 const FILMS_COLLECTION_NAME = 'films';

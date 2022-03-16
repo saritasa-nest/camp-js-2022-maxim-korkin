@@ -1,13 +1,13 @@
 import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom, Observable, merge } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
-import { FilmSortingField } from 'src/app/features/films/enums/FilmSortingField';
+import { FilmSortingField } from 'src/app/core/services/filmsService/film-sorting-field';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
-import { Film } from 'src/app/core/models/Film';
-import { PaginationDirection } from 'src/app/core/utils/enums/PaginationDirection';
-import { SortingDirection } from 'src/app/core/utils/enums/SortingDirection';
+import { Film } from 'src/app/core/models/film';
+import { PaginationDirection } from 'src/app/core/utils/enums/pagination-direction';
+import { SortingDirection } from 'src/app/core/utils/enums/sorting-direction';
 import { Router } from '@angular/router';
-import { SortingOptions } from 'src/app/features/films/interfaces/FilmsSortingOptions';
+import { SortingOptions } from 'src/app/core/services/filmsService/films-sorting-options';
 
 import { SearchingInputComponent } from '../searching-input/searching-input.component';
 import { PaginationButtonsComponent } from '../pagination-buttons/pagination-buttons.component';
