@@ -3,6 +3,8 @@ import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Film } from 'src/app/core/models/film';
 
+const FILM_DATA = 'film';
+
 /**
  * Component for the film details.
  */
@@ -19,7 +21,7 @@ export class FilmDetailsComponent implements OnDestroy {
   /** Film. */
   public readonly film$: Observable<Film> = this.route.data.pipe(
     takeUntil(this.destroy$),
-    map(data => data['film']),
+    map(data => data[FILM_DATA]),
   );
 
   public constructor(

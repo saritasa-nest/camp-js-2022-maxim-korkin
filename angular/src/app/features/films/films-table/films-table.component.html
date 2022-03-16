@@ -7,6 +7,7 @@
   matSortDisableClear="true"
   matSortActive="Episode Id"
   matSortDirection="asc"
+  class="films-table"
 >
   <ng-container matColumnDef="Episode Id">
     <mat-header-cell
@@ -61,7 +62,7 @@
   <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
   <mat-row
     *matRowDef="let film; columns: tableHeaders"
-    (click)="navigateToFilmDetailsPage(film)"
+    [routerLink]="['/films/film/' + film.pk, { state: film }]"
     class="films-table__row"
   ></mat-row>
 </mat-table>

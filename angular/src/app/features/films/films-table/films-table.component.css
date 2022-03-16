@@ -5,6 +5,4 @@
 
 .films-table__row:hover {
   box-shadow: var(--film-row-hover-shadow);
-  -webkit-box-shadow: var(--film-row-hover-shadow);
-  -moz-box-shadow: var(--film-row-hover-shadow);
 }

@@ -152,14 +152,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * A function to call when a user clicks a row.
-   * @param film - Film to provide to details page.
-   */
-  public navigateToFilmDetailsPage(film: Film): void {
-    this.router.navigateByUrl(`films/film/${film.pk}`, { state: film });
-  }
-
-  /**
    * Method used as a side-effect in film fetching. Checks if this is first or last page.
    * @param countOfFilms - Count of fetched films.
    * @param paginationMode - Pagination mode.
