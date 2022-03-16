@@ -39,9 +39,9 @@ export function getFilmsQueryConstraints(
   if (titleSearchingValue !== '') {
     queryConstraints.push(orderBy(FilmSortingField.Title, SortingDirection.Ascending));
 
-    const veryBigSymbol = '\uf8ff';
+    const veryHighCodePoint = '\uf8ff';
     queryConstraints.push(where(FilmSortingField.Title, '>=', titleSearchingValue));
-    queryConstraints.push(where(FilmSortingField.Title, '<=', `${titleSearchingValue}${veryBigSymbol}`));
+    queryConstraints.push(where(FilmSortingField.Title, '<=', `${titleSearchingValue}${veryHighCodePoint}`));
   } else {
     queryConstraints.push(orderBy(sortingOptions.sortingField, sortingOptions.direction));
   }
