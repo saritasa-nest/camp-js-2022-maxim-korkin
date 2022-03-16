@@ -67,6 +67,6 @@
 </mat-table>
 
 <sw-pagination-buttons
-  [isFirstPage]="!!(isFirstPage$ | async)"
-  [isLastPage]="!!(isLastPage$ | async)"
+  [isFirstPage]="(isFirstPage$ | async) === true"
+  [isLastPage]="(isLastPage$ | async) === true"
 ></sw-pagination-buttons>
