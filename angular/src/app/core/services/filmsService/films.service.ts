@@ -5,8 +5,8 @@ import { collection, endBefore, Firestore, limit, limitToLast, orderBy, startAft
 import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/film';
-import { FilmDto } from '../mappers/dto/film-dto/film-dto';
-import { FilmMapper } from '../mappers/FilmMapper.service';
+import { FilmDto } from '../mappers/dto/film-dto/film-dto.dto';
+import { FilmMapper } from '../mappers/film-mapper';
 import { SortingDirection } from '../../utils/enums/sorting-direction';
 import { PaginationDirection } from '../../utils/enums/pagination-direction';
 
