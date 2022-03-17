@@ -15,11 +15,11 @@ export class PaginationButtonsComponent {
 
   /** Shows if the current page is the last one. */
   @Input()
-  public isLastPage = true;
+  public hasNext: boolean | undefined = false;
 
   /** Shows if the current page is the first one. */
   @Input()
-  public isFirstPage = true;
+  public hasPrev: boolean | undefined = false;
 
   /** Pagination mode. */
   public paginationMode$ = new BehaviorSubject<PaginationDirection>(PaginationDirection.Next);

@@ -3,7 +3,7 @@
   class="pagination-button"
   type="button"
   (click)="fetchPrevPage()"
-  [disabled]="isFirstPage"
+  [disabled]="!hasPrev"
 >
   Prev
 </button>
@@ -12,7 +12,7 @@
   class="pagination-button"
   type="button"
   (click)="fetchNextPage()"
-  [disabled]="isLastPage"
+  [disabled]="!hasNext"
 >
   Next
 </button>

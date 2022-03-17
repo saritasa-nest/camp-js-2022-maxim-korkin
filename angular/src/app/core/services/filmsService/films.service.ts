@@ -1,7 +1,7 @@
 import { CollectionReference, query, QueryConstraint } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
 import { Observable, map, first } from 'rxjs';
-import { collection, endAt, Firestore, limit, limitToLast, orderBy, startAfter, where } from '@angular/fire/firestore';
+import { collection, Firestore, limit, limitToLast, orderBy, startAfter, where, endBefore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/film';
@@ -9,11 +9,12 @@ import { FilmDto } from '../mappers/dto/film-dto/film-dto.dto';
 import { FilmMapper } from '../mappers/film-mapper';
 import { SortingDirection } from '../../utils/enums/sorting-direction';
 import { PaginationDirection } from '../../utils/enums/pagination-direction';
+import { PaginationStatus } from '../../models/pagination-status';
 
 import { FilmSortingFieldDto } from './enums/film-sorting-field-dto';
-
 import { FilmsFetchOptions } from './interfaces/films-fetch-options';
 import { FilmSortingField } from './enums/film-sorting-field';
+import { FilmsAndPaginationInfo } from './interfaces/films-pagination';
 
 const FILMS_COLLECTION_NAME = 'films';
 
@@ -37,10 +38,17 @@ export class FilmsService {
    * Method for fetching films with the constraints builded from the fetch options provided.
    * @param fetchOptions - Options required for building query.
    */
-  public fetchFilms(fetchOptions: FilmsFetchOptions): Observable<Film[]> {
+  public fetchFilms(fetchOptions: FilmsFetchOptions): Observable<FilmsAndPaginationInfo> {
     const filmsQuery = query(this.filmsCollection, ...this.getFilmsQueryConstraints(fetchOptions));
     return collectionData<FilmDto>(filmsQuery).pipe(
       map(films => films.map(film => this.filmMapper.fromDto(film))),
+      map(films => ({
+        films: this.parseFilmsList(films, fetchOptions),
+        ...this.getPaginationStatus(
+            films.length,
+            fetchOptions,
+        ),
+      })),
     );
   }
 
@@ -104,8 +112,8 @@ export class FilmsService {
       queryConstraints.push(startAfter(this.getSortingFieldValue(lastVisibleFilm, sortingField)));
       queryConstraints.push(limit(countOfFilmsOnPage + 1));
     } else if (paginationMode === PaginationDirection.Previous) {
-      queryConstraints.push(endAt(this.getSortingFieldValue(firstVisibleFilm, sortingField)));
-      queryConstraints.push(limitToLast(countOfFilmsOnPage + 1));
+      queryConstraints.push(endBefore(this.getSortingFieldValue(firstVisibleFilm, sortingField)));
+      queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
     }
 
     return queryConstraints;
@@ -146,5 +154,36 @@ export class FilmsService {
         /** All film sorting fields should be declared above. If not then the error will be thrown so please add missing field case. */
         throw new Error('Failed to recognize FilmSortingField.');
     }
+  }
+
+  private getPaginationStatus(
+    countOfFilms: number, { paginationMode, firstVisibleFilm, countOfFilmsOnPage }: FilmsFetchOptions,
+  ): PaginationStatus {
+    if (firstVisibleFilm === null) {
+      return { hasNext: countOfFilms === countOfFilmsOnPage + 1, hasPrev: false };
+    } else if (paginationMode === PaginationDirection.Next) {
+      return { hasNext: countOfFilms === countOfFilmsOnPage + 1, hasPrev: true };
+    }
+    return { hasNext: true, hasPrev: countOfFilms === countOfFilmsOnPage + 1 };
+  }
+
+  /**
+   * Method used in films fetching. Removes film which indicates existence of next or previous page.
+   * @param films - Array of films.
+   * @param paginationMode - Pagination mode.
+   */
+  private parseFilmsList(films: Film[], { paginationMode, countOfFilmsOnPage }: FilmsFetchOptions): Film[] {
+    /** Case when we dont have film we dont need to display. */
+    if (films.length !== countOfFilmsOnPage + 1) {
+      return films;
+    }
+
+    /** Removes last film if we loaded next page. */
+    if (paginationMode === PaginationDirection.Next) {
+      return films.slice(0, -1);
+    }
+
+    /** Removes first film if we loaded previous page. */
+    return films.slice(1);
   }
 }

@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, withLatestFrom, Observable, merge } from 'rxjs';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, Observable, merge } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { FilmSortingField } from 'src/app/core/services/filmsService/enums/film-sorting-field';
@@ -11,15 +11,12 @@ import { SortingOptions } from 'src/app/core/services/filmsService/interfaces/fi
 import { SearchingInputComponent } from '../searching-input/searching-input.component';
 import { PaginationButtonsComponent } from '../pagination-buttons/pagination-buttons.component';
 
+import { FilmsAndPaginationInfo } from './../../../core/services/filmsService/interfaces/films-pagination';
+
 /**
  * Maximum count of films on a single page.
  */
 const COUNT_OF_FILMS_ON_PAGE = 3;
-
-/**
- * Count of fetched films which shows that there is next or previous page.
- */
-const COUNT_OF_FILMS_FOR_NEXT_PAGE = COUNT_OF_FILMS_ON_PAGE + 1;
 
 const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: FilmSortingField.EpisodeId, direction: SortingDirection.Ascending };
 
@@ -36,12 +33,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** Shows if we are searching or not. Used for disabling sorting field changing. */
   public readonly isSearching$ = new BehaviorSubject(false);
-
-  /** Shows if the current page is the last one. */
-  public readonly isLastPage$ = new BehaviorSubject(true);
-
-  /** Shows if the current page is the first one. */
-  public readonly isFirstPage$ = new BehaviorSubject(true);
 
   private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(DEFAULT_SORTING_OPTIONS);
 
@@ -61,8 +52,11 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private readonly destroy$ = new Subject<void>();
 
+  /** Films and pagination info on the current page. */
+  public readonly filmsInfo$ = this.initFilmsStream();
+
   /** Films on the current page. */
-  public readonly films$ = this.initFilmsStream();
+  public readonly films$ = new Subject<Film[]>();
 
   private readonly episodeIdHeader = 'Episode Id';
 
@@ -108,6 +102,10 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.resetValuesForFirstPageFetching();
         },
       });
+
+    this.filmsInfo$.pipe(
+      map(films => films.films),
+    ).subscribe(this.films$);
   }
 
   /**
@@ -150,48 +148,11 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * Method used as a side-effect in film fetching. Checks if this is first or last page.
-   * @param countOfFilms - Count of fetched films.
-   * @param paginationMode - Pagination mode.
-   */
-  private updatePaginationStatus(countOfFilms: number, paginationMode: PaginationDirection): void {
-    if (this.firstVisibleFilm === null) {
-      this.isLastPage$.next(countOfFilms !== COUNT_OF_FILMS_FOR_NEXT_PAGE);
-    } else if (paginationMode === PaginationDirection.Next) {
-      this.isLastPage$.next(countOfFilms !== COUNT_OF_FILMS_FOR_NEXT_PAGE);
-      this.isFirstPage$.next(false);
-    } else {
-      this.isFirstPage$.next(countOfFilms !== COUNT_OF_FILMS_FOR_NEXT_PAGE);
-      this.isLastPage$.next(false);
-    }
-  }
-
-  /**
-   * Method used in films fetching. Removes film which indicates existence of next or previous page.
-   * @param films - Array of films.
-   * @param paginationMode - Pagination mode.
-   */
-  private parseFilmsList(films: Film[], paginationMode: PaginationDirection): Film[] {
-    /** Case when we dont have film we dont need to display. */
-    if (films.length !== COUNT_OF_FILMS_FOR_NEXT_PAGE) {
-      return films;
-    }
-
-    /** Removes last film if we loaded next page. */
-    if (paginationMode === PaginationDirection.Next) {
-      return films.slice(0, -1);
-    }
-
-    /** Removes first film if we loaded previous page. */
-    return films.slice(1);
-  }
-
-  /**
    * Method used as a side-effect in film fetching. Updates first and last films on the current page.
    * @param films - Films array.
    * Make sure that this array contains only films on the current page without film indicating existence of next or previous page.
    */
-  private updateFirstAndLastFilms(films: Film[]): void {
+  private updateFirstAndLastFilms(films: readonly Film[]): void {
     this.firstVisibleFilm = films[0];
     this.lastVisibleFilm = films.slice(-1)[0];
   }
@@ -203,8 +164,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     this.firstVisibleFilm = null;
     this.lastVisibleFilm = null;
     this.paginationMode$.next(PaginationDirection.Next);
-    this.isFirstPage$.next(true);
-    this.isLastPage$.next(true);
   }
 
   private mapSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
@@ -262,7 +221,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private initFilmsStream(): Observable<readonly Film[]> {
+  private initFilmsStream(): Observable<FilmsAndPaginationInfo> {
     return combineLatest(
       [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
     ).pipe(
@@ -278,7 +237,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       )),
       tap(fetchOptions => {
-
         if (fetchOptions.titleSearchingValue !== '') {
           this.isSearching$.next(true);
           this.setSortingHeaders(FilmSortingField.Title, SortingDirection.Ascending);
@@ -289,10 +247,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }),
       switchMap(fetchOptions => this.filmsService.fetchFilms(fetchOptions)),
-      withLatestFrom(this.paginationMode$),
-      tap(([films, paginationMode]) => this.updatePaginationStatus(films.length, paginationMode)),
-      map(([films, paginationMode]) => this.parseFilmsList(films, paginationMode)),
-      tap(films => this.updateFirstAndLastFilms(films)),
+      tap(films => this.updateFirstAndLastFilms(films.films)),
       takeUntil(this.destroy$),
     );
   }
