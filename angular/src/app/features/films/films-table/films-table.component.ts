@@ -6,7 +6,6 @@ import { FilmsService } from 'src/app/core/services/filmsService/films.service';
 import { Film } from 'src/app/core/models/film';
 import { PaginationDirection } from 'src/app/core/utils/enums/pagination-direction';
 import { SortingDirection } from 'src/app/core/utils/enums/sorting-direction';
-import { Router } from '@angular/router';
 import { SortingOptions } from 'src/app/core/services/filmsService/interfaces/films-sorting-options';
 
 import { SearchingInputComponent } from '../searching-input/searching-input.component';
@@ -90,7 +89,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public constructor(
     private readonly filmsService: FilmsService,
-    private readonly router: Router,
   ) {}
 
   /**
