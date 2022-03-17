@@ -1,7 +1,7 @@
 import { CollectionReference, query, QueryConstraint } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
 import { Observable, map, first } from 'rxjs';
-import { collection, endBefore, Firestore, limit, limitToLast, orderBy, startAfter, where } from '@angular/fire/firestore';
+import { collection, endAt, Firestore, limit, limitToLast, orderBy, startAfter, where } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
 import { Film } from '../../models/film';
@@ -101,8 +101,8 @@ export class FilmsService {
       queryConstraints.push(startAfter(this.getSortingFieldValue(lastVisibleFilm, sortingField)));
       queryConstraints.push(limit(countOfFilmsOnPage + 1));
     } else if (paginationMode === PaginationDirection.Previous) {
-      queryConstraints.push(endBefore(this.getSortingFieldValue(firstVisibleFilm, sortingField)));
-      queryConstraints.push(limitToLast(countOfFilmsOnPage + 2));
+      queryConstraints.push(endAt(this.getSortingFieldValue(firstVisibleFilm, sortingField)));
+      queryConstraints.push(limitToLast(countOfFilmsOnPage + 1));
     }
 
     return queryConstraints;
