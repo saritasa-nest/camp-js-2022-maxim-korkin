@@ -4,7 +4,7 @@ import { authRoutes } from 'src/features/auth/routes';
 const routes: RouteObject[] = [
   {
     path: '*',
-    element: <Navigate to="/SignIn" />,
+    element: <Navigate to="/auth/sign-in" />,
   },
   ...authRoutes,
 ];

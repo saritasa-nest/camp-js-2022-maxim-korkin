@@ -1,23 +1,24 @@
 import { Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { memo, VFC } from 'react';
+import { AuthService } from 'src/api/services/auth/auth.service';
 import * as Yup from 'yup';
 
-interface FormValues {
+interface SignInFormValues {
   /** Email. */
   readonly email: string;
   /** Password. */
   readonly password: string;
 }
 
-const SignInSchema = Yup.object().shape({
+const SignInValidationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string().required('Required'),
 });
 
 const SignInFormComponent: VFC = () => {
-  const onSignInSubmit = (values: FormValues): void => {
-    console.log(values);
+  const onSignInSubmit = (values: SignInFormValues): void => {
+    AuthService.signIn(values.email, values.password);
   };
 
   const formik = useFormik({
@@ -26,7 +27,7 @@ const SignInFormComponent: VFC = () => {
       password: '',
     },
     onSubmit: onSignInSubmit,
-    validationSchema: SignInSchema,
+    validationSchema: SignInValidationSchema,
     validateOnMount: true,
     validateOnChange: true,
   });
@@ -37,17 +38,16 @@ const SignInFormComponent: VFC = () => {
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
-          id="email"
           name="email"
           label="Email"
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
+          margin="normal"
         />
         <TextField
           fullWidth
-          id="password"
           name="password"
           label="Password"
           type="password"
