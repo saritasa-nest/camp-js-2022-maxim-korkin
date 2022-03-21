@@ -14,20 +14,20 @@ export const authSlice = createSlice({
   extraReducers: builder => builder
     .addCase(signIn.fulfilled, state => {
       state.isSignedIn = true;
-      state.error = undefined;
+      state.signInError = undefined;
     })
     .addCase(signIn.rejected, (state, action) => {
       if (action.error.message) {
-        state.error = action.error.message;
+        state.signInError = action.error.message;
       }
     })
     .addCase(signUp.fulfilled, state => {
       state.isSignedIn = true;
-      state.error = undefined;
+      state.signUpError = undefined;
     })
     .addCase(signUp.rejected, (state, action) => {
       if (action.error.message) {
-        state.error = action.error.message;
+        state.signUpError = action.error.message;
       }
     })
     .addCase(signOut.fulfilled, state => {

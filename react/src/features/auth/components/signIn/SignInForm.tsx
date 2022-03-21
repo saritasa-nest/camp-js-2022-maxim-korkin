@@ -4,7 +4,7 @@ import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'src/store';
 import { signIn } from 'src/store/auth/dispatchers';
-import { selectAuthError } from 'src/store/auth/selectors';
+import { selectSignInError } from 'src/store/auth/selectors';
 import * as Yup from 'yup';
 
 interface SignInFormValues {
@@ -21,7 +21,7 @@ const SignInValidationSchema = Yup.object().shape({
 
 const SignInFormComponent: VFC = () => {
   const dispatch = useDispatch();
-  const error = useAppSelector(selectAuthError);
+  const error = useAppSelector(selectSignInError);
 
   const onSignInSubmit = (values: SignInFormValues): void => {
     dispatch(signIn(values));

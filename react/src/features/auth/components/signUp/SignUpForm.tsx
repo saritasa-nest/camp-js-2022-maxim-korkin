@@ -4,7 +4,7 @@ import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'src/store';
 import { signUp } from 'src/store/auth/dispatchers';
-import { selectAuthError } from 'src/store/auth/selectors';
+import { selectSignUpError } from 'src/store/auth/selectors';
 import * as Yup from 'yup';
 
 interface SignUpFormValues {
@@ -24,7 +24,7 @@ const SignUpValidationSchema = Yup.object().shape({
 
 const SignUpFormComponent: VFC = () => {
   const dispatch = useDispatch();
-  const error = useAppSelector(selectAuthError);
+  const error = useAppSelector(selectSignUpError);
 
   const onSignUpSubmit = async (values: SignUpFormValues): Promise<void> => {
     dispatch(signUp({

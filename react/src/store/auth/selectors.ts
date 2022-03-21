@@ -5,5 +5,8 @@ import { RootState } from '../store';
 /** Selects sign in state. */
 export const selectIsSignedIn = createSelector((state: RootState) => state.auth.isSignedIn, isSignedIn => isSignedIn);
 
-/** Selects auth error. */
-export const selectAuthError = createSelector((state: RootState) => state.auth.error, error => error);
+/** Selects sign in error. */
+export const selectSignInError = createSelector((state: RootState) => state.auth.signInError, error => error);
+
+/** Selects sign in error. */
+export const selectSignUpError = createSelector((state: RootState) => state.auth.signUpError, error => error);
