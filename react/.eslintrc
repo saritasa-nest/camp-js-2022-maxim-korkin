@@ -6,6 +6,9 @@
     "airbnb-typescript",
     "plugin:react/jsx-runtime"
   ],
+  "parserOptions": {
+    "project": ["tsconfig.json"]
+  },
   "rules": {
     "@typescript-eslint/member-ordering": 0,
     "import/prefer-default-export": 0,
