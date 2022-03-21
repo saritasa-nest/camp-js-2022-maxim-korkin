@@ -1,7 +1,10 @@
 import { Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { memo, VFC } from 'react';
-import { AuthService } from 'src/api/services/auth/auth.service';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from 'src/store';
+import { signIn } from 'src/store/auth/dispatchers';
+import { selectAuthError } from 'src/store/auth/selectors';
 import * as Yup from 'yup';
 
 interface SignInFormValues {
@@ -17,8 +20,11 @@ const SignInValidationSchema = Yup.object().shape({
 });
 
 const SignInFormComponent: VFC = () => {
+  const dispatch = useDispatch();
+  const error = useAppSelector(selectAuthError);
+
   const onSignInSubmit = (values: SignInFormValues): void => {
-    AuthService.signIn(values.email, values.password);
+    dispatch(signIn(values));
   };
 
   const formik = useFormik({
@@ -57,6 +63,7 @@ const SignInFormComponent: VFC = () => {
           helperText={formik.touched.password && formik.errors.password}
           margin="normal"
         />
+        {error ?? <div>{error}</div>}
         <Button color="primary" variant="contained" fullWidth type="submit">
           Submit
         </Button>

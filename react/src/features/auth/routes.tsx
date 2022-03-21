@@ -1,9 +1,11 @@
 import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
-import { SignInForm } from './components/signIn/SignInForm';
-import { SignUpForm } from './components/signUp/SignUpForm';
 
 const AuthPage = lazy(() => import('./pages/AuthPage').then(module => ({ default: module.AuthPage })));
+const SignInForm = lazy(() => import('./components/signIn/SignInForm')
+  .then(module => ({ default: module.SignInForm })));
+const SignUpForm = lazy(() => import('./components/signUp/SignUpForm')
+  .then(module => ({ default: module.SignUpForm })));
 
 export const authRoutes: RouteObject[] = [
   {

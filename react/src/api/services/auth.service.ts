@@ -1,5 +1,5 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { Firebase } from '../firebase/firebase.service';
+import { Firebase } from './firebase.service';
 
 const { auth } = Firebase;
 

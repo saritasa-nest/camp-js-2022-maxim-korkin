@@ -1,8 +1,10 @@
 import { Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { memo, VFC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthService } from 'src/api/services/auth/auth.service';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from 'src/store';
+import { signUp } from 'src/store/auth/dispatchers';
+import { selectAuthError } from 'src/store/auth/selectors';
 import * as Yup from 'yup';
 
 interface SignUpFormValues {
@@ -16,19 +18,19 @@ interface SignUpFormValues {
 
 const SignUpValidationSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().required('Required'),
+  password: Yup.string().required('Required').min(6, 'Password should be at least 6 characters'),
   repeatPassword: Yup.string().required('Required').oneOf([Yup.ref('password')], 'Passwords doesn\'t match'),
 });
 
 const SignUpFormComponent: VFC = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const error = useAppSelector(selectAuthError);
+
   const onSignUpSubmit = async (values: SignUpFormValues): Promise<void> => {
-    try {
-      await AuthService.signUp(values.email, values.password);
-      navigate('auth/sign-in');
-    } catch (error: unknown) {
-      console.error(123);
-    }
+    dispatch(signUp({
+      email: values.email,
+      password: values.password,
+    }));
   };
 
   const formik = useFormik({
@@ -79,6 +81,7 @@ const SignUpFormComponent: VFC = () => {
           helperText={formik.touched.repeatPassword && formik.errors.repeatPassword}
           margin="normal"
         />
+        {error ?? <div>{error}</div>}
         <Button color="primary" variant="contained" fullWidth type="submit">
           Submit
         </Button>
