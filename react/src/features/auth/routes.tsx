@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
+import { SignedOutOnlyGuard } from 'src/routes/guards/SignedOutOnlyGuard';
 
 const AuthPage = lazy(() => import('./pages/AuthPage').then(module => ({ default: module.AuthPage })));
 const SignInForm = lazy(() => import('./components/signIn/SignInForm')
@@ -9,16 +10,21 @@ const SignUpForm = lazy(() => import('./components/signUp/SignUpForm')
 
 export const authRoutes: RouteObject[] = [
   {
-    path: 'auth',
-    element: <AuthPage />,
+    element: <SignedOutOnlyGuard />,
     children: [
       {
-        path: 'sign-in',
-        element: <SignInForm />,
-      },
-      {
-        path: 'sign-up',
-        element: <SignUpForm />,
+        path: 'auth',
+        element: <AuthPage />,
+        children: [
+          {
+            path: 'sign-in',
+            element: <SignInForm />,
+          },
+          {
+            path: 'sign-up',
+            element: <SignUpForm />,
+          },
+        ],
       },
     ],
   },
