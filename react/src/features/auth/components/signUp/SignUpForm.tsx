@@ -46,7 +46,7 @@ const SignUpFormComponent: VFC = () => {
   });
 
   return (
-    <div>
+    <>
       <h1>Sign Up</h1>
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -86,7 +86,7 @@ const SignUpFormComponent: VFC = () => {
           Submit
         </Button>
       </form>
-    </div>
+    </>
   );
 };
 

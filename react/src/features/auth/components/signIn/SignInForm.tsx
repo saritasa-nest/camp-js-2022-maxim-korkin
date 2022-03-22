@@ -39,7 +39,7 @@ const SignInFormComponent: VFC = () => {
   });
 
   return (
-    <div>
+    <>
       <h1>Sign In</h1>
       <form onSubmit={formik.handleSubmit}>
         <TextField
@@ -68,7 +68,7 @@ const SignInFormComponent: VFC = () => {
           Submit
         </Button>
       </form>
-    </div>
+    </>
   );
 };
 
