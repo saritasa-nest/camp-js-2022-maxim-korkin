@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, FormHelperText, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
@@ -63,7 +63,7 @@ const SignInFormComponent: VFC = () => {
           helperText={formik.touched.password && formik.errors.password}
           margin="normal"
         />
-        {error ?? <div>{error}</div>}
+        <FormHelperText error>{error}</FormHelperText>
         <Button color="primary" variant="contained" fullWidth type="submit">
           Submit
         </Button>
