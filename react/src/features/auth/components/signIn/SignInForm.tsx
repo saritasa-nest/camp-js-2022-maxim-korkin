@@ -2,10 +2,10 @@ import { Button, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
+import * as Yup from 'yup';
 import { useAppSelector } from 'src/store';
 import { signIn } from 'src/store/auth/dispatchers';
 import { selectSignInError } from 'src/store/auth/selectors';
-import * as Yup from 'yup';
 
 interface SignInFormValues {
   /** Email. */
