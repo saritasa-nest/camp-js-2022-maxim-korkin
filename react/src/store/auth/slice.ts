@@ -12,8 +12,8 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: builder => builder
-    .addCase(signIn.fulfilled, state => {
-      state.isSignedIn = true;
+    .addCase(signIn.fulfilled, (state, action) => {
+      state.userInfo = action.payload;
       state.signInError = undefined;
     })
     .addCase(signIn.rejected, (state, action) => {
@@ -21,8 +21,8 @@ export const authSlice = createSlice({
         state.signInError = action.error.message;
       }
     })
-    .addCase(signUp.fulfilled, state => {
-      state.isSignedIn = true;
+    .addCase(signUp.fulfilled, (state, action) => {
+      state.userInfo = action.payload;
       state.signUpError = undefined;
     })
     .addCase(signUp.rejected, (state, action) => {
@@ -31,7 +31,7 @@ export const authSlice = createSlice({
       }
     })
     .addCase(signOut.fulfilled, state => {
-      state.isSignedIn = false;
+      state.userInfo = null;
     }),
 });
 

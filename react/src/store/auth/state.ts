@@ -1,7 +1,11 @@
+import { UserInfo } from '../../models/user';
 /**
  * Auth state.
  */
 export interface AuthState {
+
+  /** Currently signed in user. */
+  readonly userInfo: UserInfo | null;
 
   /** Shows if the user is signed in or not. */
   readonly isSignedIn: boolean;
@@ -14,5 +18,6 @@ export interface AuthState {
 }
 
 export const initialState: AuthState = {
+  userInfo: null,
   isSignedIn: false,
 };
