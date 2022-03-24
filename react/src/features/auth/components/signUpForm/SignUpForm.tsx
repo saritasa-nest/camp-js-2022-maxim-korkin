@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { useAppSelector } from 'src/store';
 import { signUp } from 'src/store/auth/dispatchers';
 import { selectSignUpError } from 'src/store/auth/selectors';
-import { FormikTextField } from 'src/components/formikTextField/FormikTextField';
+import { FormikTextField } from 'src/components/FormikTextField/FormikTextField';
 import { SignUpFormValues } from '../../shared/SignUpFormValues';
 
 const SignUpValidationSchema = Yup.object().shape({

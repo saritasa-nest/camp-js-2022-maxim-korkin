@@ -22,3 +22,8 @@ export const signOut = createAsyncThunk(
   'auth/signOut',
   async () => AuthService.signOutUser(),
 );
+
+export const getUserFromCache = createAsyncThunk(
+  'auth/subscribeToAuthStatus',
+  async () => AuthService.getUser(),
+);

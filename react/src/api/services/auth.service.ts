@@ -1,6 +1,6 @@
 import {
   signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  signOut, Unsubscribe, onAuthStateChanged, User, NextOrObserver,
+  signOut, onAuthStateChanged,
 } from 'firebase/auth';
 import { Firebase } from './firebase.service';
 
@@ -40,12 +40,17 @@ export namespace AuthService {
     return signOut(auth);
   }
 
-  /**
-   * Subscribes to the auth state changes and.
-   * @param callBack - Callback to call when auth state has changed.
-   * @returns Unsubscribe function.
-   */
-  export function subscribeToAuthStateChange(callBack: NextOrObserver<User>): Unsubscribe {
-    return onAuthStateChanged(auth, callBack);
+  /** Function which tries to get a user from cache. */
+  export function getUser(): Promise<UserInfo | null> {
+    return new Promise((resolve, reject) => {
+      try {
+        const unsubscribe = onAuthStateChanged(auth, user => {
+          unsubscribe();
+          resolve(user !== null ? UserMapper.fromUserDto(user) : user);
+        });
+      } catch (error: unknown) {
+        reject(error);
+      }
+    });
   }
 }

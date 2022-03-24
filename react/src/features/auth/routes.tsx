@@ -3,9 +3,9 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import { SignedOutOnlyGuard } from 'src/routes/guards/SignedOutOnlyGuard';
 
 const AuthPage = lazy(() => import('./pages/AuthPage').then(module => ({ default: module.AuthPage })));
-const SignInForm = lazy(() => import('./components/signInForm/SignInForm')
+const SignInForm = lazy(() => import('./components/SignInForm/SignInForm')
   .then(module => ({ default: module.SignInForm })));
-const SignUpForm = lazy(() => import('./components/signUpForm/SignUpForm')
+const SignUpForm = lazy(() => import('./components/SignUpForm/SignUpForm')
   .then(module => ({ default: module.SignUpForm })));
 
 export const authRoutes: RouteObject[] = [

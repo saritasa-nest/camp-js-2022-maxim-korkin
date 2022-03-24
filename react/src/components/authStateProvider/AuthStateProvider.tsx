@@ -1,15 +1,14 @@
 import { memo, useEffect, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import { AuthService } from 'src/api/services/auth.service';
-import { setSignIn } from 'src/store/auth/slice';
+import { getUserFromCache } from 'src/store/auth/dispatchers';
 
 const AuthStateProviderComponent: VFC = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => AuthService.subscribeToAuthStateChange(user => {
-    dispatch(setSignIn(user !== null));
-  }));
+  useEffect(() => {
+    dispatch(getUserFromCache());
+  });
 
   return <Outlet />;
 };
