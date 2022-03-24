@@ -7,12 +7,9 @@ import { setSignIn } from 'src/store/auth/slice';
 const AuthStateProviderComponent: VFC = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const unsubscribe = AuthService.subscribeToAuthStateChange(user => {
-      dispatch(setSignIn(user !== null));
-    });
-    return unsubscribe;
-  });
+  useEffect(() => AuthService.subscribeToAuthStateChange(user => {
+    dispatch(setSignIn(user !== null));
+  }));
 
   return <Outlet />;
 };
