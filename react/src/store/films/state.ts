@@ -1,14 +1,7 @@
-import { Film } from 'src/models/film';
-
 /**
- * Films state.
+ * Films state. Films itself are added by entity manager.
  */
 export interface FilmsState {
-  /**
-   * Films.
-   */
-  readonly films: Film[];
-
   /**
    * Shows if we are loading next page of films.
    */
@@ -18,9 +11,7 @@ export interface FilmsState {
    * Error.
    */
   readonly error?: string;
-}
 
-export const initialState: FilmsState = {
-  films: [],
-  isLoading: false,
-};
+  /** Shows if there is next page of films. */
+  readonly hasNext: boolean;
+}

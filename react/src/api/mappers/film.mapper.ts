@@ -15,6 +15,7 @@ export namespace FilmMapper {
       openingCrawl: fields.opening_crawl,
       director: fields.director,
       producers: fields.producer.split(',').map(producer => producer.trim()),
+      primaryKey: dto.pk,
     };
   }
 }
