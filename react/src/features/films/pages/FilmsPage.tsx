@@ -13,7 +13,7 @@ const FilmsPageComponent: VFC = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar>
-        <Button color="inherit" onClick={handleSignOut}>Sign Out</Button>
+        <Button type="button" color="inherit" onClick={handleSignOut}>Sign Out</Button>
       </AppBar>
     </Box>
   );

@@ -1,12 +1,12 @@
 import { Button, FormHelperText } from '@mui/material';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useAppSelector } from 'src/store';
 import { signIn } from 'src/store/auth/dispatchers';
 import { selectSignInError } from 'src/store/auth/selectors';
-import { SignInTextField } from 'src/features/auth/components/signInTextField/SignInTextField';
+import { FormikTextField } from 'src/components/formikTextField/FormikTextField';
 import { SignInFormValues } from '../../shared/SignInFormValues';
 
 const SignInValidationSchema = Yup.object().shape({
@@ -34,8 +34,8 @@ const SignInFormComponent: VFC = () => {
         validationSchema={SignInValidationSchema}
       >
         <Form>
-          <Field name="email" component={SignInTextField} label="Email" />
-          <Field name="password" component={SignInTextField} type="password" label="Password" />
+          <FormikTextField name="email" label="Email" />
+          <FormikTextField name="password" type="password" label="Password" />
           <FormHelperText error>{error}</FormHelperText>
           <Button color="primary" variant="contained" fullWidth type="submit">
             Submit
