@@ -5,7 +5,7 @@ import { SignUpFormValues } from '../../shared/SignUpFormValues';
 
 interface FormTextFieldProps {
   /** Field props. */
-  readonly field: FieldInputProps<String>;
+  readonly field: FieldInputProps<string>;
   /** Form props. */
   readonly form: FormikProps<SignUpFormValues>;
 }

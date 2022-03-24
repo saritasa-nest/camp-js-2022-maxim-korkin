@@ -5,7 +5,7 @@ import { SignInFormValues } from '../../shared/SignInFormValues';
 
 interface FormTextFieldProps {
   /** Field props. */
-  readonly field: FieldInputProps<String>;
+  readonly field: FieldInputProps<string>;
   /** Form props. */
   readonly form: FormikProps<SignInFormValues>;
 }
