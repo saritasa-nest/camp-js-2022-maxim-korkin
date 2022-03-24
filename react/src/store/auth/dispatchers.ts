@@ -10,21 +10,20 @@ interface AuthInfo {
 
 export const signIn = createAsyncThunk(
   'auth/signIn',
-  async (authInfo: AuthInfo) => {
-    await AuthService.signIn(authInfo.email, authInfo.password);
-  },
+  async (authInfo: AuthInfo) => AuthService.signIn(authInfo.email, authInfo.password),
 );
 
 export const signUp = createAsyncThunk(
   'auth/signUp',
-  async (authInfo: AuthInfo) => {
-    await AuthService.signUp(authInfo.email, authInfo.password);
-  },
+  async (authInfo: AuthInfo) => AuthService.signUp(authInfo.email, authInfo.password),
 );
 
 export const signOut = createAsyncThunk(
   'auth/signOut',
-  async () => {
-    await AuthService.signOutUser();
-  },
+  async () => AuthService.signOutUser(),
+);
+
+export const getUserFromCache = createAsyncThunk(
+  'auth/subscribeToAuthStatus',
+  async () => AuthService.getUser(),
 );

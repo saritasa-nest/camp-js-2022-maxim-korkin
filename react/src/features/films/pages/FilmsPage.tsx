@@ -34,7 +34,6 @@ const FilmsPageComponent: VFC = () => {
         {films.map(film => <FilmCard film={film} />)}
       </Stack>
     </>
-
   );
 };
 

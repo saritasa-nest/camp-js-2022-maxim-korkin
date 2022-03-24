@@ -1,7 +1,11 @@
 import {
-  signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, UserCredential,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signOut, onAuthStateChanged,
 } from 'firebase/auth';
 import { Firebase } from './firebase.service';
+
+import { UserInfo } from '../../models/user';
+import { UserMapper } from '../mappers/user.mapper';
 
 const { auth } = Firebase;
 
@@ -14,8 +18,9 @@ export namespace AuthService {
    * @param email - Email.
    * @param password - Password.
    */
-  export function signIn(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(auth, email, password);
+  export async function signIn(email: string, password: string): Promise<UserInfo> {
+    const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+    return UserMapper.fromUserCredentials(userCredentials);
   }
 
   /**
@@ -23,8 +28,9 @@ export namespace AuthService {
    * @param email - Email.
    * @param password - Password.
    */
-  export function signUp(email: string, password: string): Promise<UserCredential> {
-    return createUserWithEmailAndPassword(auth, email, password);
+  export async function signUp(email: string, password: string): Promise<UserInfo> {
+    const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+    return UserMapper.fromUserCredentials(userCredentials);
   }
 
   /**
@@ -32,5 +38,19 @@ export namespace AuthService {
    */
   export function signOutUser(): Promise<void> {
     return signOut(auth);
+  }
+
+  /** Function which tries to get a user from cache. */
+  export function getUser(): Promise<UserInfo | null> {
+    return new Promise((resolve, reject) => {
+      try {
+        const unsubscribe = onAuthStateChanged(auth, user => {
+          unsubscribe();
+          resolve(user !== null ? UserMapper.fromUserDto(user) : user);
+        });
+      } catch (error: unknown) {
+        reject(error);
+      }
+    });
   }
 }

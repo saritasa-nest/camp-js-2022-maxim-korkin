@@ -1,19 +1,18 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { signIn, signOut, signUp } from './dispatchers';
+import {
+  signIn, signOut, signUp, getUserFromCache,
+} from './dispatchers';
 import { initialState } from './state';
 
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    setSignIn: (state, action: PayloadAction<boolean>) => {
-      state.isSignedIn = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: builder => builder
-    .addCase(signIn.fulfilled, state => {
+    .addCase(signIn.fulfilled, (state, action) => {
       state.isSignedIn = true;
+      state.userInfo = action.payload;
       state.signInError = undefined;
     })
     .addCase(signIn.rejected, (state, action) => {
@@ -21,8 +20,9 @@ export const authSlice = createSlice({
         state.signInError = action.error.message;
       }
     })
-    .addCase(signUp.fulfilled, state => {
+    .addCase(signUp.fulfilled, (state, action) => {
       state.isSignedIn = true;
+      state.userInfo = action.payload;
       state.signUpError = undefined;
     })
     .addCase(signUp.rejected, (state, action) => {
@@ -32,7 +32,15 @@ export const authSlice = createSlice({
     })
     .addCase(signOut.fulfilled, state => {
       state.isSignedIn = false;
+      state.userInfo = null;
+    })
+    .addCase(getUserFromCache.fulfilled, (state, action) => {
+      if (action.payload !== null) {
+        state.isSignedIn = true;
+        state.userInfo = action.payload;
+      } else {
+        state.isSignedIn = false;
+        state.userInfo = action.payload;
+      }
     }),
 });
-
-export const { setSignIn } = authSlice.actions;
