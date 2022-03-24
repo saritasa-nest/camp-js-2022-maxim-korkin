@@ -22,5 +22,5 @@ export interface Film {
   readonly title: string;
 
   /** Primary key of the film. */
-  readonly primaryKey: number;
+  readonly id: number;
 }

@@ -4,12 +4,12 @@ import { fetchNextPageOfFilms } from './dispatchers';
 import { FilmsState } from './state';
 
 export const filmsAdapter = createEntityAdapter<Film>({
-  selectId: film => film.primaryKey,
+  selectId: film => film.id,
 });
 
 const initialState = filmsAdapter.getInitialState<FilmsState>({
   isLoading: false,
-  error: undefined,
+  filmsListError: undefined,
   hasNext: true,
 });
 
@@ -20,7 +20,7 @@ export const filmsSlice = createSlice({
   extraReducers: builder => builder
     .addCase(fetchNextPageOfFilms.pending, state => {
       state.isLoading = true;
-      state.error = undefined;
+      state.filmsListError = undefined;
     })
     .addCase(fetchNextPageOfFilms.fulfilled, (state, action) => {
       filmsAdapter.addMany(state, action.payload.films);
@@ -28,7 +28,7 @@ export const filmsSlice = createSlice({
       state.isLoading = false;
     })
     .addCase(fetchNextPageOfFilms.rejected, (state, action) => {
-      state.error = action.error.message;
+      state.filmsListError = action.error.message;
       state.isLoading = false;
     }),
 });

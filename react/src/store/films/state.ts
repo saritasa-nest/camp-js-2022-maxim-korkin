@@ -10,7 +10,7 @@ export interface FilmsState {
   /**
    * Error.
    */
-  readonly error?: string;
+  readonly filmsListError?: string;
 
   /** Shows if there is next page of films. */
   readonly hasNext: boolean;

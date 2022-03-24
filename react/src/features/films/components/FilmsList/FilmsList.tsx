@@ -5,7 +5,9 @@ import {
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'src/store';
 import { fetchNextPageOfFilms } from 'src/store/films/dispatchers';
-import { selectAllFilms, selectHasNextPageOfFilms, selectIsLoadingFilms } from 'src/store/films/selectors';
+import {
+  selectAllFilms, selectFilmsListError, selectHasNextPageOfFilms, selectIsLoadingFilms,
+} from 'src/store/films/selectors';
 import { FilmsListItem } from '../FilmsListItem/FilmsListItem';
 
 const COUNT_OF_FILMS_TO_FETCH = 20;
@@ -16,6 +18,7 @@ const FilmsListComponent: VFC = () => {
   const films = useAppSelector(selectAllFilms);
   const isLoading = useAppSelector(selectIsLoadingFilms);
   const hasNext = useAppSelector(selectHasNextPageOfFilms);
+  const filmsListError = useAppSelector(selectFilmsListError);
 
   /* Function for checking if the element has been scrolled to the bottom
    and fetching next page of films. */
@@ -37,9 +40,10 @@ const FilmsListComponent: VFC = () => {
   return (
     <Box style={{ height: '100%', overflowY: 'auto' }} onScroll={onScroll}>
       <List>
-        {films.map(film => <FilmsListItem film={film} key={film.primaryKey} />)}
+        {films.map(film => <FilmsListItem film={film} key={film.id} />)}
       </List>
       {isLoading && <CircularProgress />}
+      {filmsListError && <div>{filmsListError}</div>}
     </Box>
   );
 };
