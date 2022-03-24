@@ -19,7 +19,7 @@ const SignUpFormComponent: VFC = () => {
   const dispatch = useDispatch();
   const error = useAppSelector(selectSignUpError);
 
-  const onSignUpSubmit = async (values: SignUpFormValues): Promise<void> => {
+  const onSignUpSubmit = (values: SignUpFormValues): void => {
     dispatch(signUp({
       email: values.email,
       password: values.password,
