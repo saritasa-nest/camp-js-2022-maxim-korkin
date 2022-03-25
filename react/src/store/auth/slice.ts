@@ -42,13 +42,8 @@ export const authSlice = createSlice({
       state.userInfo = null;
     })
     .addCase(getUserFromCache.fulfilled, (state, action) => {
-      if (action.payload !== null) {
-        state.userInfo = action.payload;
-        state.isLoading = false;
-      } else {
-        state.userInfo = action.payload;
-        state.isLoading = false;
-      }
+      state.userInfo = action.payload;
+      state.isLoading = false;
     })
     .addCase(getUserFromCache.pending, state => {
       state.isLoading = true;
