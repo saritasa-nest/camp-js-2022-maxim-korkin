@@ -11,6 +11,11 @@ export const selectFilmsListError = createSelector((state: RootState) => state.f
 /** Selects flag which shows if there is next page of films for fetching. */
 export const selectHasNextPageOfFilms = createSelector((state: RootState) => state.films.hasNext, hasNext => hasNext);
 
+export const selectSelectedFilmId = createSelector(
+  (state: RootState) => state.films.selectedFilmId,
+  selectedFilmId => selectedFilmId,
+);
+
 export const {
   /** Selects all films. */
   selectAll: selectAllFilms,

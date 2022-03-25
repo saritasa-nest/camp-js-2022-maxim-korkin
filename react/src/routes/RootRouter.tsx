@@ -7,12 +7,12 @@ const routes: RouteObject[] = [
   {
     element: <AuthStateProvider />,
     children: [
+      ...authRoutes,
+      ...filmsRoutes,
       {
         path: '*',
         element: <Navigate to="/auth/sign-in" />,
       },
-      ...authRoutes,
-      ...filmsRoutes,
     ],
   },
 ];

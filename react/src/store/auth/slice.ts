@@ -43,9 +43,9 @@ export const authSlice = createSlice({
     })
     .addCase(getUserFromCache.fulfilled, (state, action) => {
       state.userInfo = action.payload;
-      state.isLoading = false;
+      state.isLoadingFromCache = false;
     })
     .addCase(getUserFromCache.pending, state => {
-      state.isLoading = true;
+      state.isLoadingFromCache = true;
     }),
 });

@@ -32,7 +32,7 @@ const FilmsListComponent: VFC = () => {
     }
   };
 
-  /* Fetching first page of films. */
+  // Fetching first page of films.
   useEffect(() => {
     dispatch(fetchNextPageOfFilms({ countOfFilms: COUNT_OF_FILMS_TO_FETCH, lastVisibleFilm: null }));
   }, [dispatch]);
@@ -40,7 +40,12 @@ const FilmsListComponent: VFC = () => {
   return (
     <Box style={{ height: '100%', overflowY: 'auto' }} onScroll={onScroll}>
       <List>
-        {films.map(film => <FilmsListItem film={film} key={film.id} />)}
+        {films.map(film => (
+          <FilmsListItem
+            film={film}
+            key={film.id}
+          />
+        ))}
       </List>
       {isLoading && <CircularProgress />}
       {filmsListError && <div>{filmsListError}</div>}

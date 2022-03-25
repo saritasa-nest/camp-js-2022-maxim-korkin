@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Film } from 'src/models/film';
 import { fetchNextPageOfFilms } from './dispatchers';
 import { FilmsState } from './state';
@@ -16,7 +16,11 @@ const initialState = filmsAdapter.getInitialState<FilmsState>({
 export const filmsSlice = createSlice({
   name: 'films',
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedFilmId: (state, action: PayloadAction<number>) => {
+      state.selectedFilmId = action.payload;
+    },
+  },
   extraReducers: builder => builder
     .addCase(fetchNextPageOfFilms.pending, state => {
       state.isLoading = true;
@@ -32,3 +36,5 @@ export const filmsSlice = createSlice({
       state.isLoading = false;
     }),
 });
+
+export const { setSelectedFilmId } = filmsSlice.actions;

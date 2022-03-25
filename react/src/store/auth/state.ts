@@ -10,6 +10,9 @@ export interface AuthState {
   /** Shows if we are signing in or signing up at this moment. */
   readonly isLoading: boolean;
 
+  /** Shows if we are getting a user from cache. */
+  readonly isLoadingFromCache: boolean;
+
   /** Sign In error. */
   readonly signInError?: string;
 
@@ -20,4 +23,5 @@ export interface AuthState {
 export const initialState: AuthState = {
   userInfo: null,
   isLoading: false,
+  isLoadingFromCache: true,
 };
