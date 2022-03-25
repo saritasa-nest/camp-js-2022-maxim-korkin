@@ -1,8 +1,9 @@
 import { User, UserCredential } from 'firebase/auth';
-import { UserInfo } from 'src/models/user';
+import { UserInfo } from 'src/models/UserInfo';
 
-export namespace UserMapper {
-  /** Maps UserCredentials to UserInfo.
+export namespace UserCredentialsMapper {
+  /**
+   * Maps UserCredentials to UserInfo.
    * @param userCredential - User's credentials.
    */
   export function fromUserCredentials(userCredential: UserCredential): UserInfo {

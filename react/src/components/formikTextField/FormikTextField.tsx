@@ -2,12 +2,12 @@ import { TextField } from '@mui/material';
 import { FieldHookConfig, useField } from 'formik';
 import { VFC } from 'react';
 
-interface MyTextFieldProps {
+interface TextFieldProps {
   /** Label. */
   readonly label: string;
 }
 
-type Props = FieldHookConfig<string> & MyTextFieldProps;
+type Props = FieldHookConfig<string> & TextFieldProps;
 
 export const FormikTextField: VFC<Props> = ({ label, ...props }) => {
   const [field, meta] = useField(props);

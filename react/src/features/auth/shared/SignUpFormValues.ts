@@ -1,9 +1,7 @@
+import { AuthInfo } from 'src/models/AuthInfo';
+
 /** Values of sign up form. */
-export interface SignUpFormValues {
-  /** Email. */
-  readonly email: string;
-  /** Password. */
-  readonly password: string;
+export interface SignUpFormValues extends AuthInfo {
   /** Password repeat. */
   readonly repeatPassword: string;
 }
