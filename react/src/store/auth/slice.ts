@@ -11,36 +11,46 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: builder => builder
     .addCase(signIn.fulfilled, (state, action) => {
-      state.isSignedIn = true;
+      state.isLoading = false;
       state.userInfo = action.payload;
       state.signInError = undefined;
+    })
+    .addCase(signIn.pending, state => {
+      state.isLoading = true;
     })
     .addCase(signIn.rejected, (state, action) => {
       if (action.error.message) {
         state.signInError = action.error.message;
+        state.isLoading = false;
       }
     })
     .addCase(signUp.fulfilled, (state, action) => {
-      state.isSignedIn = true;
+      state.isLoading = false;
       state.userInfo = action.payload;
       state.signUpError = undefined;
+    })
+    .addCase(signUp.pending, state => {
+      state.isLoading = true;
     })
     .addCase(signUp.rejected, (state, action) => {
       if (action.error.message) {
         state.signUpError = action.error.message;
+        state.isLoading = false;
       }
     })
     .addCase(signOut.fulfilled, state => {
-      state.isSignedIn = false;
       state.userInfo = null;
     })
     .addCase(getUserFromCache.fulfilled, (state, action) => {
       if (action.payload !== null) {
-        state.isSignedIn = true;
         state.userInfo = action.payload;
+        state.isLoading = false;
       } else {
-        state.isSignedIn = false;
         state.userInfo = action.payload;
+        state.isLoading = false;
       }
+    })
+    .addCase(getUserFromCache.pending, state => {
+      state.isLoading = true;
     }),
 });

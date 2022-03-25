@@ -1,23 +1,36 @@
-import { Button, FormHelperText } from '@mui/material';
+import { Button, FormHelperText, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useAppSelector } from 'src/store';
 import { signUp } from 'src/store/auth/dispatchers';
-import { selectSignUpError } from 'src/store/auth/selectors';
+import { selectAuthIsLoading, selectSignUpError } from 'src/store/auth/selectors';
 import { FormikTextField } from 'src/components/FormikTextField/FormikTextField';
 import { SignUpFormValues } from '../../shared/SignUpFormValues';
+import { FormValidationError } from '../../shared/FormValidationError';
+
+const MIN_PASSWORD_LENGTH = 6;
 
 const SignUpValidationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().required('Required').min(6, 'Password should be at least 6 characters'),
-  repeatPassword: Yup.string().required('Required').oneOf([Yup.ref('password')], 'Passwords doesn\'t match'),
+  email: Yup
+    .string()
+    .email(FormValidationError.invalidEmail)
+    .required(FormValidationError.required),
+  password: Yup
+    .string()
+    .required(FormValidationError.required)
+    .min(MIN_PASSWORD_LENGTH, FormValidationError.tooShortPassword),
+  repeatPassword: Yup
+    .string()
+    .required(FormValidationError.required)
+    .oneOf([Yup.ref('password')], FormValidationError.passwordsDontMatch),
 });
 
 const SignUpFormComponent: VFC = () => {
   const dispatch = useDispatch();
   const error = useAppSelector(selectSignUpError);
+  const isLoading = useAppSelector(selectAuthIsLoading);
 
   const onSignUpSubmit = (values: SignUpFormValues): void => {
     dispatch(signUp({
@@ -28,7 +41,7 @@ const SignUpFormComponent: VFC = () => {
 
   return (
     <>
-      <h1>Sign Up</h1>
+      <Typography variant="h1" component="h1">Sign up</Typography>
       <Formik
         initialValues={{
           email: '',
@@ -43,7 +56,7 @@ const SignUpFormComponent: VFC = () => {
           <FormikTextField name="password" type="password" label="Password" />
           <FormikTextField name="repeatPassword" type="password" label="Repeat password" />
           <FormHelperText error>{error}</FormHelperText>
-          <Button color="primary" variant="contained" fullWidth type="submit">
+          <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading}>
             Submit
           </Button>
         </Form>

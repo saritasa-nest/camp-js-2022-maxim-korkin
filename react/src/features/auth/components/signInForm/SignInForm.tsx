@@ -1,22 +1,29 @@
-import { Button, FormHelperText } from '@mui/material';
+import { Button, FormHelperText, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { useAppSelector } from 'src/store';
 import { signIn } from 'src/store/auth/dispatchers';
-import { selectSignInError } from 'src/store/auth/selectors';
+import { selectAuthIsLoading, selectSignInError } from 'src/store/auth/selectors';
 import { FormikTextField } from 'src/components/FormikTextField/FormikTextField';
 import { SignInFormValues } from '../../shared/SignInFormValues';
+import { FormValidationError } from '../../shared/FormValidationError';
 
 const SignInValidationSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  password: Yup.string().required('Required'),
+  email: Yup
+    .string()
+    .email(FormValidationError.invalidEmail)
+    .required(FormValidationError.required),
+  password: Yup
+    .string()
+    .required(FormValidationError.required),
 });
 
 const SignInFormComponent: VFC = () => {
   const dispatch = useDispatch();
   const error = useAppSelector(selectSignInError);
+  const isLoading = useAppSelector(selectAuthIsLoading);
 
   const onSignInSubmit = (values: SignInFormValues): void => {
     dispatch(signIn(values));
@@ -24,7 +31,7 @@ const SignInFormComponent: VFC = () => {
 
   return (
     <>
-      <h1>Sign In</h1>
+      <Typography variant="h1" component="h1">Sign in</Typography>
       <Formik
         initialValues={{
           email: '',
@@ -37,7 +44,7 @@ const SignInFormComponent: VFC = () => {
           <FormikTextField name="email" label="Email" />
           <FormikTextField name="password" type="password" label="Password" />
           <FormHelperText error>{error}</FormHelperText>
-          <Button color="primary" variant="contained" fullWidth type="submit">
+          <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading}>
             Submit
           </Button>
         </Form>
