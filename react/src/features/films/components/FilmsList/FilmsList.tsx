@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'src/store';
 import { fetchNextPageOfFilms } from 'src/store/films/dispatchers';
 import {
-  selectAllFilms, selectFilmsListError, selectHasNextPageOfFilms, selectIsLoadingFilms,
+  selectFilmsListError, selectHasNextPageOfFilms, selectIsLoadingFilms, selectVisibleFilms,
 } from 'src/store/films/selectors';
 import { FilmsListItem } from '../FilmsListItem/FilmsListItem';
 
@@ -15,7 +15,7 @@ const COUNT_OF_FILMS_TO_FETCH = 20;
 const FilmsListComponent: VFC = () => {
   const dispatch = useDispatch();
 
-  const films = useAppSelector(selectAllFilms);
+  const films = useAppSelector(selectVisibleFilms);
   const isLoading = useAppSelector(selectIsLoadingFilms);
   const hasNext = useAppSelector(selectHasNextPageOfFilms);
   const filmsListError = useAppSelector(selectFilmsListError);

@@ -1,6 +1,6 @@
 import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Film } from 'src/models/film';
-import { fetchNextPageOfFilms } from './dispatchers';
+import { fetchNextPageOfFilms, fetchFilmById } from './dispatchers';
 import { FilmsState } from './state';
 
 export const filmsAdapter = createEntityAdapter<Film>({
@@ -8,9 +8,11 @@ export const filmsAdapter = createEntityAdapter<Film>({
 });
 
 const initialState = filmsAdapter.getInitialState<FilmsState>({
+  visibleFilmIds: [],
   isLoading: false,
   filmsListError: undefined,
   hasNext: true,
+  isFilmExists: true,
 });
 
 export const filmsSlice = createSlice({
@@ -28,12 +30,26 @@ export const filmsSlice = createSlice({
     })
     .addCase(fetchNextPageOfFilms.fulfilled, (state, action) => {
       filmsAdapter.addMany(state, action.payload.films);
+      action.payload.films.forEach(film => state.visibleFilmIds.push(film.id));
       state.hasNext = action.payload.hasNext;
       state.isLoading = false;
     })
     .addCase(fetchNextPageOfFilms.rejected, (state, action) => {
       state.filmsListError = action.error.message;
       state.isLoading = false;
+    })
+    .addCase(fetchFilmById.fulfilled, (state, action) => {
+      if (action.payload !== null) {
+        filmsAdapter.addOne(state, action.payload);
+        state.selectedFilmId = action.payload.id;
+      } else {
+        state.isFilmExists = false;
+      }
+    })
+    .addCase(fetchFilmById.rejected, (state, action) => {
+      if (action.error.message) {
+        state.filmDetailsError = action.error.message;
+      }
     }),
 });
 

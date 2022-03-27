@@ -1,12 +1,12 @@
 import {
-  query, getDocs, limit, QueryConstraint, startAfter, orderBy,
+  query, getDocs, limit, QueryConstraint, startAfter, orderBy, where,
 } from 'firebase/firestore';
 import { Film } from 'src/models/film';
 import { Firebase } from './firebase.service';
 import { FilmDto } from '../dtos/film.dto';
 import { FilmMapper } from '../mappers/film.mapper';
 
-/** Options required to build query constraints for films fetching. */
+/** Options required to build query constraints. */
 export interface FilmsFetchingOptions {
   /** Count of films to fetch. */
   readonly countOfFilms: number;
@@ -61,5 +61,16 @@ export namespace FilmsService {
       films: Firebase.mapQuerySnapshotToArray<FilmDto, Film>(filmsSnapshot, FilmMapper.fromDto).slice(0, -1),
       hasNext,
     };
+  }
+
+  /**
+   * Fetches film by id.
+   * @param id - Id of the film to fetch.
+   * @returns - Fetched film or null in case film with provided id doesn't exist.
+   */
+  export async function fetchFilmById(id: number): Promise<Film | null> {
+    const filmsQuery = query(filmsCollection, where('pk', '==', id));
+    const filmsSnapshot = await getDocs(filmsQuery);
+    return !filmsSnapshot.empty ? FilmMapper.fromDto(filmsSnapshot.docs[0].data()) : null;
   }
 }

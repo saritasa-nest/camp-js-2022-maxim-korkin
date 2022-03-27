@@ -6,3 +6,8 @@ export const fetchNextPageOfFilms = createAsyncThunk(
   'films/films',
   (options: FilmsFetchingOptions) => FilmsService.fetchFilms(options),
 );
+
+export const fetchFilmById = createAsyncThunk(
+  'films/filmById',
+  (id: number) => FilmsService.fetchFilmById(id),
+);
