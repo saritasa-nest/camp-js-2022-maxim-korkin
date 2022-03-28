@@ -1,12 +1,13 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { memo, useEffect, VFC } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useAppSelector } from 'src/store';
 import { fetchFilmById } from 'src/store/films/dispatchers';
 import {
   selectFilmById, selectIsFilmLoaded, selectFilmDetailsError,
 } from 'src/store/films/selectors';
+import { removeFilmDetailsError } from 'src/store/films/slice';
 
 const FilmDetailsComponent: VFC = () => {
   const filmId = Number(useParams().filmId);
@@ -23,12 +24,20 @@ const FilmDetailsComponent: VFC = () => {
     }
   }, [dispatch, isFilmLoaded, filmId]);
 
-  if (film == null) {
-    return <CircularProgress />;
-  }
+  useEffect(() => {
+    dispatch(removeFilmDetailsError());
+  }, [dispatch, filmId]);
 
   if (error) {
-    return <Navigate to="films" />;
+    return (
+      <Box>
+        <Typography variant="h2">{error}</Typography>
+      </Box>
+    );
+  }
+
+  if (film == null) {
+    return <CircularProgress />;
   }
 
   return (

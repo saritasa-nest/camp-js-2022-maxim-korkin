@@ -28,9 +28,14 @@ export const filmsSlice = createSlice({
       state.selectedFilmId = action.payload;
     },
     setFilmsFilters: (state, action: PayloadAction<FilmsFilters>) => {
+      state.filmsListFilters = action.payload;
+    },
+    removeVisibleFilms: state => {
       filmsAdapter.removeMany(state, state.visibleFilmIds);
       state.visibleFilmIds = [];
-      state.filmsListFilters = action.payload;
+    },
+    removeFilmDetailsError: state => {
+      state.filmDetailsError = undefined;
     },
   },
   extraReducers: builder => builder
@@ -49,10 +54,8 @@ export const filmsSlice = createSlice({
       state.isLoading = false;
     })
     .addCase(fetchFilmById.fulfilled, (state, action) => {
-      if (action.payload !== null) {
-        filmsAdapter.addOne(state, action.payload);
-        state.selectedFilmId = action.payload.id;
-      }
+      filmsAdapter.addOne(state, action.payload);
+      state.selectedFilmId = action.payload.id;
       state.filmDetailsError = undefined;
     })
     .addCase(fetchFilmById.rejected, (state, action) => {
@@ -62,4 +65,9 @@ export const filmsSlice = createSlice({
     }),
 });
 
-export const { setSelectedFilmId, setFilmsFilters } = filmsSlice.actions;
+export const {
+  setSelectedFilmId,
+  setFilmsFilters,
+  removeFilmDetailsError,
+  removeVisibleFilms,
+} = filmsSlice.actions;

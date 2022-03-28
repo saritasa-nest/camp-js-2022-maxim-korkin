@@ -6,8 +6,8 @@ import { FormikSelect } from 'src/components/FormikSelect/FormikSelect';
 import { FormikTextField } from 'src/components/FormikTextField/FormikTextField';
 import { FilmSortingField } from 'src/models/FilmSortingField';
 import { useAppSelector } from 'src/store';
-import { selectIsLoadingFilms } from 'src/store/films/selectors';
-import { setFilmsFilters } from 'src/store/films/slice';
+import { selectFilmsListFilters, selectIsLoadingFilms } from 'src/store/films/selectors';
+import { removeVisibleFilms, setFilmsFilters } from 'src/store/films/slice';
 
 /** Filters values. */
 export interface FilmsFilters {
@@ -21,10 +21,15 @@ export interface FilmsFilters {
 const FiltersComponent: VFC = () => {
   const dispatch = useDispatch();
 
+  const filter = useAppSelector(selectFilmsListFilters);
+
   const isLoading = useAppSelector(selectIsLoadingFilms);
 
   const onSubmit = (values: FilmsFilters): void => {
-    dispatch(setFilmsFilters(values));
+    if (filter.searchValue !== values.searchValue || filter.sortingField !== values.sortingField) {
+      dispatch(removeVisibleFilms());
+      dispatch(setFilmsFilters(values));
+    }
   };
 
   const initialValues: FilmsFilters = {

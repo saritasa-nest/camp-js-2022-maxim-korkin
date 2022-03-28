@@ -105,11 +105,15 @@ export namespace FilmsService {
   /**
    * Fetches film by id.
    * @param id - Id of the film to fetch.
-   * @returns - Fetched film or null in case film with provided id doesn't exist.
+   * @returns - Fetched film.
+   * @throws - Error in case film with provided id doesn't exist.
    */
-  export async function fetchFilmById(id: number): Promise<Film | null> {
+  export async function fetchFilmById(id: number): Promise<Film> {
     const filmsQuery = query(filmsCollection, where('pk', '==', id), limit(1));
     const filmsSnapshot = await getDocs(filmsQuery);
-    return !filmsSnapshot.empty ? FilmMapper.fromDto(filmsSnapshot.docs[0].data()) : null;
+    if (filmsSnapshot.empty) {
+      throw new Error(`Film with id ${id} doesn't exist`);
+    }
+    return FilmMapper.fromDto(filmsSnapshot.docs[0].data());
   }
 }
