@@ -44,8 +44,8 @@ export const filmsSlice = createSlice({
       state.filmsListError = undefined;
     })
     .addCase(fetchNextPageOfFilms.fulfilled, (state, action) => {
-      filmsAdapter.addMany(state, action.payload.films);
-      action.payload.films.forEach(film => state.visibleFilmIds.push(film.id));
+      filmsAdapter.addMany(state, action.payload.entities);
+      action.payload.entities.forEach(film => state.visibleFilmIds.push(film.id));
       state.hasNext = action.payload.hasNext;
       state.isLoading = false;
     })

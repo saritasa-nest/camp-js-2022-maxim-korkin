@@ -4,6 +4,7 @@ import {
 import { FilmsFilters } from 'src/features/films/components/Filters/Filters';
 import { Film } from 'src/models/Film';
 import { FilmSortingField } from 'src/models/FilmSortingField';
+import { Pagination } from './Pagination';
 import { Firebase } from './firebase.service';
 import { FilmDto } from '../dtos/film.dto';
 import { FilmMapper } from '../mappers/film.mapper';
@@ -19,13 +20,6 @@ export interface FilmsFetchingOptions {
 
   /** Filter options. */
   readonly filters: FilmsFilters;
-}
-
-interface FilmsFetchCursor {
-  /** Fetched films. */
-  readonly films: readonly Film[];
-  /** Shows if there is next page of films. */
-  readonly hasNext: boolean;
 }
 
 /** Function for getting value of the film field we are sorting by.
@@ -65,12 +59,14 @@ function getFilmsQueryConstraints(options: FilmsFetchingOptions): QueryConstrain
     const veryHighCodePoint = '\uf8ff';
     constraints.push(where(SortingFieldDto.Title, '>=', searchValue));
     constraints.push(where(SortingFieldDto.Title, '<=', `${searchValue}${veryHighCodePoint}`));
+    if (options.lastVisibleFilm !== null) {
+      constraints.push(startAfter(getSortingFieldValue(options.lastVisibleFilm, FilmSortingField.title)));
+    }
   } else {
     constraints.push(orderBy(SortingFieldDto[sortingField]));
-  }
-
-  if (options.lastVisibleFilm !== null) {
-    constraints.push(startAfter(getSortingFieldValue(options.lastVisibleFilm, options.filters.sortingField)));
+    if (options.lastVisibleFilm !== null) {
+      constraints.push(startAfter(getSortingFieldValue(options.lastVisibleFilm, options.filters.sortingField)));
+    }
   }
 
   return constraints;
@@ -89,7 +85,7 @@ export namespace FilmsService {
    * Function for fetching next page of films.
    * @param options - Fetching options.
    */
-  export async function fetchFilms(options: FilmsFetchingOptions): Promise<FilmsFetchCursor> {
+  export async function fetchFilms(options: FilmsFetchingOptions): Promise<Pagination<Film>> {
     const filmsQuery = query(filmsCollection, ...getFilmsQueryConstraints(options));
     const filmsSnapshot = await getDocs(filmsQuery);
     const hasNext = filmsSnapshot.docs.length === (options.countOfFilms + 1);
@@ -97,7 +93,7 @@ export namespace FilmsService {
       ? Firebase.mapQuerySnapshotToArray<FilmDto, Film>(filmsSnapshot, FilmMapper.fromDto).slice(0, -1)
       : Firebase.mapQuerySnapshotToArray<FilmDto, Film>(filmsSnapshot, FilmMapper.fromDto);
     return {
-      films,
+      entities: films,
       hasNext,
     };
   }
