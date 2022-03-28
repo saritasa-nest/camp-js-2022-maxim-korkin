@@ -8,8 +8,8 @@ import { NavBar } from '../components/NavBar/NavBar';
 const FilmsPageComponent: VFC = () => (
   <>
     <NavBar />
-    <Grid container style={{ height: '90vh' }}>
-      <Grid item xs={4} style={{ height: '80%' }}>
+    <Grid container>
+      <Grid item xs={4}>
         <Filters />
         <FilmsList />
       </Grid>

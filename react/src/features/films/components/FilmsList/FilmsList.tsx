@@ -40,7 +40,7 @@ const FilmsListComponent: VFC = () => {
   }, [dispatch, filters]);
 
   return (
-    <Box style={{ height: '100%', overflowY: 'auto' }} onScroll={onScroll}>
+    <Box sx={{ height: '100%', maxHeight: '640px', overflowY: 'auto' }} onScroll={onScroll}>
       <List>
         {films.map(film => (
           <FilmsListItem
