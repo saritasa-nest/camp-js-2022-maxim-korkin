@@ -6,6 +6,6 @@ export interface BaseDto<T> {
   /** Model in DB. */
   readonly model: string;
 
-  /** Primary key of the film. */
+  /** Primary key of the entity. */
   readonly pk: number;
 }
