@@ -12,7 +12,6 @@ const initialState = filmsAdapter.getInitialState<FilmsState>({
   isLoading: false,
   filmsListError: undefined,
   hasNext: true,
-  isFilmExists: true,
 });
 
 export const filmsSlice = createSlice({
@@ -42,9 +41,8 @@ export const filmsSlice = createSlice({
       if (action.payload !== null) {
         filmsAdapter.addOne(state, action.payload);
         state.selectedFilmId = action.payload.id;
-      } else {
-        state.isFilmExists = false;
       }
+      state.filmDetailsError = undefined;
     })
     .addCase(fetchFilmById.rejected, (state, action) => {
       if (action.error.message) {

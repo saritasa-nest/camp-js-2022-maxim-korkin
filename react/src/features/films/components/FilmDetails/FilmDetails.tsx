@@ -1,10 +1,12 @@
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { memo, useEffect, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom';
 import { useAppSelector } from 'src/store';
 import { fetchFilmById } from 'src/store/films/dispatchers';
-import { selectFilmById, selectIsFilmExists, selectIsFilmLoaded } from 'src/store/films/selectors';
+import {
+  selectFilmById, selectIsFilmLoaded, selectFilmDetailsError,
+} from 'src/store/films/selectors';
 
 const FilmDetailsComponent: VFC = () => {
   const filmId = Number(useParams().filmId);
@@ -13,7 +15,7 @@ const FilmDetailsComponent: VFC = () => {
 
   const film = useAppSelector(state => selectFilmById(state, filmId));
   const isFilmLoaded = useAppSelector(state => selectIsFilmLoaded(state, filmId));
-  const isFilmExists = useAppSelector(selectIsFilmExists);
+  const error = useAppSelector(selectFilmDetailsError);
 
   useEffect(() => {
     if (!isFilmLoaded) {
@@ -21,17 +23,24 @@ const FilmDetailsComponent: VFC = () => {
     }
   }, [dispatch, isFilmLoaded, filmId]);
 
-  if (!isFilmExists) {
-    return <Navigate to="films" />;
-  }
-
   if (film == null) {
     return <CircularProgress />;
   }
 
+  if (error) {
+    return <Navigate to="films" />;
+  }
+
   return (
     <Box>
-      <h1>{film.title}</h1>
+      <Typography variant="h2">{film.title}</Typography>
+      <Typography variant="body1">{film.openingCrawl}</Typography>
+      <Typography variant="subtitle1">{`Release date: ${film.releaseDate.toDateString()}`}</Typography>
+      <Typography variant="subtitle1">{`Director: ${film.director}`}</Typography>
+      <Typography variant="subtitle1">Producers:</Typography>
+      <ul>
+        {film.producers.map(producer => <li key={producer}>{producer}</li>)}
+      </ul>
     </Box>
   );
 };

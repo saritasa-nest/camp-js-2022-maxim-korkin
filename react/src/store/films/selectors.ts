@@ -33,10 +33,9 @@ export const selectIsFilmLoaded = createSelector(
   isFilmLoaded => isFilmLoaded,
 );
 
-/** Selects flag which shows if the film we tried to fetch exists. */
-export const selectIsFilmExists = createSelector(
-  (state: RootState) => state.films.isFilmExists,
-  isFilmExists => isFilmExists,
+export const selectFilmDetailsError = createSelector(
+  (state: RootState) => state.films.filmDetailsError,
+  filmDetailsError => filmDetailsError,
 );
 
 /** Selects visible films. */

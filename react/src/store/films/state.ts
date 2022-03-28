@@ -19,7 +19,4 @@ export interface FilmsState {
 
   /** Id of the currently selected film. */
   readonly selectedFilmId?: number;
-
-  /** Shows if the film we tried to fetch exists. */
-  readonly isFilmExists: boolean;
 }
