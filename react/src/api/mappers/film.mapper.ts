@@ -1,4 +1,4 @@
-import { Film } from 'src/models/film';
+import { Film } from 'src/models/Film';
 import { FilmDto } from '../dtos/film.dto';
 
 export namespace FilmMapper {

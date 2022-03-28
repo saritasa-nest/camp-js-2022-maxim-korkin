@@ -1,3 +1,5 @@
+import { FilmsFilters } from 'src/features/films/components/Filters/Filters';
+
 /**
  * Films state. Films itself are added by entity manager.
  */
@@ -19,4 +21,7 @@ export interface FilmsState {
 
   /** Id of the currently selected film. */
   readonly selectedFilmId?: number;
+
+  /** Filters values. */
+  readonly filmsListFilters: FilmsFilters;
 }

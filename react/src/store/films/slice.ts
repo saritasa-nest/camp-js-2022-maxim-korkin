@@ -1,5 +1,7 @@
 import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Film } from 'src/models/film';
+import { FilmsFilters } from 'src/features/films/components/Filters/Filters';
+import { Film } from 'src/models/Film';
+import { FilmSortingField } from 'src/models/FilmSortingField';
 import { fetchNextPageOfFilms, fetchFilmById } from './dispatchers';
 import { FilmsState } from './state';
 
@@ -12,6 +14,10 @@ const initialState = filmsAdapter.getInitialState<FilmsState>({
   isLoading: false,
   filmsListError: undefined,
   hasNext: true,
+  filmsListFilters: {
+    searchValue: '',
+    sortingField: FilmSortingField.title,
+  },
 });
 
 export const filmsSlice = createSlice({
@@ -20,6 +26,11 @@ export const filmsSlice = createSlice({
   reducers: {
     setSelectedFilmId: (state, action: PayloadAction<number>) => {
       state.selectedFilmId = action.payload;
+    },
+    setFilmsFilters: (state, action: PayloadAction<FilmsFilters>) => {
+      filmsAdapter.removeMany(state, state.visibleFilmIds);
+      state.visibleFilmIds = [];
+      state.filmsListFilters = action.payload;
     },
   },
   extraReducers: builder => builder
@@ -51,4 +62,4 @@ export const filmsSlice = createSlice({
     }),
 });
 
-export const { setSelectedFilmId } = filmsSlice.actions;
+export const { setSelectedFilmId, setFilmsFilters } = filmsSlice.actions;

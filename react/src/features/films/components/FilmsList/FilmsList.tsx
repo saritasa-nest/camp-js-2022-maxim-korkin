@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'src/store';
 import { fetchNextPageOfFilms } from 'src/store/films/dispatchers';
 import {
-  selectFilmsListError, selectHasNextPageOfFilms, selectIsLoadingFilms, selectVisibleFilms,
+  selectFilmsListError, selectFilmsListFilters, selectHasNextPageOfFilms, selectIsLoadingFilms, selectVisibleFilms,
 } from 'src/store/films/selectors';
 import { FilmsListItem } from '../FilmsListItem/FilmsListItem';
 
@@ -18,6 +18,8 @@ const FilmsListComponent: VFC = () => {
   const films = useAppSelector(selectVisibleFilms);
   const isLoading = useAppSelector(selectIsLoadingFilms);
   const hasNext = useAppSelector(selectHasNextPageOfFilms);
+  const filters = useAppSelector(selectFilmsListFilters);
+
   const filmsListError = useAppSelector(selectFilmsListError);
 
   /* Function for checking if the element has been scrolled to the bottom
@@ -27,15 +29,15 @@ const FilmsListComponent: VFC = () => {
     === event.currentTarget.clientHeight;
     if (isBottom && !isLoading && hasNext) {
       dispatch(fetchNextPageOfFilms(
-        { countOfFilms: COUNT_OF_FILMS_TO_FETCH, lastVisibleFilm: films[films.length - 1] },
+        { countOfFilms: COUNT_OF_FILMS_TO_FETCH, lastVisibleFilm: films[films.length - 1], filters },
       ));
     }
   };
 
   // Fetching first page of films.
   useEffect(() => {
-    dispatch(fetchNextPageOfFilms({ countOfFilms: COUNT_OF_FILMS_TO_FETCH, lastVisibleFilm: null }));
-  }, [dispatch]);
+    dispatch(fetchNextPageOfFilms({ countOfFilms: COUNT_OF_FILMS_TO_FETCH, lastVisibleFilm: null, filters }));
+  }, [dispatch, filters]);
 
   return (
     <Box style={{ height: '100%', overflowY: 'auto' }} onScroll={onScroll}>

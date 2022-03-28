@@ -2,7 +2,7 @@ import { ListItem, ListItemButton, ListItemText } from '@mui/material';
 import { memo, VFC } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Film } from 'src/models/film';
+import { Film } from 'src/models/Film';
 import { useAppSelector } from 'src/store';
 import { selectSelectedFilmId } from 'src/store/films/selectors';
 import { setSelectedFilmId } from 'src/store/films/slice';

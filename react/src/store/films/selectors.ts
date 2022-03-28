@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { Film } from 'src/models/film';
+import { Film } from 'src/models/Film';
 import { filmsAdapter } from './slice';
 import { RootState } from '../store';
 
@@ -36,6 +36,11 @@ export const selectIsFilmLoaded = createSelector(
 export const selectFilmDetailsError = createSelector(
   (state: RootState) => state.films.filmDetailsError,
   filmDetailsError => filmDetailsError,
+);
+
+export const selectFilmsListFilters = createSelector(
+  (state: RootState) => state.films.filmsListFilters,
+  filmsListFilters => filmsListFilters,
 );
 
 /** Selects visible films. */
