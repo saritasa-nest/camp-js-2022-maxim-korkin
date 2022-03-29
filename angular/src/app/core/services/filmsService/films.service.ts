@@ -11,7 +11,7 @@ import { SortingDirection } from '../../utils/enums/sorting-direction';
 import { PaginationDirection } from '../../utils/enums/pagination-direction';
 import { Pagination } from '../../models/pagination';
 
-import { FilmSortingFieldDto } from './enums/film-sorting-field-dto';
+import { FilmSortingFieldDto, filmSortingFieldDtoMap } from './enums/film-sorting-field-dto';
 import { FilmsFetchOptions } from './interfaces/films-fetch-options';
 import { FilmSortingField } from './enums/film-sorting-field';
 
@@ -81,7 +81,7 @@ export class FilmsService {
     /** Checking if the user is searching by title. */
     if (titleSearchingValue !== '') {
       /** Need to sort exactly by title if the user is searching by it. */
-      sortingField = this.mapFilmSortingFieldToDto(FilmSortingField.Title);
+      sortingField = filmSortingFieldDtoMap[FilmSortingField.Title];
       direction = SortingDirection.Ascending;
 
       /* Adding searching constraint.
@@ -92,7 +92,7 @@ export class FilmsService {
       queryConstraints.push(where(sortingField, '<=', `${titleSearchingValue}${veryHighCodePoint}`));
     } else {
       /** Otherwise using sorting field and direction from the sorting options. */
-      sortingField = this.mapFilmSortingFieldToDto(sortingOptions.sortingField);
+      sortingField = filmSortingFieldDtoMap[sortingOptions.sortingField];
       ({ direction } = sortingOptions);
     }
 
@@ -128,32 +128,17 @@ export class FilmsService {
    */
   private getSortingFieldValue(film: Film, sortingField: FilmSortingFieldDto): string | number {
     switch (sortingField) {
-      case FilmSortingFieldDto.EpisodeId:
+      case filmSortingFieldDtoMap.episodeId:
         return film.episodeId;
-      case FilmSortingFieldDto.Title:
+      case filmSortingFieldDtoMap.title:
         return film.title;
-      case FilmSortingFieldDto.ReleaseDate:
+      case filmSortingFieldDtoMap.releaseDate:
+        /* Formatting date to a DB format. */
         return film.releaseDate.toISOString().slice(0, 10);
-      case FilmSortingFieldDto.Director:
+      case filmSortingFieldDtoMap.director:
         return film.director;
       default:
-        /** All film sorting fields should be declared above. If not then the error will be thrown so please add missing field case. */
-        throw new Error('Failed to recognize FilmSortingField.');
-    }
-  }
-
-  private mapFilmSortingFieldToDto(sortingField: FilmSortingField): FilmSortingFieldDto {
-    switch (sortingField) {
-      case FilmSortingField.Director:
-        return FilmSortingFieldDto.Director;
-      case FilmSortingField.EpisodeId:
-        return FilmSortingFieldDto.EpisodeId;
-      case FilmSortingField.ReleaseDate:
-        return FilmSortingFieldDto.ReleaseDate;
-      case FilmSortingField.Title:
-        return FilmSortingFieldDto.Title;
-      default:
-        /** All film sorting fields should be declared above. If not then the error will be thrown so please add missing field case. */
+        /* All film sorting fields should be declared above. If not then the error will be thrown so please add missing field case. */
         throw new Error('Failed to recognize FilmSortingField.');
     }
   }
@@ -174,7 +159,7 @@ export class FilmsService {
    * @param films - Array of films.
    * @param paginationMode - Pagination mode.
    */
-  private parseFilmsList(films: Film[], { paginationMode, countOfFilmsOnPage }: FilmsFetchOptions): Film[] {
+  private parseFilmsList(films: readonly Film[], { paginationMode, countOfFilmsOnPage }: FilmsFetchOptions): readonly Film[] {
     /** Case when we dont have film we dont need to display. */
     if (films.length !== countOfFilmsOnPage + 1) {
       return films;

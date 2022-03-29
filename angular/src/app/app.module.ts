@@ -23,7 +23,6 @@ import { CommonSharedModule } from './shared/common-shared.module';
     provideFirestore(() => getFirestore()),
     CommonSharedModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
