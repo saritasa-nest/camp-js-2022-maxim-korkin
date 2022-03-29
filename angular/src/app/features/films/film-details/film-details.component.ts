@@ -1,7 +1,8 @@
-import { takeUntil, Subject, map, Observable } from 'rxjs';
+import { takeUntil, Subject, map, Observable, tap } from 'rxjs';
 import { Component, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Film } from 'src/app/core/models/film';
+import { assertIsFilm } from 'src/app/core/utils/assert-is-film';
 
 const FILM_DATA = 'film';
 
@@ -20,7 +21,8 @@ export class FilmDetailsComponent implements OnDestroy {
 
   /** Film. */
   public readonly film$: Observable<Film> = this.route.data.pipe(
-    map(data => data[FILM_DATA]),
+    map(data => data[FILM_DATA] as Film),
+    tap(film => assertIsFilm(film)),
     takeUntil(this.destroy$),
   );
 
@@ -35,14 +37,4 @@ export class FilmDetailsComponent implements OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
-  /**
-   * TrackBy function for producers list.
-   * @param index - Index.
-   * @param producer - Producer.
-   */
-  public trackProducer(index: number, producer: string): string {
-    return producer;
-  }
-
 }

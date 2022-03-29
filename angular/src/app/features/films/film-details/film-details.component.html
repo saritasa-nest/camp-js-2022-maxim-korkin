@@ -1,11 +1,10 @@
-<div *ngIf="this.film$ | async as film">
+<div *ngIf="film$ | async as film">
   <h2>{{ film.title }}</h2>
   <p>{{ film.openingCrawl }}</p>
   <p>Director: {{ film.director }}</p>
   <p>Producers:</p>
-  <p></p>
   <ul>
-    <li *ngFor="let producer of film.producers; trackBy: trackProducer">
+    <li *ngFor="let producer of film.producers">
       {{ producer }}
     </li>
   </ul>

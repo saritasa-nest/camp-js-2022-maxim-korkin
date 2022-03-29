@@ -5,7 +5,7 @@ import { PaginationDirection } from '../../../utils/enums/pagination-direction';
 import { SortingOptions } from './films-sorting-options';
 
 /**
- * Options used for fetching films by the FilmsService.
+ * Options required for building constraints for the films fetching.
  */
 export interface FilmsFetchOptions {
 

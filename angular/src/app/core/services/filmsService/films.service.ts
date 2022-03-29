@@ -89,9 +89,11 @@ export class FilmsService {
       sortingField = filmSortingFieldDtoMap[FilmSortingField.Title];
       direction = SortingDirection.Ascending;
 
-      /* Adding searching constraint.
-         The \uf8ff character used in the query is a very high code point in the Unicode range.
-         Because it is after most regular characters in Unicode, the query matches all values that start with searching value. */
+      /**
+       * Adding searching constraint.
+       * The \uf8ff character used in the query is a very high code point in the Unicode range.
+       * Because it is after most regular characters in Unicode, the query matches all values that start with searching value.
+       */
       const veryHighCodePoint = '\uf8ff';
       queryConstraints.push(where(sortingField, '>=', titleSearchingValue));
       queryConstraints.push(where(sortingField, '<=', `${titleSearchingValue}${veryHighCodePoint}`));
