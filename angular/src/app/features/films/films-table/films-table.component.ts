@@ -1,5 +1,5 @@
-import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, debounceTime, Observable, merge } from 'rxjs';
-import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { BehaviorSubject, Subject, combineLatest, map, switchMap, tap, takeUntil, Observable, merge, shareReplay } from 'rxjs';
+import { Component, ChangeDetectionStrategy, OnDestroy, ViewChild, OnInit } from '@angular/core';
 import { MatSort, Sort } from '@angular/material/sort';
 import { FilmSortingField } from 'src/app/core/services/filmsService/enums/film-sorting-field';
 import { FilmsService } from 'src/app/core/services/filmsService/films.service';
@@ -7,16 +7,12 @@ import { Film } from 'src/app/core/models/film';
 import { PaginationDirection } from 'src/app/core/utils/enums/pagination-direction';
 import { SortingDirection } from 'src/app/core/utils/enums/sorting-direction';
 import { SortingOptions } from 'src/app/core/services/filmsService/interfaces/films-sorting-options';
-
-import { SearchingInputComponent } from '../searching-input/searching-input.component';
-import { PaginationButtonsComponent } from '../pagination-buttons/pagination-buttons.component';
-
-import { FilmsAndPaginationInfo } from './../../../core/services/filmsService/interfaces/films-pagination';
+import { Pagination } from 'src/app/core/models/pagination';
 
 /**
  * Maximum count of films on a single page.
  */
-const COUNT_OF_FILMS_ON_PAGE = 3;
+const COUNT_OF_FILMS_ON_PAGE = 10;
 
 const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: FilmSortingField.EpisodeId, direction: SortingDirection.Ascending };
 
@@ -29,14 +25,14 @@ const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: FilmSortingField
   styleUrls: ['./films-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FilmsTableComponent implements OnInit, OnDestroy {
 
   /** Shows if we are searching or not. Used for disabling sorting field changing. */
   public readonly isSearching$ = new BehaviorSubject(false);
 
   private readonly sortingOptions$ = new BehaviorSubject<SortingOptions>(DEFAULT_SORTING_OPTIONS);
 
-  private readonly paginationMode$ = new Subject<PaginationDirection>();
+  private readonly paginationDirection$ = new BehaviorSubject<PaginationDirection>(PaginationDirection.Next);
 
   private readonly searchingValue$ = new BehaviorSubject<string>('');
 
@@ -44,19 +40,10 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private lastVisibleFilm: Film | null = null;
 
-  @ViewChild(PaginationButtonsComponent)
-  private readonly paginationButtons!: PaginationButtonsComponent;
-
-  @ViewChild(SearchingInputComponent)
-  private readonly searchingInput!: SearchingInputComponent;
-
   private readonly destroy$ = new Subject<void>();
 
   /** Films and pagination info on the current page. */
-  public readonly filmsInfo$ = this.initFilmsStream();
-
-  /** Films on the current page. */
-  public readonly films$ = new Subject<Film[]>();
+  public readonly films$ = this.initFilmsStream();
 
   private readonly episodeIdHeader = 'Episode Id';
 
@@ -79,7 +66,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /** Container for MatSortables to manage the sort state. */
   @ViewChild(MatSort)
-  private readonly filmsSortHeaders!: MatSort;
+  private readonly filmsSortHeaders?: MatSort;
 
   public constructor(
     private readonly filmsService: FilmsService,
@@ -89,7 +76,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @inheritdoc
    */
   public ngOnInit(): void {
-    /* Emitting and updating values to fetch first page when sorting field or direction is changed or when field
+    /* Emitting and updating values to fetch first page when sorting field or direction is changed
      or when user updates searching value. */
     merge(
       this.sortingOptions$,
@@ -102,10 +89,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
           this.resetValuesForFirstPageFetching();
         },
       });
-
-    this.filmsInfo$.pipe(
-      map(films => films.films),
-    ).subscribe(this.films$);
   }
 
   /**
@@ -117,15 +100,17 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
-   * @inheritdoc
-   */
-  public ngAfterViewInit(): void {
-    this.paginationButtons.paginationMode$.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe(this.paginationMode$);
-    this.searchingInput.searchChange$.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe(this.searchingValue$);
+   * Emits new searching value.
+   * @param value - New searching value. */
+  public onSearchingValueChange(value: string): void {
+    this.searchingValue$.next(value);
+  }
+
+  /**
+   * Emits new pagination direction.
+   * @param paginationDirection - New searching pagination direction. */
+  public onPaginationDirectionChange(paginationDirection: PaginationDirection): void {
+    this.paginationDirection$.next(paginationDirection);
   }
 
   /**
@@ -143,8 +128,10 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param direction - New direction.
    */
   public setSortingHeaders(active: FilmSortingField, direction: SortingDirection): void {
-    this.filmsSortHeaders.active = this.mapSortingFieldToHeader(active);
-    this.filmsSortHeaders.direction = direction;
+    if (this.filmsSortHeaders) {
+      this.filmsSortHeaders.active = this.mapSortingFieldToHeader(active);
+      this.filmsSortHeaders.direction = direction;
+    }
   }
 
   /**
@@ -163,7 +150,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
   private resetValuesForFirstPageFetching(): void {
     this.firstVisibleFilm = null;
     this.lastVisibleFilm = null;
-    this.paginationMode$.next(PaginationDirection.Next);
+    this.paginationDirection$.next(PaginationDirection.Next);
   }
 
   private mapSortStateIntoSortingOptions(sortState: Sort): SortingOptions {
@@ -221,11 +208,11 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private initFilmsStream(): Observable<FilmsAndPaginationInfo> {
+  private initFilmsStream(): Observable<Pagination<Film>> {
     return combineLatest(
-      [this.sortingOptions$, this.paginationMode$, this.searchingValue$],
+      [this.sortingOptions$, this.paginationDirection$, this.searchingValue$],
     ).pipe(
-      debounceTime(300),
+      shareReplay(1),
       map(([sortingOptions, paginationMode, searchingValue]) => (
         {
           sortingOptions,
@@ -247,7 +234,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }),
       switchMap(fetchOptions => this.filmsService.fetchFilms(fetchOptions)),
-      tap(films => this.updateFirstAndLastFilms(films.films)),
+      tap(films => this.updateFirstAndLastFilms(films.items)),
       takeUntil(this.destroy$),
     );
   }

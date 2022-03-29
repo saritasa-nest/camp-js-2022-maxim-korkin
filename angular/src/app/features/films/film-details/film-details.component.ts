@@ -20,8 +20,8 @@ export class FilmDetailsComponent implements OnDestroy {
 
   /** Film. */
   public readonly film$: Observable<Film> = this.route.data.pipe(
-    takeUntil(this.destroy$),
     map(data => data[FILM_DATA]),
+    takeUntil(this.destroy$),
   );
 
   public constructor(
