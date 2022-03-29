@@ -22,7 +22,8 @@ export interface FilmsFetchingOptions {
   readonly filters: FilmsFilters;
 }
 
-/** Function for getting value of the film field we are sorting by.
+/**
+ * Function for getting value of the film field we are sorting by.
  * @param film - Film to get value from.
  * @param sortingField - Field.
  */
@@ -39,7 +40,8 @@ function getSortingFieldValue(film: Film, sortingField: FilmSortingField): strin
   }
 }
 
-/** Function for getting query constraints for films fetching based on options provided.
+/**
+ * Function for getting query constraints for films fetching based on options provided.
  * @param options - Options to builds constraints.
  */
 function getFilmsQueryConstraints(options: FilmsFetchingOptions): QueryConstraint[] {
@@ -72,9 +74,7 @@ function getFilmsQueryConstraints(options: FilmsFetchingOptions): QueryConstrain
   return constraints;
 }
 
-/**
- * Films service.
- */
+/** Films service. */
 export namespace FilmsService {
 
   const FILMS_COLLECTION_NAME = 'films';
