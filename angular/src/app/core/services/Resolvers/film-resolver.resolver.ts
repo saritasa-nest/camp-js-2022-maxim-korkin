@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { Observable, of, catchError, EMPTY } from 'rxjs';
+import { Observable, of, catchError, EMPTY, first } from 'rxjs';
 
 import { Film } from '../../models/film';
 import { FilmsService } from '../filmsService/films.service';
@@ -35,6 +35,7 @@ export class FilmResolver implements Resolve<Film> {
 
     return this.filmsService.fetchFilmByPrimaryKey(filmPk).pipe(
       catchError(() => this.handleError()),
+      first(),
     );
   }
 

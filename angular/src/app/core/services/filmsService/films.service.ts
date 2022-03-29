@@ -1,6 +1,6 @@
 import { CollectionReference, query, QueryConstraint, limit, limitToLast, orderBy, startAfter, where, endBefore } from 'firebase/firestore';
 import { Injectable } from '@angular/core';
-import { Observable, map, first } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { collection, Firestore } from '@angular/fire/firestore';
 import { collectionData } from 'rxfire/firestore';
 
@@ -54,12 +54,17 @@ export class FilmsService {
   /**
    * Fetches a film by primary key.
    * @param pk - Primary key to fetch the film.
+   * @throws - Error in case film with provided id not found.
    */
   public fetchFilmByPrimaryKey(pk: number): Observable<Film> {
     const filmQuery = query(this.filmsCollection, where('pk', '==', pk));
     return collectionData<FilmDto>(filmQuery).pipe(
+      tap(films => {
+        if (films.length === 0) {
+          throw new Error(`Film with primary key ${pk} not found`);
+        }
+      }),
       map(films => this.filmMapper.fromDto(films[0])),
-      first(),
     );
   }
 
@@ -133,13 +138,13 @@ export class FilmsService {
       case filmSortingFieldDtoMap.title:
         return film.title;
       case filmSortingFieldDtoMap.releaseDate:
-        /* Formatting date to a DB format. */
+        /* Formatting date to a DB format YYYY-MM-DD. */
         return film.releaseDate.toISOString().slice(0, 10);
       case filmSortingFieldDtoMap.director:
         return film.director;
       default:
         /* All film sorting fields should be declared above. If not then the error will be thrown so please add missing field case. */
-        throw new Error('Failed to recognize FilmSortingField.');
+        throw new Error(`Failed to recognize ${sortingField} FilmSortingField.`);
     }
   }
 
