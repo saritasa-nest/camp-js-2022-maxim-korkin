@@ -27,6 +27,9 @@ const DEFAULT_SORTING_OPTIONS: SortingOptions = { sortingField: FilmSortingField
 })
 export class FilmsTableComponent implements OnInit, OnDestroy {
 
+  /** Films and pagination info on the current page. */
+  public readonly films$ = this.initFilmsStream();
+
   /** Shows if we are searching or not. Used for disabling sorting field changing. */
   public readonly isSearching$ = new BehaviorSubject(false);
 
@@ -42,9 +45,6 @@ export class FilmsTableComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
-  /** Films and pagination info on the current page. */
-  public readonly films$ = this.initFilmsStream();
-
   private readonly episodeIdHeader = 'Episode Id';
 
   private readonly titleHeader = 'Title';
@@ -56,7 +56,7 @@ export class FilmsTableComponent implements OnInit, OnDestroy {
   private readonly directorHeader = 'Director';
 
   /** List of table headers. */
-  public readonly tableHeaders = [
+  public readonly tableHeaders: readonly string[] = [
     this.episodeIdHeader,
     this.titleHeader,
     this.releaseDateHeader,
